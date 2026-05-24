@@ -76,7 +76,14 @@ public class ApplicationDbContextInitialiser
         }
 
         // Default users
-        var administrator = new ApplicationUser { UserName = "administrator@localhost", Email = "administrator@localhost", FullName = "Administrator" };
+        var administrator = new ApplicationUser
+        {
+            UserName = "administrator@localhost",
+            Email = "administrator@localhost",
+            FullName = "Administrator",
+            EmailConfirmed = true,
+            IsEmailVerified = true
+        };
 
         if (_userManager.Users.All(u => u.UserName != administrator.UserName))
         {
@@ -85,6 +92,12 @@ public class ApplicationDbContextInitialiser
             {
                 await _userManager.AddToRolesAsync(administrator, [administratorRole.Name]);
             }
+        }
+        else if (await _userManager.FindByNameAsync(administrator.UserName!) is { EmailConfirmed: false } existingAdmin)
+        {
+            existingAdmin.EmailConfirmed = true;
+            existingAdmin.IsEmailVerified = true;
+            await _userManager.UpdateAsync(existingAdmin);
         }
 
         if (!_context.ShippingOptions.Any())

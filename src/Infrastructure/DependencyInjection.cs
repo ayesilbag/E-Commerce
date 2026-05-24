@@ -14,6 +14,7 @@ using ECommerce.Application.Common.Interfaces;
 using ECommerce.Domain.Constants;
 using ECommerce.Infrastructure.Configuration;
 using ECommerce.Infrastructure.Data;
+using ECommerce.Infrastructure.Email;
 using ECommerce.Infrastructure.Data.Interceptors;
 using ECommerce.Infrastructure.Identity;
 using ECommerce.Infrastructure.Services;
@@ -84,6 +85,8 @@ public static class DependencyInjection
         services.AddAWSService<IAmazonBedrockRuntime>();
 
         services.AddFluentEmail(configuration);
+        services.AddSingleton<EmailTemplateRenderer>();
+        services.AddTransient<IEmailSender<ApplicationUser>, FluentEmailSender>();
 
         services.Configure<RateLimitSettings>(configuration.GetSection("RateLimitSettings"));
 

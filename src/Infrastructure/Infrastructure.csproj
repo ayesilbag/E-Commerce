@@ -25,4 +25,8 @@
     <Folder Include="Data\Migrations\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <EmbeddedResource Include="Email\Templates\*.html" />
+  </ItemGroup>
+
 </Project>
