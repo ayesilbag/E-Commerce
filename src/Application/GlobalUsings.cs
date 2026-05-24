@@ -1,0 +1,12 @@
+﻿global using Ardalis.GuardClauses;
+global using AutoMapper;
+global using AutoMapper.QueryableExtensions;
+global using FluentValidation;
+global using FluentValidation.Results;
+global using MediatR;
+global using Microsoft.EntityFrameworkCore;
+global using ECommerce.Application.Common.DTOs;
+global using ECommerce.Application.Common.Interfaces;
+global using ECommerce.Application.Common.Models;
+global using ECommerce.Domain.Entities;
+global using ECommerce.Domain.Enums;

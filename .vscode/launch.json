@@ -1,0 +1,104 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": ".NET Core Launch (console)",
+        "type": "coreclr",
+        "request": "launch",
+        "preLaunchTask": "build",
+        "program": "${workspaceFolder}/src/WebServer/bin/Debug/net9.0/ECommerce.WebServer.dll",
+        "args": [],
+        "cwd": "${workspaceFolder}/src/WebServer",
+        "console": "integratedTerminal",
+        "stopAtEntry": false,
+        "env": {
+          "ASPNETCORE_ENVIRONMENT": "Development",
+          "MSBuildSDKsPath": "C:\\Program Files\\dotnet\\sdk\\9.0.310\\Sdks"
+        }
+      },
+      {
+        "name": ".NET Core Attach",
+        "type": "coreclr",
+        "request": "attach"
+    },
+    {
+        // Use IntelliSense to find out which attributes exist for C# debugging
+        // Use hover for the description of the existing attributes
+        // For further information visit https://github.com/dotnet/vscode-csharp/blob/main/debugger-launchjson.md.
+        "name": ".NET Core Launch (web)",
+        "type": "coreclr",
+        "request": "launch",
+        "preLaunchTask": "build",
+        // If you have changed target frameworks, make sure to update the program path.
+        "program": "${workspaceFolder}/src/WebServer/bin/Debug/net9.0/ECommerce.WebServer.dll",
+        "args": [],
+        "cwd": "${workspaceFolder}/src/WebServer",
+        "stopAtEntry": false,
+        // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
+        "serverReadyAction": {
+            "action": "openExternally",
+            "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+        },
+        "env": {
+            "ASPNETCORE_ENVIRONMENT": "Development",
+            "MSBuildSDKsPath": "C:\\Program Files\\dotnet\\sdk\\9.0.310\\Sdks"
+        },
+        "sourceFileMap": {
+            "/Views": "${workspaceFolder}/Views"
+        }
+    }
+    // ,
+    // {
+    //     "name": "Debug RateLimitServiceTests",
+    //     "type": "coreclr",
+    //     "request": "launch",
+    //     "preLaunchTask": "build",
+    //     "program": "dotnet",
+    //     "args": [
+    //         "test",
+    //         "${workspaceFolder}/tests/Infrastructure.IntegrationTests/Infrastructure.IntegrationTests.csproj",
+    //         "--filter",
+    //         "RateLimitServiceTests",
+    //         "--logger",
+    //         "console;verbosity=detailed"
+    //     ],
+    //     "cwd": "${workspaceFolder}",
+    //     "console": "integratedTerminal",
+    //     "stopAtEntry": false
+    // },
+    // {
+    //     "name": "Debug All Tests",
+    //     "type": "coreclr",
+    //     "request": "launch",
+    //     "preLaunchTask": "build",
+    //     "program": "dotnet",
+    //     "args": [
+    //         "test",
+    //         "${workspaceFolder}/tests/Infrastructure.IntegrationTests/Infrastructure.IntegrationTests.csproj",
+    //         "--logger",
+    //         "console;verbosity=detailed"
+    //     ],
+    //     "cwd": "${workspaceFolder}",
+    //     "console": "integratedTerminal",
+    //     "stopAtEntry": false
+    // },
+    // {
+    //     "name": "Debug Specific Test Method",
+    //     "type": "coreclr",
+    //     "request": "launch",
+    //     "preLaunchTask": "build",
+    //     "program": "dotnet",
+    //     "args": [
+    //         "test",
+    //         "${workspaceFolder}/tests/Infrastructure.IntegrationTests/Infrastructure.IntegrationTests.csproj",
+    //         "--filter",
+    //         "RateLimitServiceTests.IsAllowedAsync_ShouldAllowRequestsWithinUserLimit",
+    //         "--logger",
+    //         "console;verbosity=detailed"
+    //     ],
+    //     "cwd": "${workspaceFolder}",
+    //     "console": "integratedTerminal",
+    //     "stopAtEntry": false
+    // }
+    ]
+  }

@@ -1,0 +1,21 @@
+{
+  "env": {
+    "ANTHROPIC_BASE_URL": "https://api.z.ai/api/anthropic",
+    "ANTHROPIC_AUTH_TOKEN": "4505e8eeb5564b3a8dc9df47939e5054.tLKtwfKFMB5DRZeD",
+    "API_TIMEOUT_MS": "3000000",
+    "ANTHROPIC_DEFAULT_SONNET_MODEL": "glm-4.7",
+    "ANTHROPIC_DEFAULT_OPUS_MODEL": "glm-4.7",
+    "ANTHROPIC_DEFAULT_HAIKU_MODEL": "glm-4.5-air"
+  },
+  "permissions": {
+    "allow": [
+      "Bash(dotnet run:*)",
+      "Bash(timeout:*)",
+      "Bash(dotnet build:*)",
+      "Bash(dir global.json /s)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(export MSBuildSDKsPath=\"C:\\\\Program Files\\\\dotnet\\\\sdk\\\\9.0.310\\\\Sdks\")"
+    ]
+  }
+}
