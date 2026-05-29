@@ -57,7 +57,7 @@ public class IdentityService : IIdentityService
         if (user == null) return;
 
         user.FullName = fullName;
-        user.Phone = phone ?? user.Phone;
+        user.PhoneNumber = phone ?? user.PhoneNumber;
         user.Avatar = avatar ?? user.Avatar;
 
         await _userManager.UpdateAsync(user);

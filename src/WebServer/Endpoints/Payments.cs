@@ -19,9 +19,34 @@ public class Payments : EndpointGroupBase
             .WithOpenApi();
 
         group.MapPost("/validate", ValidatePaymentAsync);
+        group.MapGet("/options", GetPaymentOptionsAsync);
         group.MapGet("/bank-accounts", GetBankAccountsAsync);
         group.MapGet("/methods", GetPaymentMethodsAsync).RequireAuthorization();
         group.MapPost("/process", ProcessPaymentAsync).RequireAuthorization();
+    }
+
+    private static async Task<IResult> GetPaymentOptionsAsync(
+        ApplicationDbContext context,
+        CancellationToken cancellationToken)
+    {
+        var iyzicoClients = await context.PaymentClients
+            .Where(c => c.IsActive)
+            .OrderByDescending(c => c.IsDefault)
+            .ThenBy(c => c.Name)
+            .Select(c => new { c.Code, c.Name, c.IsSandbox, c.IsDefault })
+            .ToListAsync(cancellationToken);
+
+        var bankTransferEnabled = await context.BankAccounts.AnyAsync(a => a.IsActive, cancellationToken);
+
+        return Results.Ok(new
+        {
+            success = true,
+            data = new
+            {
+                iyzico = iyzicoClients,
+                bankTransfer = bankTransferEnabled
+            }
+        });
     }
 
     private static async Task<IResult> GetBankAccountsAsync(

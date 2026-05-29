@@ -8,6 +8,7 @@ import ProductFormPage from './pages/ProductFormPage';
 import CategoriesPage from './pages/CategoriesPage';
 import ShippingPage from './pages/ShippingPage';
 import BankAccountsPage from './pages/BankAccountsPage';
+import PaymentClientsPage from './pages/PaymentClientsPage';
 import OrdersPage from './pages/OrdersPage';
 import OrderDetailPage from './pages/OrderDetailPage';
 import CouponsPage from './pages/CouponsPage';
@@ -41,6 +42,7 @@ export default function App() {
         <Route path="categories" element={<CategoriesPage />} />
         <Route path="shipping" element={<ShippingPage />} />
         <Route path="bank-accounts" element={<BankAccountsPage />} />
+        <Route path="payment-clients" element={<PaymentClientsPage />} />
       </Route>
     </Routes>
   );

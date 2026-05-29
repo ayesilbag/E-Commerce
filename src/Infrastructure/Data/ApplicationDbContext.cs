@@ -22,6 +22,9 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
     public DbSet<ShippingOption> ShippingOptions => Set<ShippingOption>();
     public DbSet<Coupon> Coupons => Set<Coupon>();
     public DbSet<BankAccount> BankAccounts => Set<BankAccount>();
+    public DbSet<PaymentClient> PaymentClients => Set<PaymentClient>();
+    public DbSet<PaymentSession> PaymentSessions => Set<PaymentSession>();
+    public DbSet<PaymentSettings> PaymentSettings => Set<PaymentSettings>();
 
     // Orders
     public DbSet<Order> Orders => Set<Order>();
@@ -55,7 +58,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
         {
             entity.ToTable(name: "Users");
             entity.Property(e => e.FullName).HasMaxLength(256);
-            entity.Property(e => e.Phone).HasMaxLength(20);
+            entity.Property(e => e.PhoneNumber).HasMaxLength(20);
             entity.Property(e => e.Avatar).HasMaxLength(500);
         });
 

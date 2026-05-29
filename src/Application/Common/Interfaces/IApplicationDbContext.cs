@@ -16,6 +16,9 @@ public interface IApplicationDbContext
     DbSet<ShippingOption> ShippingOptions { get; }
     DbSet<Coupon> Coupons { get; }
     DbSet<BankAccount> BankAccounts { get; }
+    DbSet<PaymentClient> PaymentClients { get; }
+    DbSet<PaymentSession> PaymentSessions { get; }
+    DbSet<PaymentSettings> PaymentSettings { get; }
 
     // Orders
     DbSet<Order> Orders { get; }

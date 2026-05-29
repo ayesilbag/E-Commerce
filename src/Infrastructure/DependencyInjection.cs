@@ -17,7 +17,9 @@ using ECommerce.Infrastructure.Data;
 using ECommerce.Infrastructure.Email;
 using ECommerce.Infrastructure.Data.Interceptors;
 using ECommerce.Infrastructure.Identity;
+using ECommerce.Infrastructure.Payments;
 using ECommerce.Infrastructure.Services;
+using ECommerce.Application.Payments;
 
 namespace ECommerce.Infrastructure;
 
@@ -25,8 +27,6 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
     {
-        services.Configure<ApiOptions>(configuration.GetSection("ApiSettings"));
-
         var connectionString = configuration.GetConnectionString("DefaultConnection");
 
         Guard.Against.Null(connectionString, message: "Connection string 'DefaultConnection' not found.");
@@ -49,21 +49,12 @@ public static class DependencyInjection
 
         services.AddScoped<ApplicationDbContextInitialiser>();
 
-        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddJwtBearer(options => 
-            {
-                var apiOptions = configuration.GetSection("ApiSettings").Get<ApiOptions>();
-                Guard.Against.NullOrWhiteSpace(apiOptions?.SecretKey, message: "ApiSettings:SecretKey not found in configuration.");
-                
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(apiOptions.SecretKey)),
-                    ValidateIssuer = false,
-                    ValidateAudience = false
-                };
-            });
-        services.AddAuthorizationBuilder();
+        services.AddAuthentication()
+            .AddBearerToken(IdentityConstants.BearerScheme);
+
+        services.AddAuthorizationBuilder()
+           .AddPolicy(Policies.CanPurge, policy => policy.RequireRole(Roles.Administrator))
+           .AddPolicy(Policies.Admin, policy => policy.RequireRole(Roles.Administrator));
 
         services
             .AddIdentityCore<ApplicationUser>()
@@ -96,6 +87,10 @@ public static class DependencyInjection
         services.Configure<S3Options>(configuration.GetSection("S3Settings"));
         services.AddAWSService<IAmazonS3>();
         services.AddScoped<IS3Service, S3Service>();
+
+        services.Configure<PaymentsOptions>(configuration.GetSection(PaymentsOptions.SectionName));
+        services.AddScoped<IPaymentClientResolver, PaymentClientResolver>();
+        services.AddScoped<IIyzicoCheckoutService, IyzicoCheckoutService>();
 
         return services;
     }

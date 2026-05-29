@@ -1,22 +1,17 @@
-import { FormEvent, useEffect, useState } from 'react';
+import { FormEvent, useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { api, uploadImage } from '../api/client';
-import { IconUpload } from '../components/Icons';
+import GalleryGrid from '../components/GalleryGrid';
+import { IconPlus, IconUpload } from '../components/Icons';
 import PageHeader from '../components/PageHeader';
 
 type Category = { id: string; name: string };
-
-function reorderArray<T>(list: T[], from: number, to: number): T[] {
-  const next = [...list];
-  const [removed] = next.splice(from, 1);
-  next.splice(to, 0, removed);
-  return next;
-}
 
 export default function ProductFormPage() {
   const { id } = useParams();
   const isNew = !id || id === 'new';
   const navigate = useNavigate();
+  const galleryInputRef = useRef<HTMLInputElement>(null);
 
   const [categories, setCategories] = useState<Category[]>([]);
   const [name, setName] = useState('');
@@ -31,9 +26,6 @@ export default function ProductFormPage() {
   const [isActive, setIsActive] = useState(true);
   const [isFeatured, setIsFeatured] = useState(false);
   const [uploading, setUploading] = useState(false);
-  const [galleryDragOver, setGalleryDragOver] = useState(false);
-  const [dragIndex, setDragIndex] = useState<number | null>(null);
-  const [dropIndex, setDropIndex] = useState<number | null>(null);
   const [error, setError] = useState('');
   const [saving, setSaving] = useState(false);
 
@@ -97,11 +89,6 @@ export default function ProductFormPage() {
     } finally {
       setUploading(false);
     }
-  };
-
-  const onGalleryReorder = (from: number, to: number) => {
-    if (from === to) return;
-    setImages((prev) => reorderArray(prev, from, to));
   };
 
   const onSubmit = async (e: FormEvent) => {
@@ -216,86 +203,28 @@ export default function ProductFormPage() {
             </div>
             <div className="field">
               <label>Galeri</label>
-              <div
-                className={`upload-zone${galleryDragOver ? ' upload-zone--dragover' : ''}`}
-                onDragEnter={(e) => {
-                  if (e.dataTransfer.types.includes('Files')) setGalleryDragOver(true);
+              <input
+                ref={galleryInputRef}
+                type="file"
+                accept="image/*"
+                multiple
+                disabled={uploading}
+                className="gallery-file-input"
+                onChange={(e) => {
+                  if (e.target.files) void onGalleryFiles(e.target.files);
+                  e.target.value = '';
                 }}
-                onDragLeave={(e) => {
-                  if (!e.currentTarget.contains(e.relatedTarget as Node)) setGalleryDragOver(false);
-                }}
-                onDragOver={(e) => {
-                  if (e.dataTransfer.types.includes('Files')) {
-                    e.preventDefault();
-                    e.dataTransfer.dropEffect = 'copy';
-                  }
-                }}
-                onDrop={(e) => {
-                  e.preventDefault();
-                  setGalleryDragOver(false);
-                  if (e.dataTransfer.files.length) {
-                    void onGalleryFiles(e.dataTransfer.files);
-                  }
-                }}
+              />
+              <button
+                type="button"
+                className="btn btn-secondary gallery-add-btn"
+                disabled={uploading}
+                onClick={() => galleryInputRef.current?.click()}
               >
-                <input
-                  type="file"
-                  accept="image/*"
-                  multiple
-                  disabled={uploading}
-                  onChange={(e) => e.target.files && void onGalleryFiles(e.target.files)}
-                />
-                <div className="upload-zone-icon">
-                  <IconUpload size={28} />
-                </div>
-                <div className="upload-zone-text">
-                  {uploading ? 'Yükleniyor...' : 'Görselleri sürükleyip bırakın veya tıklayın'}
-                </div>
-                <div className="upload-zone-hint">Birden fazla görsel seçebilirsiniz · PNG, JPG veya WebP</div>
-              </div>
-              {images.length > 0 && (
-                <>
-                  <p className="gallery-hint">Sıralamayı değiştirmek için görselleri sürükleyin</p>
-                  <div className="gallery-grid">
-                    {images.map((url, index) => (
-                      <div
-                        key={`${index}-${url}`}
-                        className={`gallery-item${dragIndex === index ? ' gallery-item--dragging' : ''}${dropIndex === index ? ' gallery-item--drop-target' : ''}`}
-                        draggable={!uploading}
-                        onDragStart={(e) => {
-                          e.dataTransfer.effectAllowed = 'move';
-                          e.dataTransfer.setData('text/plain', String(index));
-                          setDragIndex(index);
-                        }}
-                        onDragEnd={() => {
-                          setDragIndex(null);
-                          setDropIndex(null);
-                        }}
-                        onDragOver={(e) => {
-                          if (dragIndex === null) return;
-                          e.preventDefault();
-                          e.dataTransfer.dropEffect = 'move';
-                          setDropIndex(index);
-                        }}
-                        onDragLeave={() => {
-                          setDropIndex((current) => (current === index ? null : current));
-                        }}
-                        onDrop={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          const from = dragIndex ?? Number(e.dataTransfer.getData('text/plain'));
-                          onGalleryReorder(from, index);
-                          setDragIndex(null);
-                          setDropIndex(null);
-                        }}
-                      >
-                        <img src={url} alt="" className="thumb gallery-item-image" draggable={false} />
-                        <span className="gallery-item-index">{index + 1}</span>
-                      </div>
-                    ))}
-                  </div>
-                </>
-              )}
+                <IconPlus size={18} />
+                {uploading ? 'Yükleniyor...' : 'Galeriye görsel ekle'}
+              </button>
+              {images.length > 0 && <GalleryGrid images={images} onChange={setImages} disabled={uploading} />}
             </div>
           </div>
 

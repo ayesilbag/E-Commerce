@@ -81,8 +81,7 @@ public class ApplicationDbContextInitialiser
             UserName = "administrator@localhost",
             Email = "administrator@localhost",
             FullName = "Administrator",
-            EmailConfirmed = true,
-            IsEmailVerified = true
+            EmailConfirmed = true
         };
 
         if (_userManager.Users.All(u => u.UserName != administrator.UserName))
@@ -96,8 +95,17 @@ public class ApplicationDbContextInitialiser
         else if (await _userManager.FindByNameAsync(administrator.UserName!) is { EmailConfirmed: false } existingAdmin)
         {
             existingAdmin.EmailConfirmed = true;
-            existingAdmin.IsEmailVerified = true;
             await _userManager.UpdateAsync(existingAdmin);
+        }
+
+        if (!_context.PaymentSettings.Any(s => s.Id == PaymentSettings.GlobalId))
+        {
+            _context.PaymentSettings.Add(new PaymentSettings
+            {
+                Id = PaymentSettings.GlobalId,
+                DefaultCurrency = "TRY"
+            });
+            await _context.SaveChangesAsync();
         }
 
         if (!_context.ShippingOptions.Any())

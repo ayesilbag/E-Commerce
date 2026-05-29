@@ -64,6 +64,19 @@ public class Orders : EndpointGroupBase
             }
         }
 
+        if (PaymentClientRules.IsIyzicoPayment(request.PaymentMethod.Type))
+        {
+            var hasIyzico = await context.PaymentClients.AnyAsync(c => c.IsActive, cancellationToken);
+            if (!hasIyzico)
+            {
+                return Results.BadRequest(new
+                {
+                    success = false,
+                    message = "Kart ile ödeme (iyzico) şu an kullanılamıyor."
+                });
+            }
+        }
+
         // Create order
         var order = new Domain.Entities.Order
         {
@@ -126,6 +139,17 @@ public class Orders : EndpointGroupBase
 
         var orderDto = MapToOrderDto(order);
         BankTransferInstructionsDto? paymentInstructions = null;
+        object? iyzicoPayment = null;
+
+        if (PaymentClientRules.IsIyzicoPayment(request.PaymentMethod.Type))
+        {
+            iyzicoPayment = new
+            {
+                type = "iyzico",
+                orderId = order.Id,
+                message = "Sipariş oluşturuldu. Ödeme için POST /api/payments/iyzico/initialize çağrısı yapın."
+            };
+        }
 
         if (BankAccountRules.IsBankTransfer(request.PaymentMethod.Type))
         {
@@ -148,7 +172,7 @@ public class Orders : EndpointGroupBase
         {
             success = true,
             message = "Sipariş başarıyla oluşturuldu",
-            data = new { order = orderDto, paymentInstructions }
+            data = new { order = orderDto, paymentInstructions, iyzicoPayment }
         });
     }
 

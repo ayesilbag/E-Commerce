@@ -9,6 +9,7 @@ import {
   IconProducts,
   IconShipping,
   IconBank,
+  IconCreditCard,
 } from './Icons';
 import MobileNav from './MobileNav';
 
@@ -59,6 +60,10 @@ export default function Layout() {
           <NavLink to="/bank-accounts" className={({ isActive }) => `nav-item${isActive ? ' active' : ''}`}>
             <IconBank />
             Havale
+          </NavLink>
+          <NavLink to="/payment-clients" className={({ isActive }) => `nav-item${isActive ? ' active' : ''}`}>
+            <IconCreditCard />
+            iyzico
           </NavLink>
         </nav>
 

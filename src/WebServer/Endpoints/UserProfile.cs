@@ -60,16 +60,18 @@ public class UserProfile : EndpointGroupBase
         var preferences = await context.UserPreferences
             .FirstOrDefaultAsync(x => x.UserId == userId, cancellationToken);
 
+        var roles = await userManager.GetRolesAsync(user);
+
         var profile = new UserProfileDto
         {
             Id = user.Id,
             FullName = user.FullName,
             Email = user.Email ?? "",
-            Phone = user.Phone ?? "",
+            Phone = user.PhoneNumber ?? "",
             Avatar = user.Avatar ?? "",
-            Role = ((int)user.Role).ToString(),
+            Role = roles.FirstOrDefault() ?? "Customer",
             IsActive = user.IsActive,
-            IsEmailVerified = user.IsEmailVerified,
+            EmailConfirmed = user.EmailConfirmed,
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow,
             Addresses = addresses.ToArray(),
@@ -101,7 +103,7 @@ public class UserProfile : EndpointGroupBase
             return Results.NotFound(new { success = false, error = new { code = "USER_NOT_FOUND", message = "Kullanıcı bulunamadı" } });
 
         user.FullName = request.FullName;
-        user.Phone = request.Phone;
+        user.PhoneNumber = request.Phone;
         user.Avatar = request.Avatar;
 
         await userManager.UpdateAsync(user);

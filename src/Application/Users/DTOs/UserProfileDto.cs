@@ -11,7 +11,7 @@ public class UserProfileDto
     public string? Avatar { get; set; }
     public required string Role { get; set; }
     public bool IsActive { get; set; }
-    public bool IsEmailVerified { get; set; }
+    public bool EmailConfirmed { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
     public required AddressDto[] Addresses { get; set; }

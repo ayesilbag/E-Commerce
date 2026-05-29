@@ -37,17 +37,23 @@ public class EmailTemplateRenderer
             .Replace("{{Year}}", DateTime.UtcNow.Year.ToString());
     }
 
-    public string RenderActionButton(string url, string label) =>
-        $"""
+    public string RenderActionButton(string url, string label)
+    {
+        // MapIdentityApi already HTML-encodes callback URLs (& -> &amp;) before calling IEmailSender.
+        // Re-encoding breaks query string parsing in many email clients (code param missing -> 400).
+        var hrefUrl = WebUtility.HtmlDecode(url);
+
+        return $"""
         <table role="presentation" cellspacing="0" cellpadding="0" border="0" style="margin:0 0 20px;">
           <tr>
             <td align="left" style="border-radius:8px;background:linear-gradient(135deg,#5b4cdb 0%,#7c3aed 50%,#a855f7 100%);box-shadow:0 8px 32px rgba(91,76,219,0.25);">
-              <a href="{EncodeAttribute(url)}" target="_blank" style="display:inline-block;padding:10px 18px;font-size:14px;font-weight:600;line-height:1.2;color:#ffffff;text-decoration:none;border-radius:8px;font-family:'Plus Jakarta Sans',system-ui,sans-serif;">{Encode(label)}</a>
+              <a href="{hrefUrl}" target="_blank" style="display:inline-block;padding:10px 18px;font-size:14px;font-weight:600;line-height:1.2;color:#ffffff;text-decoration:none;border-radius:8px;font-family:'Plus Jakarta Sans',system-ui,sans-serif;">{Encode(label)}</a>
             </td>
           </tr>
         </table>
-        <p style="margin:0;font-size:13px;line-height:1.6;color:#94a3b8;word-break:break-all;">Buton çalışmıyorsa bağlantıyı tarayıcınıza yapıştırın:<br /><a href="{EncodeAttribute(url)}" style="color:#5b4cdb;text-decoration:underline;">{Encode(url)}</a></p>
+        <p style="margin:0;font-size:13px;line-height:1.6;color:#94a3b8;word-break:break-all;">Buton çalışmıyorsa bağlantıyı tarayıcınıza yapıştırın:<br /><a href="{hrefUrl}" style="color:#5b4cdb;text-decoration:underline;">{Encode(hrefUrl)}</a></p>
         """;
+    }
 
     public string RenderCodeBlock(string code) =>
         $"""
@@ -136,6 +142,4 @@ public class EmailTemplateRenderer
     private static string Encode(string value) =>
         WebUtility.HtmlEncode(value);
 
-    private static string EncodeAttribute(string value) =>
-        WebUtility.HtmlEncode(value);
 }
