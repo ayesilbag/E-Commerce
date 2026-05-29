@@ -1,10 +1,10 @@
 ﻿using System.Data;
 using System.Data.Common;
-using NefesAI.Infrastructure.Data;
+using ECommerce.Infrastructure.Data;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 
-namespace NefesAI.Application.FunctionalTests;
+namespace ECommerce.Application.FunctionalTests;
 
 public class SqliteTestDatabase : ITestDatabase
 {

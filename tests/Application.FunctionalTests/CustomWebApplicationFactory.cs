@@ -1,6 +1,6 @@
 ﻿using System.Data.Common;
-using NefesAI.Application.Common.Interfaces;
-using NefesAI.Infrastructure.Data;
+using ECommerce.Application.Common.Interfaces;
+using ECommerce.Infrastructure.Data;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 
-namespace NefesAI.Application.FunctionalTests;
+namespace ECommerce.Application.FunctionalTests;
 
 using static Testing;
 

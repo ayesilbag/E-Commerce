@@ -1,8 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <RootNamespace>NefesAI.Application.FunctionalTests</RootNamespace>
-        <AssemblyName>NefesAI.Application.FunctionalTests</AssemblyName>
+        <RootNamespace>ECommerce.Application.FunctionalTests</RootNamespace>
+        <AssemblyName>ECommerce.Application.FunctionalTests</AssemblyName>
     </PropertyGroup>
 
     <ItemGroup>

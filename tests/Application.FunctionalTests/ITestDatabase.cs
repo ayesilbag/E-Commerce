@@ -1,6 +1,6 @@
 ﻿using System.Data.Common;
 
-namespace NefesAI.Application.FunctionalTests;
+namespace ECommerce.Application.FunctionalTests;
 
 public interface ITestDatabase
 {
