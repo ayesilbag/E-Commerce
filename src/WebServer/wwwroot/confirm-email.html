@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>E-posta Doğrulama</title>
+    <style>
+      :root {
+        color-scheme: light;
+        font-family: "Plus Jakarta Sans", "Segoe UI", system-ui, sans-serif;
+      }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        background: linear-gradient(180deg, #f6f7fb 0%, #eef0f6 100%);
+        color: #0f172a;
+      }
+      .card {
+        width: min(100%, 440px);
+        margin: 1rem;
+        padding: 2.25rem 2rem;
+        background: #fff;
+        border: 1px solid #e2e8f0;
+        border-radius: 20px;
+        box-shadow: 0 16px 48px rgba(15, 23, 42, 0.08);
+        text-align: center;
+      }
+      .brand {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 56px;
+        height: 56px;
+        margin-bottom: 1.25rem;
+        border-radius: 16px;
+        background: linear-gradient(135deg, #5b4cdb 0%, #7c3aed 50%, #a855f7 100%);
+        color: #fff;
+        font-size: 1.5rem;
+        font-weight: 700;
+        box-shadow: 0 8px 32px rgba(91, 76, 219, 0.25);
+      }
+      .icon {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 72px;
+        height: 72px;
+        margin: 0 auto 1.25rem;
+        border-radius: 999px;
+        font-size: 2rem;
+        font-weight: 700;
+      }
+      .icon.loading {
+        border: 4px solid #e2e8f0;
+        border-top-color: #5b4cdb;
+        animation: spin 0.8s linear infinite;
+      }
+      .icon.success {
+        background: #ecfdf5;
+        color: #059669;
+        border: 1px solid #a7f3d0;
+      }
+      .icon.error {
+        background: #fef2f2;
+        color: #dc2626;
+        border: 1px solid #fecaca;
+      }
+      h1 {
+        margin: 0 0 0.75rem;
+        font-size: 1.625rem;
+        line-height: 1.25;
+      }
+      p {
+        margin: 0;
+        color: #64748b;
+        line-height: 1.6;
+      }
+      .actions {
+        margin-top: 1.75rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+      }
+      .btn {
+        display: inline-block;
+        padding: 0.85rem 1.25rem;
+        border-radius: 10px;
+        font: inherit;
+        font-weight: 600;
+        text-decoration: none;
+        cursor: pointer;
+        border: 0;
+      }
+      .btn-primary {
+        background: linear-gradient(135deg, #5b4cdb 0%, #7c3aed 50%, #a855f7 100%);
+        color: #fff;
+        box-shadow: 0 8px 24px rgba(91, 76, 219, 0.22);
+      }
+      .btn-secondary {
+        background: #f8fafc;
+        color: #475569;
+        border: 1px solid #e2e8f0;
+      }
+      .hidden {
+        display: none;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="card">
+      <div class="brand" aria-hidden="true">D</div>
+
+      <section id="state-loading">
+        <div class="icon loading" aria-hidden="true"></div>
+        <h1>E-posta doğrulanıyor</h1>
+        <p>Lütfen bekleyin, hesabınızı doğruluyoruz.</p>
+      </section>
+
+      <section id="state-success" class="hidden">
+        <div class="icon success" aria-hidden="true">✓</div>
+        <h1>E-postanız doğrulandı</h1>
+        <p>Hesabınız aktif. Artık giriş yaparak alışverişe devam edebilirsiniz.</p>
+        <div class="actions">
+          <a class="btn btn-primary" id="login-link" href="/">Giriş yap</a>
+        </div>
+      </section>
+
+      <section id="state-error" class="hidden">
+        <div class="icon error" aria-hidden="true">!</div>
+        <h1>Doğrulama başarısız</h1>
+        <p id="error-text">Bağlantı geçersiz veya süresi dolmuş olabilir. Yeni bir doğrulama e-postası isteyebilirsiniz.</p>
+        <div class="actions">
+          <a class="btn btn-primary" href="/">Ana sayfaya dön</a>
+          <button class="btn btn-secondary" type="button" onclick="location.reload()">Tekrar dene</button>
+        </div>
+      </section>
+
+      <section id="state-invalid" class="hidden">
+        <div class="icon error" aria-hidden="true">!</div>
+        <h1>Geçersiz bağlantı</h1>
+        <p>E-postanızdaki doğrulama bağlantısı eksik veya hatalı. Lütfen maildeki butona tekrar tıklayın.</p>
+        <div class="actions">
+          <a class="btn btn-primary" href="/">Ana sayfaya dön</a>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      const params = new URLSearchParams(window.location.search);
+      const userId = params.get("userId") ?? "";
+      const code = params.get("code") ?? "";
+      const changedEmail = params.get("changedEmail");
+
+      const sections = {
+        loading: document.getElementById("state-loading"),
+        success: document.getElementById("state-success"),
+        error: document.getElementById("state-error"),
+        invalid: document.getElementById("state-invalid")
+      };
+
+      function show(state) {
+        Object.values(sections).forEach((section) => section.classList.add("hidden"));
+        sections[state].classList.remove("hidden");
+      }
+
+      async function confirmEmail() {
+        if (!userId || !code) {
+          show("invalid");
+          return;
+        }
+
+        const query = new URLSearchParams({ userId, code });
+        if (changedEmail) query.set("changedEmail", changedEmail);
+
+        try {
+          const response = await fetch(`/confirmEmail?${query.toString()}`, {
+            method: "GET",
+            headers: { Accept: "text/html, text/plain, */*" }
+          });
+
+          if (response.ok) {
+            show("success");
+            return;
+          }
+
+          document.getElementById("error-text").textContent =
+            response.status === 401
+              ? "Doğrulama bağlantısı geçersiz veya süresi dolmuş. Kayıt ekranından yeni doğrulama maili isteyin."
+              : "Doğrulama tamamlanamadı. Lütfen daha sonra tekrar deneyin.";
+          show("error");
+        } catch {
+          document.getElementById("error-text").textContent =
+            "Sunucuya bağlanılamadı. İnternet bağlantınızı kontrol edip tekrar deneyin.";
+          show("error");
+        }
+      }
+
+      confirmEmail();
+    </script>
+  </body>
+</html>
