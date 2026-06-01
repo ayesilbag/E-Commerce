@@ -19,6 +19,7 @@ public interface IApplicationDbContext
     DbSet<PaymentClient> PaymentClients { get; }
     DbSet<PaymentSession> PaymentSessions { get; }
     DbSet<PaymentSettings> PaymentSettings { get; }
+    DbSet<SiteSettings> SiteSettings { get; }
 
     // Orders
     DbSet<Order> Orders { get; }

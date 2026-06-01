@@ -37,7 +37,7 @@ public class AdminMedia : EndpointGroupBase
             return Results.BadRequest(new { success = false, error = new { code = "FILE_TOO_LARGE", message = "Dosya boyutu çok büyük" } });
         }
 
-        var allowedFolders = new[] { "products", "categories" };
+        var allowedFolders = new[] { "products", "categories", "site" };
         if (!allowedFolders.Contains(folder, StringComparer.OrdinalIgnoreCase))
         {
             return Results.BadRequest(new { success = false, error = new { code = "INVALID_FOLDER", message = "Geçersiz klasör" } });

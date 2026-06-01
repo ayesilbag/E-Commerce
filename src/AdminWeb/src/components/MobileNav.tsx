@@ -12,6 +12,7 @@ import {
   IconShipping,
   IconBank,
   IconCreditCard,
+  IconSettings,
 } from './Icons';
 
 export default function MobileNav() {
@@ -64,6 +65,9 @@ export default function MobileNav() {
             </NavLink>
             <NavLink to="/payment-clients" className="mobile-sheet-link" onClick={() => setMenuOpen(false)}>
               <IconCreditCard /> iyzico ödeme
+            </NavLink>
+            <NavLink to="/site-settings" className="mobile-sheet-link" onClick={() => setMenuOpen(false)}>
+              <IconSettings /> Site ayarları
             </NavLink>
             <button type="button" className="mobile-sheet-link danger" onClick={logout}>
               <IconLogout /> Çıkış yap

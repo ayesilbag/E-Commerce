@@ -10,6 +10,7 @@ import {
   IconShipping,
   IconBank,
   IconCreditCard,
+  IconSettings,
 } from './Icons';
 import MobileNav from './MobileNav';
 
@@ -64,6 +65,10 @@ export default function Layout() {
           <NavLink to="/payment-clients" className={({ isActive }) => `nav-item${isActive ? ' active' : ''}`}>
             <IconCreditCard />
             iyzico
+          </NavLink>
+          <NavLink to="/site-settings" className={({ isActive }) => `nav-item${isActive ? ' active' : ''}`}>
+            <IconSettings />
+            Site ayarları
           </NavLink>
         </nav>
 

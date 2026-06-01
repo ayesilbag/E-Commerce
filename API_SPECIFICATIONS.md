@@ -376,6 +376,32 @@ interface NewsletterSubscription {
 }
 ```
 
+### 9. Site Settings Model
+
+```typescript
+interface SiteSettings {
+  id: string;
+  code: string;           // UI tanımlayıcı (ör. bizdenal, digitalep)
+  name: string;           // Admin görünen ad
+  siteName: string;
+  domain?: string;
+  logoUrl?: string;
+  faviconUrl?: string;
+  address?: string;
+  emails: string[];
+  phones: string[];
+  workingHours: string[];
+  socialLinks: {
+    facebook?: string;
+    twitter?: string;
+    instagram?: string;
+    youTube?: string;
+  };
+  isActive: boolean;
+  isDefault: boolean;
+}
+```
+
 ---
 
 ## API Endpoints
@@ -1484,6 +1510,47 @@ Siparişi iptal et
 
 ### 📧 Contact & Newsletter Endpoints
 
+#### GET /site-settings/{code}
+
+Belirli bir UI instance'ının marka ve iletişim bilgilerini getir (auth gerekmez)
+
+**Path param:** `code` — UI slug (ör. `bizdenal`)
+
+**Response (200):**
+
+```json
+{
+  "success": true,
+  "data": {
+    "id": "01JXXXX",
+    "code": "bizdenal",
+    "name": "Bizden Al Bizden Sat",
+    "siteName": "bizdenalbizdensat.com",
+    "domain": "https://bizdenalbizdensat.com",
+    "logoUrl": "/uploads/site/logo.png",
+    "faviconUrl": "/uploads/site/favicon.ico",
+    "address": "Teknoloji Caddesi No: 123, Dijital Şehir İstanbul, 34001",
+    "emails": ["info@example.com", "destek@example.com"],
+    "phones": ["+90 (555) 123-4567"],
+    "workingHours": ["Pazartesi - Cuma: 09:00 - 18:00"],
+    "socialLinks": {
+      "facebook": "https://facebook.com/...",
+      "twitter": "https://x.com/...",
+      "instagram": "https://instagram.com/...",
+      "youTube": "https://youtube.com/..."
+    },
+    "isActive": true,
+    "isDefault": false
+  }
+}
+```
+
+#### GET /site-settings
+
+Varsayılan (`isDefault=true`) aktif UI ayarlarını getir (auth gerekmez)
+
+---
+
 #### POST /contact
 
 İletişim formu gönder
@@ -2219,13 +2286,31 @@ const addAddress = async (addressData) => {
 
 **API Çağrıları:**
 
-| Sıra | Endpoint   | Method | Açıklama              |
-| ---- | ---------- | ------ | --------------------- |
-| 1    | `/contact` | POST   | İletişim formu gönder |
+| Sıra | Endpoint                    | Method | Açıklama                           |
+| ---- | --------------------------- | ------ | ---------------------------------- |
+| 1    | `/site-settings/{uiCode}`   | GET    | Bu UI'nin iletişim ve marka bilgisi |
+| 2    | `/contact`                  | POST   | İletişim formu gönder              |
 
 **Component: Contact.tsx**
 
 ```typescript
+const UI_CODE = import.meta.env.VITE_UI_CODE;
+
+useEffect(() => {
+  fetch(`${API_BASE_URL}/site-settings/${UI_CODE}`)
+    .then((res) => res.json())
+    .then((data) => {
+      if (data.success) {
+        setSiteSettings(data.data);
+        document.title = data.data.siteName;
+        if (data.data.faviconUrl) {
+          const link = document.querySelector("link[rel='icon']") as HTMLLinkElement;
+          if (link) link.href = data.data.faviconUrl;
+        }
+      }
+    });
+}, []);
+
 const handleSubmit = async (e) => {
   e.preventDefault();
   setIsSubmitting(true);

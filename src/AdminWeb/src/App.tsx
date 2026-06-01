@@ -12,6 +12,8 @@ import PaymentClientsPage from './pages/PaymentClientsPage';
 import OrdersPage from './pages/OrdersPage';
 import OrderDetailPage from './pages/OrderDetailPage';
 import CouponsPage from './pages/CouponsPage';
+import SiteSettingsPage from './pages/SiteSettingsPage';
+import SiteSettingsFormPage from './pages/SiteSettingsFormPage';
 
 function PrivateRoute({ children }: { children: React.ReactNode }) {
   if (!getToken()) {
@@ -43,6 +45,9 @@ export default function App() {
         <Route path="shipping" element={<ShippingPage />} />
         <Route path="bank-accounts" element={<BankAccountsPage />} />
         <Route path="payment-clients" element={<PaymentClientsPage />} />
+        <Route path="site-settings" element={<SiteSettingsPage />} />
+        <Route path="site-settings/new" element={<SiteSettingsFormPage />} />
+        <Route path="site-settings/:id" element={<SiteSettingsFormPage />} />
       </Route>
     </Routes>
   );

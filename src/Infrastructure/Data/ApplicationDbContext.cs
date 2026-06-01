@@ -25,6 +25,7 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplica
     public DbSet<PaymentClient> PaymentClients => Set<PaymentClient>();
     public DbSet<PaymentSession> PaymentSessions => Set<PaymentSession>();
     public DbSet<PaymentSettings> PaymentSettings => Set<PaymentSettings>();
+    public DbSet<SiteSettings> SiteSettings => Set<SiteSettings>();
 
     // Orders
     public DbSet<Order> Orders => Set<Order>();
