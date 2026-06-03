@@ -23,6 +23,12 @@ public class SiteSettingsConfiguration : IEntityTypeConfiguration<SiteSettings>
         builder.Property(x => x.TwitterUrl).HasMaxLength(500);
         builder.Property(x => x.InstagramUrl).HasMaxLength(500);
         builder.Property(x => x.YouTubeUrl).HasMaxLength(500);
+        builder.Property(x => x.AboutPageContent);
+        builder.Property(x => x.DeliveryReturnsPageContent);
+        builder.Property(x => x.PrivacyPolicyPageContent);
+        builder.Property(x => x.DistanceSellingAgreementPageContent);
+        builder.Property(x => x.PreInformationFormPageContent);
+        builder.Property(x => x.IyzicoPayLogoUrl).HasMaxLength(500);
 
         builder.HasIndex(x => x.Code).IsUnique();
         builder.HasIndex(x => new { x.IsActive, x.IsDefault });

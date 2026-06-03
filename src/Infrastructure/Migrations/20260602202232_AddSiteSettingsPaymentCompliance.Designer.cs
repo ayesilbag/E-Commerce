@@ -4,6 +4,7 @@ using ECommerce.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ECommerce.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260602202232_AddSiteSettingsPaymentCompliance")]
+    partial class AddSiteSettingsPaymentCompliance
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1015,8 +1018,9 @@ namespace ECommerce.Infrastructure.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("AboutPageContent")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<string>("AboutPageUrl")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<string>("Address")
                         .HasMaxLength(1000)
@@ -1027,11 +1031,13 @@ namespace ECommerce.Infrastructure.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("DeliveryReturnsPageContent")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<string>("DeliveryReturnsPageUrl")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
-                    b.Property<string>("DistanceSellingAgreementPageContent")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<string>("DistanceSellingAgreementPageUrl")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<string>("Domain")
                         .HasMaxLength(500)
@@ -1048,6 +1054,9 @@ namespace ECommerce.Infrastructure.Migrations
                     b.Property<string>("FaviconUrl")
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
+
+                    b.Property<bool>("HasSsl")
+                        .HasColumnType("bit");
 
                     b.Property<string>("InstagramUrl")
                         .HasMaxLength(500)
@@ -1067,6 +1076,10 @@ namespace ECommerce.Infrastructure.Migrations
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
+                    b.Property<string>("MastercardLogoUrl")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(200)
@@ -1076,11 +1089,9 @@ namespace ECommerce.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("PreInformationFormPageContent")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PrivacyPolicyPageContent")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<string>("PrivacyPolicyPageUrl")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<string>("SiteName")
                         .IsRequired()
@@ -1088,6 +1099,10 @@ namespace ECommerce.Infrastructure.Migrations
                         .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("TwitterUrl")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("VisaLogoUrl")
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 

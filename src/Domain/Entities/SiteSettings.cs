@@ -21,6 +21,15 @@ public class SiteSettings : BaseEntity
     public string? TwitterUrl { get; set; }
     public string? InstagramUrl { get; set; }
     public string? YouTubeUrl { get; set; }
+
+    // iyzico / ödeme entegrasyonu — yasal sayfa içerikleri (sabit slug: /hakkimizda vb.)
+    public string? AboutPageContent { get; set; }
+    public string? DeliveryReturnsPageContent { get; set; }
+    public string? PrivacyPolicyPageContent { get; set; }
+    public string? DistanceSellingAgreementPageContent { get; set; }
+    public string? PreInformationFormPageContent { get; set; }
+    public string? IyzicoPayLogoUrl { get; set; }
+
     public bool IsActive { get; set; } = true;
     public bool IsDefault { get; set; }
 }

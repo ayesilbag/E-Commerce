@@ -14,6 +14,8 @@ public class SiteSettingsDto
     public IReadOnlyList<string> Phones { get; set; } = [];
     public IReadOnlyList<string> WorkingHours { get; set; } = [];
     public SocialLinksDto SocialLinks { get; set; } = new();
+    public PaymentComplianceDto PaymentCompliance { get; set; } = new();
+    public PaymentComplianceStatusDto PaymentComplianceStatus { get; set; } = new();
     public bool IsActive { get; set; } = true;
     public bool IsDefault { get; set; }
 }
@@ -27,6 +29,8 @@ public class SiteSettingsListItemDto
     public string? Domain { get; set; }
     public bool IsActive { get; set; } = true;
     public bool IsDefault { get; set; }
+    public int PaymentComplianceCompleted { get; set; }
+    public int PaymentComplianceTotal { get; set; }
 }
 
 public class SocialLinksDto

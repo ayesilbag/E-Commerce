@@ -16,9 +16,10 @@ Her UI kendi benzersiz **`code`** değeriyle tanımlanır. Admin panelden her UI
 6. [Ekran Bazlı Kullanım](#ekran-bazlı-kullanım)
 7. [Medya URL'leri](#medya-urlleri-logo--favicon)
 8. [İletişim Formu](#iletişim-formu)
-9. [Önerilen Mimari](#önerilen-mimari)
-10. [Fallback ve Hata Yönetimi](#fallback-ve-hata-yönetimi)
-11. [Kontrol Listesi](#kontrol-listesi)
+9. [Ödeme Entegrasyonu Kriterleri (iyzico)](#ödeme-entegrasyonu-kriterleri-iyzico)
+10. [Önerilen Mimari](#önerilen-mimari)
+11. [Fallback ve Hata Yönetimi](#fallback-ve-hata-yönetimi)
+12. [Kontrol Listesi](#kontrol-listesi)
 
 ---
 
@@ -100,6 +101,25 @@ Accept: application/json
       "instagram": "https://instagram.com/magaza",
       "youTube": "https://youtube.com/@magaza"
     },
+    "paymentCompliance": {
+      "legalPages": [
+        { "slug": "hakkimizda", "title": "Hakkımızda", "path": "/hakkimizda", "content": "..." },
+        { "slug": "gizlilik", "title": "Gizlilik Sözleşmesi", "path": "/gizlilik", "content": "..." }
+      ],
+      "aboutPageContent": "Mağazamız hakkında...",
+      "deliveryReturnsPageContent": "Teslimat süreleri...",
+      "privacyPolicyPageContent": "Kişisel veriler...",
+      "distanceSellingAgreementPageContent": "Mesafeli satış...",
+      "preInformationFormPageContent": "Ön bilgilendirme...",
+      "iyzicoPayLogoUrl": "/uploads/site/iyzico-ile-ode.png"
+    },
+    "paymentComplianceStatus": {
+      "completed": 6,
+      "total": 6,
+      "items": [
+        { "key": "aboutPage", "label": "Hakkımızda sayfası", "met": true }
+      ]
+    },
     "isActive": true,
     "isDefault": false
   }
@@ -135,6 +155,35 @@ export interface SocialLinks {
   youTube?: string | null;
 }
 
+export interface SiteLegalPage {
+  slug: string;
+  title: string;
+  path: string;
+  content?: string | null;
+}
+
+export interface PaymentCompliance {
+  legalPages: SiteLegalPage[];
+  aboutPageContent?: string | null;
+  deliveryReturnsPageContent?: string | null;
+  privacyPolicyPageContent?: string | null;
+  distanceSellingAgreementPageContent?: string | null;
+  preInformationFormPageContent?: string | null;
+  iyzicoPayLogoUrl?: string | null;
+}
+
+export interface PaymentComplianceItem {
+  key: string;
+  label: string;
+  met: boolean;
+}
+
+export interface PaymentComplianceStatus {
+  completed: number;
+  total: number;
+  items: PaymentComplianceItem[];
+}
+
 export interface SiteSettings {
   id: string;
   code: string;
@@ -148,6 +197,8 @@ export interface SiteSettings {
   phones: string[];
   workingHours: string[];
   socialLinks: SocialLinks;
+  paymentCompliance: PaymentCompliance;
+  paymentComplianceStatus: PaymentComplianceStatus;
   isActive: boolean;
   isDefault: boolean;
 }
@@ -367,6 +418,101 @@ export function resolveMediaUrl(url?: string | null): string {
 
 ---
 
+## Ödeme Entegrasyonu Kriterleri (iyzico)
+
+Yasal sayfalar **admin’den girilen içerikle** API üzerinden dinamik yayınlanır. Sabit slug’lar:
+
+| Sayfa | Slug | Storefront yolu |
+|-------|------|-----------------|
+| Hakkımızda | `hakkimizda` | `/hakkimizda` |
+| Ön bilgilendirme formu | `on-bilgilendirme-formu` | `/on-bilgilendirme-formu` |
+| Teslimat ve iade | `teslimat-ve-iade` | `/teslimat-ve-iade` |
+| Gizlilik | `gizlilik` | `/gizlilik` |
+| Mesafeli satış | `mesafeli-satis` | `/mesafeli-satis` |
+
+### Public API — tek sayfa
+
+```http
+GET /api/site-settings/{code}/legal-pages/{slug}
+```
+
+Örnek: `GET /api/site-settings/bizdenalbizdensat/legal-pages/on-bilgilendirme-formu`
+
+```json
+{
+  "success": true,
+  "data": {
+    "slug": "hakkimizda",
+    "title": "Hakkımızda",
+    "path": "/hakkimizda",
+    "content": "Mağazamız...",
+    "siteName": "bizdenalbizdensat.com",
+    "code": "bizdenal"
+  }
+}
+```
+
+### Hazır HTML (önizleme / crawler)
+
+```http
+GET /api/site-settings/{code}/legal-pages/{slug}/html
+```
+
+### Storefront — React Router
+
+```tsx
+const LEGAL_SLUGS = ["hakkimizda", "on-bilgilendirme-formu", "teslimat-ve-iade", "gizlilik", "mesafeli-satis"] as const;
+
+function LegalPage({ slug }: { slug: string }) {
+  const UI_CODE = import.meta.env.VITE_UI_CODE;
+  const { data } = useQuery({
+    queryKey: ["legal-page", UI_CODE, slug],
+    queryFn: async () => {
+      const res = await fetch(`${API_BASE_URL}/site-settings/${UI_CODE}/legal-pages/${slug}`);
+      const json = await res.json();
+      return json.data;
+    },
+  });
+
+  if (!data?.content) return <NotFound />;
+  return (
+    <article>
+      <h1>{data.title}</h1>
+      <div dangerouslySetInnerHTML={{ __html: data.content }} />
+    </article>
+  );
+}
+
+// routes: /hakkimizda, /gizlilik, ...
+```
+
+`GET /api/site-settings/{code}` yanıtında ayrıca `paymentCompliance.legalPages[]` ve düz `*PageContent` alanları bulunur.
+
+### Footer örneği
+
+```tsx
+function PaymentFooter() {
+  const settings = useSiteSettings();
+  const pages = settings?.paymentCompliance?.legalPages ?? [];
+  const iyzicoLogo = settings?.paymentCompliance?.iyzicoPayLogoUrl;
+
+  return (
+    <footer>
+      <nav>
+        {pages.filter((p) => p.content).map((p) => (
+          <Link key={p.slug} to={p.path}>{p.title}</Link>
+        ))}
+      </nav>
+      {/* logolar */}
+    </footer>
+  );
+}
+```
+
+Admin değişikliği sonrası: `cd src/AdminWeb && npm run build`
+
+---
+
 ## İletişim Formu
 
 Site ayarlarından bağımsızdır; tüm UI'lar aynı endpoint'i kullanır.
@@ -469,6 +615,9 @@ Her storefront UI projesi için:
 - [ ] Header logo / site adı dinamik
 - [ ] Favicon dinamik
 - [ ] İletişim sayfası sol kolon API'den besleniyor
+- [ ] Admin'de yasal sayfa içerikleri ve logolar dolduruldu (6/6)
+- [ ] Storefront'ta `/hakkimizda` vb. rotalar API içeriğini gösteriyor
+- [ ] Footer'da yasal sayfa linkleri ve ödeme logoları `paymentCompliance`'ten
 - [ ] Medya URL'leri `resolveMediaUrl` ile çözümleniyor
 - [ ] React Query kullanılıyorsa `queryKey`'de `UI_CODE` var
 - [ ] Production CORS'ta UI domain'i tanımlı
@@ -478,11 +627,11 @@ Her storefront UI projesi için:
 ## Hızlı Başlangıç
 
 1. Admin → **Site ayarları** → **Yeni UI**
-2. UI kodu: `bizdenal` (storefront `.env` ile aynı)
-3. Marka ve iletişim bilgilerini doldur → Kaydet
+2. UI kodu: `bizdenalbizdensat` (storefront `.env` ile aynı; [bizdenalbizdensat.com](https://www.bizdenalbizdensat.com/))
+3. Marka, iletişim ve **yasal form içerikleri** (admin formundan manuel) → Kaydet
 4. Storefront `.env`:
    ```env
-   VITE_UI_CODE=bizdenal
+   VITE_UI_CODE=bizdenalbizdensat
    VITE_API_BASE_URL=https://api.example.com/api
    VITE_API_ORIGIN=https://api.example.com
    ```
@@ -497,5 +646,7 @@ Her storefront UI projesi için:
 | `src/WebServer/Endpoints/SiteSettings.cs` | Public GET by code |
 | `src/WebServer/Endpoints/AdminSiteSettings.cs` | Admin CRUD |
 | `src/Application/Settings/SiteSettingsRules.cs` | Code validasyonu |
+| `src/Application/Settings/PaymentComplianceRules.cs` | iyzico kriter durumu |
+| `src/Application/Settings/SiteLegalPages.cs` | Sabit slug / sayfa eşlemesi |
 | `src/AdminWeb/src/pages/SiteSettingsPage.tsx` | UI listesi |
 | `src/AdminWeb/src/pages/SiteSettingsFormPage.tsx` | UI düzenleme formu |

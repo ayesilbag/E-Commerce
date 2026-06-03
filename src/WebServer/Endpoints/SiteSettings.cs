@@ -14,9 +14,102 @@ public class SiteSettingsEndpoint : EndpointGroupBase
             .WithTags("SiteSettings")
             .WithOpenApi();
 
+        group.MapGet("/{code}/legal-pages/{slug}", GetLegalPageAsync);
+        group.MapGet("/{code}/legal-pages/{slug}/html", GetLegalPageHtmlAsync);
         group.MapGet("/{code}", GetByCodeAsync);
         group.MapGet("/", GetDefaultAsync);
     }
+
+    private static async Task<IResult> GetLegalPageAsync(
+        string code,
+        string slug,
+        ApplicationDbContext context,
+        CancellationToken cancellationToken)
+    {
+        if (!SiteSettingsRules.TryNormalizeCode(code, out var normalizedCode))
+        {
+            return Results.BadRequest(new { success = false, message = "Geçersiz UI kodu" });
+        }
+
+        var settings = await SiteSettingsHelper.GetActiveByCodeAsync(context, normalizedCode, cancellationToken);
+        if (settings is null)
+        {
+            return Results.NotFound(new { success = false, message = "Site ayarları bulunamadı" });
+        }
+
+        var page = SiteLegalPages.ToDto(settings, slug);
+        if (page is null)
+        {
+            return Results.NotFound(new { success = false, message = "Sayfa bulunamadı" });
+        }
+
+        if (string.IsNullOrWhiteSpace(page.Content))
+        {
+            return Results.NotFound(new { success = false, message = "Sayfa içeriği henüz yayınlanmadı" });
+        }
+
+        return Results.Ok(new
+        {
+            success = true,
+            data = new
+            {
+                page.Slug,
+                page.Title,
+                page.Path,
+                page.Content,
+                siteName = settings.SiteName,
+                code = settings.Code
+            }
+        });
+    }
+
+    private static async Task<IResult> GetLegalPageHtmlAsync(
+        string code,
+        string slug,
+        ApplicationDbContext context,
+        CancellationToken cancellationToken)
+    {
+        if (!SiteSettingsRules.TryNormalizeCode(code, out var normalizedCode))
+        {
+            return Results.BadRequest("Geçersiz UI kodu");
+        }
+
+        var settings = await SiteSettingsHelper.GetActiveByCodeAsync(context, normalizedCode, cancellationToken);
+        if (settings is null)
+        {
+            return Results.NotFound("Site ayarları bulunamadı");
+        }
+
+        var page = SiteLegalPages.ToDto(settings, slug);
+        if (page is null || string.IsNullOrWhiteSpace(page.Content))
+        {
+            return Results.NotFound("Sayfa bulunamadı");
+        }
+
+        var body = LooksLikeHtml(page.Content)
+            ? page.Content
+            : $"<div style=\"white-space:pre-wrap;font-family:system-ui,sans-serif;line-height:1.6\">{System.Net.WebUtility.HtmlEncode(page.Content)}</div>";
+
+        var html = $"""
+            <!DOCTYPE html>
+            <html lang="tr">
+            <head>
+              <meta charset="utf-8" />
+              <meta name="viewport" content="width=device-width, initial-scale=1" />
+              <title>{System.Net.WebUtility.HtmlEncode(page.Title)} — {System.Net.WebUtility.HtmlEncode(settings.SiteName)}</title>
+            </head>
+            <body style="max-width:48rem;margin:2rem auto;padding:0 1rem;font-family:system-ui,sans-serif;color:#111">
+              <h1>{System.Net.WebUtility.HtmlEncode(page.Title)}</h1>
+              {body}
+            </body>
+            </html>
+            """;
+
+        return Results.Content(html, "text/html; charset=utf-8");
+    }
+
+    private static bool LooksLikeHtml(string content) =>
+        content.Contains('<') && content.Contains('>');
 
     private static async Task<IResult> GetByCodeAsync(
         string code,
@@ -89,20 +182,28 @@ internal static class SiteSettingsHelper
             Instagram = settings.InstagramUrl,
             YouTube = settings.YouTubeUrl
         },
+        PaymentCompliance = PaymentComplianceRules.ToDto(settings),
+        PaymentComplianceStatus = PaymentComplianceRules.BuildStatus(settings),
         IsActive = settings.IsActive,
         IsDefault = settings.IsDefault
     };
 
-    public static SiteSettingsListItemDto ToListItemDto(SiteSettings settings) => new()
+    public static SiteSettingsListItemDto ToListItemDto(SiteSettings settings)
     {
-        Id = settings.Id,
-        Code = settings.Code,
-        Name = settings.Name,
-        SiteName = settings.SiteName,
-        Domain = settings.Domain,
-        IsActive = settings.IsActive,
-        IsDefault = settings.IsDefault
-    };
+        var status = PaymentComplianceRules.BuildStatus(settings);
+        return new()
+        {
+            Id = settings.Id,
+            Code = settings.Code,
+            Name = settings.Name,
+            SiteName = settings.SiteName,
+            Domain = settings.Domain,
+            IsActive = settings.IsActive,
+            IsDefault = settings.IsDefault,
+            PaymentComplianceCompleted = status.Completed,
+            PaymentComplianceTotal = status.Total
+        };
+    }
 
     public static List<string> NormalizeList(IEnumerable<string>? values) =>
         values?
@@ -140,6 +241,7 @@ internal static class SiteSettingsHelper
         settings.TwitterUrl = NullIfWhiteSpace(request.SocialLinks?.Twitter);
         settings.InstagramUrl = NullIfWhiteSpace(request.SocialLinks?.Instagram);
         settings.YouTubeUrl = NullIfWhiteSpace(request.SocialLinks?.YouTube);
+        PaymentComplianceRules.Apply(settings, request.PaymentCompliance);
         settings.IsActive = request.IsActive;
         settings.IsDefault = request.IsDefault;
     }

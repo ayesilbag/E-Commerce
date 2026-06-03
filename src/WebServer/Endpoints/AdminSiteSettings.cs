@@ -200,6 +200,7 @@ public class AdminSiteSettingsRequest
     public List<string>? Phones { get; set; }
     public List<string>? WorkingHours { get; set; }
     public SocialLinksDto? SocialLinks { get; set; }
+    public PaymentComplianceDto? PaymentCompliance { get; set; }
     public bool IsActive { get; set; } = true;
     public bool IsDefault { get; set; }
 }

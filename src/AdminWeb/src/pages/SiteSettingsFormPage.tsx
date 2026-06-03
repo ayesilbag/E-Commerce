@@ -11,6 +11,35 @@ type SocialLinks = {
   youTube?: string;
 };
 
+type PaymentCompliance = {
+  aboutPageContent?: string | null;
+  deliveryReturnsPageContent?: string | null;
+  privacyPolicyPageContent?: string | null;
+  distanceSellingAgreementPageContent?: string | null;
+  preInformationFormPageContent?: string | null;
+  iyzicoPayLogoUrl?: string | null;
+};
+
+const LEGAL_PAGE_FIELDS = [
+  { key: 'aboutPage', label: 'Hakkımızda', slug: 'hakkimizda', field: 'aboutPageContent' as const },
+  { key: 'preInformation', label: 'Ön bilgilendirme formu', slug: 'on-bilgilendirme-formu', field: 'preInformationFormPageContent' as const },
+  { key: 'deliveryReturns', label: 'Teslimat ve iade şartları', slug: 'teslimat-ve-iade', field: 'deliveryReturnsPageContent' as const },
+  { key: 'privacyPolicy', label: 'Gizlilik sözleşmesi', slug: 'gizlilik', field: 'privacyPolicyPageContent' as const },
+  { key: 'distanceSelling', label: 'Mesafeli satış sözleşmesi', slug: 'mesafeli-satis', field: 'distanceSellingAgreementPageContent' as const },
+];
+
+type PaymentComplianceItem = {
+  key: string;
+  label: string;
+  met: boolean;
+};
+
+type PaymentComplianceStatus = {
+  completed: number;
+  total: number;
+  items: PaymentComplianceItem[];
+};
+
 type ApiSiteSettings = {
   id: string;
   code: string;
@@ -24,6 +53,8 @@ type ApiSiteSettings = {
   phones: string[];
   workingHours: string[];
   socialLinks: SocialLinks;
+  paymentCompliance?: PaymentCompliance;
+  paymentComplianceStatus?: PaymentComplianceStatus;
   isActive: boolean;
   isDefault: boolean;
 };
@@ -43,9 +74,31 @@ const emptyForm = {
   twitter: '',
   instagram: '',
   youTube: '',
+  aboutPageContent: '',
+  deliveryReturnsPageContent: '',
+  privacyPolicyPageContent: '',
+  distanceSellingAgreementPageContent: '',
+  preInformationFormPageContent: '',
+  iyzicoPayLogoUrl: '',
   isActive: true,
   isDefault: false,
 };
+
+const IYZICO_LOGO_DOWNLOAD_URL = 'https://www.iyzico.com';
+
+function buildComplianceStatus(form: typeof emptyForm): PaymentComplianceStatus {
+  const pageItems = LEGAL_PAGE_FIELDS.map((p) => ({
+    key: p.key,
+    label: p.label,
+    met: Boolean(form[p.field].trim()),
+  }));
+  const items: PaymentComplianceItem[] = [
+    ...pageItems,
+    { key: 'iyzicoLogo', label: 'iyzico ile Öde logosu', met: Boolean(form.iyzicoPayLogoUrl.trim()) },
+  ];
+  const completed = items.filter((i) => i.met).length;
+  return { completed, total: items.length, items };
+}
 
 function linesToList(text: string) {
   return text.split('\n').map((line) => line.trim()).filter(Boolean);
@@ -71,6 +124,12 @@ function mapFromApi(data: ApiSiteSettings) {
     twitter: data.socialLinks?.twitter ?? '',
     instagram: data.socialLinks?.instagram ?? '',
     youTube: data.socialLinks?.youTube ?? '',
+    aboutPageContent: data.paymentCompliance?.aboutPageContent ?? '',
+    deliveryReturnsPageContent: data.paymentCompliance?.deliveryReturnsPageContent ?? '',
+    privacyPolicyPageContent: data.paymentCompliance?.privacyPolicyPageContent ?? '',
+    distanceSellingAgreementPageContent: data.paymentCompliance?.distanceSellingAgreementPageContent ?? '',
+    preInformationFormPageContent: data.paymentCompliance?.preInformationFormPageContent ?? '',
+    iyzicoPayLogoUrl: data.paymentCompliance?.iyzicoPayLogoUrl ?? '',
     isActive: data.isActive ?? true,
     isDefault: data.isDefault ?? false,
   };
@@ -97,10 +156,15 @@ export default function SiteSettingsFormPage() {
       .finally(() => setLoading(false));
   }, [id, isNew]);
 
-  const onUpload = async (file: File, field: 'logoUrl' | 'faviconUrl') => {
+  const onUpload = async (
+    file: File,
+    field: 'logoUrl' | 'faviconUrl' | 'iyzicoPayLogoUrl',
+  ) => {
     const result = await uploadImage(file, 'site');
     setForm((prev) => ({ ...prev, [field]: result.url }));
   };
+
+  const complianceStatus = buildComplianceStatus(form);
 
   const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -124,6 +188,14 @@ export default function SiteSettingsFormPage() {
         twitter: form.twitter || null,
         instagram: form.instagram || null,
         youTube: form.youTube || null,
+      },
+      paymentCompliance: {
+        aboutPageContent: form.aboutPageContent || null,
+        deliveryReturnsPageContent: form.deliveryReturnsPageContent || null,
+        privacyPolicyPageContent: form.privacyPolicyPageContent || null,
+        distanceSellingAgreementPageContent: form.distanceSellingAgreementPageContent || null,
+        preInformationFormPageContent: form.preInformationFormPageContent || null,
+        iyzicoPayLogoUrl: form.iyzicoPayLogoUrl || null,
       },
       isActive: form.isActive,
       isDefault: form.isDefault,
@@ -185,7 +257,7 @@ export default function SiteSettingsFormPage() {
               id="ui-code"
               value={form.code}
               onChange={(e) => setForm({ ...form, code: e.target.value.toLowerCase() })}
-              placeholder="bizdenal"
+              placeholder="bizdenalbizdensat"
               pattern="[a-z0-9]+(-[a-z0-9]+)*"
               required
               disabled={!isNew}
@@ -291,6 +363,78 @@ export default function SiteSettingsFormPage() {
             <textarea id="hours" rows={4} value={form.workingHoursText} onChange={(e) => setForm({ ...form, workingHoursText: e.target.value })} />
             <small className="field-hint">Her satıra bir saat aralığı</small>
           </div>
+        </div>
+
+        <h3 className="card-title" style={{ marginTop: 24 }}>Ödeme entegrasyonu — web sitesi kriterleri</h3>
+        <p className="field-hint" style={{ marginBottom: 12 }}>
+          Yasal sayfalar admin&apos;den girilen içerikle API üzerinden dinamik yayınlanır (sabit adresler:{' '}
+          <code>/hakkimizda</code>, <code>/on-bilgilendirme-formu</code>, <code>/teslimat-ve-iade</code>,{' '}
+          <code>/gizlilik</code>, <code>/mesafeli-satis</code>).
+          Storefront bu slug&apos;larla sayfa oluşturur veya doğrudan API HTML endpoint&apos;ini kullanır.
+        </p>
+
+        <div
+          className="card"
+          style={{
+            marginBottom: 20,
+            padding: 16,
+            background: complianceStatus.completed === complianceStatus.total
+              ? 'rgba(34, 197, 94, 0.08)'
+              : 'rgba(234, 179, 8, 0.08)',
+            border: `1px solid ${complianceStatus.completed === complianceStatus.total ? 'rgba(34, 197, 94, 0.35)' : 'rgba(234, 179, 8, 0.35)'}`,
+          }}
+        >
+          <strong>
+            Gereken kriterler: {complianceStatus.completed}/{complianceStatus.total}
+          </strong>
+          <ul style={{ margin: '12px 0 0', paddingLeft: 20 }}>
+            {complianceStatus.items.map((item) => (
+              <li key={item.key} style={{ color: item.met ? '#15803d' : 'inherit' }}>
+                {item.met ? '✓' : '○'} {item.label}
+              </li>
+            ))}
+          </ul>
+        </div>
+
+        {LEGAL_PAGE_FIELDS.map((page) => (
+          <div key={page.slug} className="field" style={{ marginBottom: 16 }}>
+            <label htmlFor={page.slug}>
+              {page.label}{' '}
+              <code style={{ fontWeight: 400 }}>/{page.slug}</code>
+            </label>
+            <textarea
+              id={page.slug}
+              rows={8}
+              value={form[page.field]}
+              onChange={(e) => setForm({ ...form, [page.field]: e.target.value })}
+              placeholder={`${page.label} metnini girin. HTML veya düz metin.`}
+            />
+            {form.code && (
+              <small className="field-hint">
+                Önizleme:{' '}
+                <code>/api/site-settings/{form.code}/legal-pages/{page.slug}/html</code>
+              </small>
+            )}
+          </div>
+        ))}
+
+        <div className="field" style={{ marginTop: 16, maxWidth: 360 }}>
+            <label>iyzico ile Öde logosu</label>
+            {form.iyzicoPayLogoUrl && (
+              <img src={form.iyzicoPayLogoUrl} alt="iyzico ile Öde" style={{ maxHeight: 32, marginBottom: 8, display: 'block' }} />
+            )}
+            <label className="btn btn-secondary" style={{ cursor: 'pointer', width: 'fit-content' }}>
+              <IconUpload /> Yükle
+              <input type="file" accept="image/*" hidden onChange={(e) => e.target.files?.[0] && onUpload(e.target.files[0], 'iyzicoPayLogoUrl')} />
+            </label>
+            <input value={form.iyzicoPayLogoUrl} onChange={(e) => setForm({ ...form, iyzicoPayLogoUrl: e.target.value })} placeholder="iyzico logo URL" style={{ marginTop: 8 }} />
+            <small className="field-hint">
+              Resmi logoyu{' '}
+              <a href={IYZICO_LOGO_DOWNLOAD_URL} target="_blank" rel="noopener noreferrer">
+                iyzico sitesinden
+              </a>{' '}
+              indirebilirsiniz.
+            </small>
         </div>
 
         <h3 className="card-title" style={{ marginTop: 24 }}>Sosyal medya</h3>

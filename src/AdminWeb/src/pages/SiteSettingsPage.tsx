@@ -12,6 +12,8 @@ type SiteSettingsListItem = {
   domain?: string;
   isActive: boolean;
   isDefault: boolean;
+  paymentComplianceCompleted?: number;
+  paymentComplianceTotal?: number;
 };
 
 export default function SiteSettingsPage() {
@@ -82,6 +84,7 @@ export default function SiteSettingsPage() {
                   <th>Ad</th>
                   <th>Site adı</th>
                   <th>Domain</th>
+                  <th>Ödeme kriterleri</th>
                   <th>Durum</th>
                   <th />
                 </tr>
@@ -93,6 +96,21 @@ export default function SiteSettingsPage() {
                     <td>{item.name}</td>
                     <td>{item.siteName}</td>
                     <td className="muted">{item.domain ?? '—'}</td>
+                    <td>
+                      {item.paymentComplianceTotal != null ? (
+                        <span
+                          className={
+                            item.paymentComplianceCompleted === item.paymentComplianceTotal
+                              ? 'badge badge-success'
+                              : 'badge badge-muted'
+                          }
+                        >
+                          {item.paymentComplianceCompleted}/{item.paymentComplianceTotal}
+                        </span>
+                      ) : (
+                        '—'
+                      )}
+                    </td>
                     <td>
                       {!item.isActive && <span className="badge badge-muted">Pasif</span>}
                       {item.isDefault && <span className="badge">Varsayılan</span>}
