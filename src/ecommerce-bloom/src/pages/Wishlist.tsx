@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import usePageTitle from "@/hooks/usePageTitle";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ProductCard from "@/components/ProductCard";
@@ -10,6 +11,7 @@ import { Link } from "react-router-dom";
 import { toast } from "sonner";
 
 const Wishlist = () => {
+  usePageTitle("Favorilerim");
   const { wishlistItems, removeFromWishlist, refreshWishlist } = useWishlist();
   const { addToCart } = useCart();
 

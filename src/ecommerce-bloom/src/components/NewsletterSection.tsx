@@ -1,27 +1,31 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { useToast } from "@/components/ui/use-toast";
+import { toast } from "sonner";
 import { Mail } from "lucide-react";
+import { subscribeNewsletter } from "@/services/newsletter.service";
 
 const NewsletterSection = () => {
-  const { toast } = useToast();
   const [email, setEmail] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (email) {
-      toast({
-        title: "Abone Olundu!",
-        description: "Bültenimize abone olduğunuz için teşekkür ederiz.",
-      });
+    if (!email) {
+      toast.error("Hata", { description: "Lütfen geçerli bir e-posta adresi girin." });
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      await subscribeNewsletter({ email });
+      toast.success("Abone Olundu!", { description: "Bültenimize abone olduğunuz için teşekkür ederiz." });
       setEmail("");
-    } else {
-      toast({
-        title: "Hata",
-        description: "Lütfen geçerli bir e-posta adresi girin.",
-        variant: "destructive",
-      });
+    } catch (error) {
+      const msg = error instanceof Error ? error.message : "Abonelik işlemi başarısız oldu.";
+      toast.error("Hata", { description: msg });
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -56,8 +60,9 @@ const NewsletterSection = () => {
             <Button
               type="submit"
               className="btn-gradient px-4 py-2 text-sm h-9 whitespace-nowrap"
+              disabled={isLoading}
             >
-              Abone Ol
+              {isLoading ? "Gönderiliyor..." : "Abone Ol"}
             </Button>
           </form>
 

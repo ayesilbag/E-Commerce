@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import usePageTitle from "@/hooks/usePageTitle";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -37,6 +38,7 @@ const statusConfig: Record<OrderStatus, { label: string; color: string; icon: an
 };
 
 const Orders = () => {
+  usePageTitle("Siparişlerim");
   const { isAuthenticated } = useAuth();
   const [searchParams] = useSearchParams();
   const statusParam = searchParams.get('status') as OrderStatus | null;
@@ -45,6 +47,7 @@ const Orders = () => {
   const [orders, setOrders] = useState<any[]>([]);
   const [filteredOrders, setFilteredOrders] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [fetchError, setFetchError] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalOrders, setTotalOrders] = useState(0);
   const [selectedStatus, setSelectedStatus] = useState<OrderStatus | 'all'>('all');
@@ -58,13 +61,15 @@ const Orders = () => {
         setOrders(data.items);
         setTotalOrders(data.total || data.items.length);
       } catch (error) {
-        console.error('Error fetching orders:', error);
+        const msg = error instanceof Error ? error.message : 'Siparişler yüklenemedi';
+        setFetchError(msg);
       } finally {
         setIsLoading(false);
       }
     };
 
     if (isAuthenticated) {
+      setFetchError(null);
       fetchOrders();
     }
   }, [isAuthenticated, currentPage, selectedStatus]);
@@ -160,6 +165,19 @@ const Orders = () => {
             <div className="flex items-center justify-center py-16">
               <Loader className="w-8 h-8 animate-spin text-purple-default" />
             </div>
+          ) : fetchError ? (
+            <Card>
+              <CardContent className="py-16">
+                <div className="text-center">
+                  <XCircle className="w-12 h-12 mx-auto text-red-400 mb-4" />
+                  <h3 className="text-sm font-medium text-gray-900 mb-2">Siparişler yüklenemedi</h3>
+                  <p className="text-xs text-gray-500 mb-4">{fetchError}</p>
+                  <Button variant="outline" onClick={() => { setFetchError(null); setCurrentPage(p => p); }}>
+                    Tekrar Dene
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
           ) : filteredOrders.length === 0 ? (
             <Card>
               <CardContent className="py-16">

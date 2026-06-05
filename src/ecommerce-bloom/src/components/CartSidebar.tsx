@@ -1,7 +1,8 @@
 import { useCart } from "@/contexts/CartContext";
+import { useAuth } from "@/contexts/AuthContext";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-import { Minus, Plus, ShoppingBag, Trash2, X } from "lucide-react";
+import { Minus, Plus, ShoppingBag, Trash2, X, LogIn } from "lucide-react";
 import {
   Sheet,
   SheetContent,
@@ -18,6 +19,7 @@ interface CartSidebarProps {
 }
 
 const CartSidebar = ({ open, onClose }: CartSidebarProps) => {
+  const { isAuthenticated } = useAuth();
   const { cartItems, removeFromCart, updateQuantity, cartTotal, cartCount } = useCart();
 
   return (
@@ -118,13 +120,29 @@ const CartSidebar = ({ open, onClose }: CartSidebarProps) => {
                   Kargo ve vergiler ödeme sırasında hesaplanır.
                 </p>
                 <div className="pt-2 xs:pt-3 md:pt-3">
-                  <SheetClose asChild>
-                    <Link to="/order">
-                      <Button className="w-full bg-purple-gradient h-9 text-sm">
-                        Ödemeye Geç
-                      </Button>
-                    </Link>
-                  </SheetClose>
+                  {isAuthenticated ? (
+                    <SheetClose asChild>
+                      <Link to="/order">
+                        <Button className="w-full bg-purple-gradient h-9 text-sm">
+                          Ödemeye Geç
+                        </Button>
+                      </Link>
+                    </SheetClose>
+                  ) : (
+                    <div className="space-y-2">
+                      <p className="text-xs text-center text-gray-500">
+                        Ödemeye geçmek için giriş yapmanız gerekiyor
+                      </p>
+                      <SheetClose asChild>
+                        <Link to="/login" state={{ from: "/order" }}>
+                          <Button className="w-full bg-purple-gradient h-9 text-sm gap-2">
+                            <LogIn size={14} />
+                            Giriş Yap ve Devam Et
+                          </Button>
+                        </Link>
+                      </SheetClose>
+                    </div>
+                  )}
                 </div>
                 <div className="flex justify-center">
                   <SheetClose asChild>

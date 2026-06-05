@@ -114,6 +114,13 @@ const Order = () => {
   const { user } = useAuth();
   const { addresses, addAddress, removeAddress } = useAddresses();
 
+  // Sepet boşsa alışveriş sayfasına yönlendir
+  useEffect(() => {
+    if (cartItems.length === 0) {
+      navigate('/shop', { replace: true });
+    }
+  }, [cartItems.length, navigate]);
+
   const [selectedAddressId, setSelectedAddressId] = useState<string | null>(null);
 
   useEffect(() => {

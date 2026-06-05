@@ -4,6 +4,15 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+  DialogDescription,
+} from '@/components/ui/dialog';
+import { Textarea } from '@/components/ui/textarea';
 import { Loader, ChevronLeft, Clock, Truck, Package, CreditCard, CheckCircle2, XCircle, ExternalLink } from 'lucide-react';
 import { getOrder, cancelOrder } from '@/services/orders.service';
 import { initializeIyzicoPayment, redirectToIyzicoPayment } from '@/services/payments.service';
@@ -17,6 +26,8 @@ const OrderDetail = () => {
   const [order, setOrder] = useState<Order | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [showCancelDialog, setShowCancelDialog] = useState(false);
+  const [cancelReason, setCancelReason] = useState("");
 
   // Check if user came from iyzico return
   const iyzicoData = location.state?.iyzicoReturn;
@@ -73,15 +84,12 @@ const OrderDetail = () => {
   };
 
   const handleCancelOrder = async () => {
-    if (!order) return;
-
-    const reason = window.prompt('İptal sebebini yazınız:');
-    if (!reason) return;
-
+    if (!order || !cancelReason.trim()) return;
     try {
       setIsProcessing(true);
-      await cancelOrder(order.id, { reason });
+      await cancelOrder(order.id, { reason: cancelReason.trim() });
       toast.success('Sipariş iptal edildi');
+      setShowCancelDialog(false);
       navigate('/account');
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'İptal işlemi başarısız';
@@ -405,10 +413,10 @@ const OrderDetail = () => {
                 <Button
                   variant="outline"
                   className="w-full border-red-200 text-red-600 hover:bg-red-50"
-                  onClick={handleCancelOrder}
+                  onClick={() => setShowCancelDialog(true)}
                   disabled={isProcessing}
                 >
-                  {isProcessing ? 'İptal Ediliyor...' : 'Siparişi İptal Et'}
+                  Siparişi İptal Et
                 </Button>
               )}
             </div>
@@ -416,6 +424,37 @@ const OrderDetail = () => {
         </div>
       </main>
       <Footer />
+
+      {/* İptal Dialog */}
+      <Dialog open={showCancelDialog} onOpenChange={setShowCancelDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Siparişi İptal Et</DialogTitle>
+            <DialogDescription>
+              Sipariş #{order?.orderNumber} iptal edilecek. Lütfen iptal sebebini belirtin.
+            </DialogDescription>
+          </DialogHeader>
+          <Textarea
+            placeholder="İptal sebebini yazınız..."
+            value={cancelReason}
+            onChange={(e) => setCancelReason(e.target.value)}
+            rows={3}
+            className="resize-none"
+          />
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setShowCancelDialog(false)}>
+              Vazgeç
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={handleCancelOrder}
+              disabled={isProcessing || !cancelReason.trim()}
+            >
+              {isProcessing ? 'İptal Ediliyor...' : 'İptal Et'}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

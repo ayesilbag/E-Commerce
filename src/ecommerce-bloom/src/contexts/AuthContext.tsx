@@ -1,6 +1,6 @@
 import { createContext, useContext, useState, useEffect, ReactNode, useCallback } from 'react';
 import { toast } from 'sonner';
-import { login as loginService, refreshToken as refreshTokenService } from '@/services/auth.service';
+import { login as loginService, refreshToken as refreshTokenService, logout as logoutService } from '@/services/auth.service';
 import { getUserProfile } from '@/services/users.service';
 import { setTokens, clearTokens } from '@/lib/api-client';
 import type { User } from '@/types';
@@ -21,18 +21,21 @@ export interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
+const storedAccessToken = localStorage.getItem('access_token');
+const storedRefreshToken = localStorage.getItem('refresh_token');
+
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [accessToken, setAccessToken] = useState<string | null>(() => localStorage.getItem('access_token') || null);
-  const [refreshToken, setRefreshToken] = useState<string | null>(() => localStorage.getItem('refresh_token') || null);
+  // Token varsa oturum yenileme tamamlanana kadar true başla — ProtectedRoute erken render'ı engeller
+  const [isLoading, setIsLoading] = useState(Boolean(storedAccessToken && storedRefreshToken));
+  const [accessToken, setAccessToken] = useState<string | null>(() => storedAccessToken);
+  const [refreshToken, setRefreshToken] = useState<string | null>(() => storedRefreshToken);
 
   // Restore user session on app load if tokens exist
   useEffect(() => {
     const restoreSession = async () => {
       if (accessToken && refreshToken && !user) {
         try {
-          setIsLoading(true);
           const userInfo = await getUserProfile();
           setUser(userInfo);
         } catch (error) {
@@ -84,6 +87,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const logout = useCallback(() => {
+    // Sunucuya session sonlandırma bildirimi gönder (hata olsa da yerel state'i temizle)
+    logoutService().catch(() => {});
     setUser(null);
     setAccessToken(null);
     setRefreshToken(null);

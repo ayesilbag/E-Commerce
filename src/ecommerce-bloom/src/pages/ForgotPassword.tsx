@@ -30,15 +30,6 @@ const ForgotPassword = () => {
       toast.success("Başarılı", {
         description: "Şifre sıfırlama bağlantısı e-posta adresinize gönderildi",
       });
-
-      // TEST İÇİN: Email yerine konsola reset linki yazdırıyoruz
-      // Backend'de email servisi çalışmadığı için test için kullanabilirsiniz
-      const mockResetCode = Math.random().toString(36).substring(2, 10).toUpperCase();
-      console.log("=== ŞİFRE SIFIRLAMA TEST BAĞLANTISI ===");
-      console.log(`Email: ${email}`);
-      console.log(`Reset Code: ${mockResetCode}`);
-      console.log(`Reset URL: ${window.location.origin}/reset-password?email=${encodeURIComponent(email)}&code=${mockResetCode}`);
-      console.log("===================================");
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : "İşlem başarısız";
       toast.error("Hata", { description: errorMessage });
@@ -123,7 +114,7 @@ const ForgotPassword = () => {
 
             {/* Resend Link */}
             {isSuccess && (
-              <div className="text-center mt-6 space-y-3">
+              <div className="text-center mt-6">
                 <Button
                   type="button"
                   variant="outline"
@@ -133,20 +124,7 @@ const ForgotPassword = () => {
                     setEmail("");
                   }}
                 >
-                  Bağla Yeniden Gönder
-                </Button>
-
-                {/* TEST ONLY: Direct reset link button */}
-                <Button
-                  type="button"
-                  variant="ghost"
-                  className="text-xs text-gray-400 hover:text-gray-600"
-                  onClick={() => {
-                    const mockResetCode = Math.random().toString(36).substring(2, 10).toUpperCase();
-                    navigate(`/reset-password?email=${encodeURIComponent(email)}&code=${mockResetCode}`);
-                  }}
-                >
-                  (Test) Şifre Sıfırlama Sayfasına Git
+                  Yeniden Gönder
                 </Button>
               </div>
             )}

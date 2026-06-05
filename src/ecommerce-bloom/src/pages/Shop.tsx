@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import { Link, useSearchParams } from "react-router-dom";
+import usePageTitle from "@/hooks/usePageTitle";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ProductCard from "@/components/ProductCard";
@@ -29,11 +30,20 @@ interface PriceRange {
   label: string;
 }
 
+const VALID_SORTS = ["featured", "price-low", "price-high", "newest", "rating", "discounted"];
+
 const Shop = () => {
+  usePageTitle("Mağaza");
   const [searchParams] = useSearchParams();
 
+  // URL parametrelerinden başlangıç değerlerini oku
+  const initialSearch = searchParams.get('search') || "";
+  const initialSort = VALID_SORTS.includes(searchParams.get('sort') || "")
+    ? searchParams.get('sort')!
+    : "featured";
+
   // State management
-  const [searchQuery, setSearchQuery] = useState(searchParams.get('search') || "");
+  const [searchQuery, setSearchQuery] = useState(initialSearch);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [selectedPriceRanges, setSelectedPriceRanges] = useState<string[]>([]);
   const [selectedRatings, setSelectedRatings] = useState<number[]>([]);
@@ -46,70 +56,68 @@ const Shop = () => {
   const [selectedMaterials, setSelectedMaterials] = useState<string[]>([]);
   const [selectedSeasons, setSelectedSeasons] = useState<string[]>([]);
   const [expandedSections, setExpandedSections] = useState<string[]>(['Kategori Ara']);
-  const [sortBy, setSortBy] = useState("featured");
+  const [sortBy, setSortBy] = useState(initialSort);
   const [gridView, setGridView] = useState(true);
   const [showFilters, setShowFilters] = useState(false);
-  const [displayedCount, setDisplayedCount] = useState(8);
   const observerTarget = useRef<HTMLDivElement>(null);
   const [allProducts, setAllProducts] = useState<Product[]>([]);
   const [apiCategories, setApiCategories] = useState<Category[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [totalProducts, setTotalProducts] = useState(0);
 
-  // Filter products from API
-  const fetchProducts = async (reset = false) => {
-    setIsLoading(true);
-    try {
-      const params: ProductsFilterParams = {
-        page: reset ? 1 : page,
-        limit: 8,
-        search: searchQuery || undefined,
-        category: selectedCategories[0] || undefined,
-        minPrice: selectedPriceRanges.length > 0 ? Math.min(...selectedPriceRanges.map(range => {
-          const r = priceRanges.find(pr => pr.label === range);
-          return r ? r.min : 0;
-        })) : undefined,
-        maxPrice: selectedPriceRanges.length > 0 ? selectedPriceRanges.some(range => {
-          const r = priceRanges.find(pr => pr.label === range);
-          return r?.max === null;
-        }) ? undefined : Math.max(...selectedPriceRanges.map(range => {
-          const r = priceRanges.find(pr => pr.label === range);
-          return r?.max || 0;
-        })) : undefined,
-        minRating: selectedRatings.length > 0 ? Math.min(...selectedRatings) : undefined,
-        color: selectedColors[0] || undefined,
-        size: selectedSizes[0] || undefined,
-        sort: sortBy,
-      };
+  // Sayfa numarasını ref ile tut — closure tuzağını önler
+  const pageRef = useRef(1);
+  const isFetchingRef = useRef(false);
 
-      const response = await getProducts(params);
-
-      if (reset) {
-        setAllProducts(response.items);
-        setPage(1);
-      } else {
-        setAllProducts(prev => [...prev, ...response.items]);
-      }
-
-      setTotalProducts(response.total);
-      setHasMore(response.items.length >= 8 && (response.page * 8) < response.total);
-    } catch (error) {
-      console.error("Error fetching products:", error);
-      toast.error("Ürünler yüklenirken hata oluştu");
-      if (reset) {
-        setAllProducts([]);
-      }
-      setHasMore(false);
-    } finally {
-      setIsLoading(false);
-    }
+  const buildParams = (pageNum: number): ProductsFilterParams => {
+    const priceRangesList: PriceRange[] = [
+      { min: 0, max: 300, label: "₺300 Altı" },
+      { min: 300, max: 600, label: "₺300 - ₺600" },
+      { min: 600, max: 1000, label: "₺600 - ₺1000" },
+      { min: 1000, max: null, label: "₺1000 Üzeri" },
+    ];
+    return {
+      page: pageNum,
+      limit: 8,
+      search: searchQuery || undefined,
+      category: selectedCategories[0] || undefined,
+      minPrice: selectedPriceRanges.length > 0
+        ? Math.min(...selectedPriceRanges.map(r => priceRangesList.find(p => p.label === r)?.min ?? 0))
+        : undefined,
+      maxPrice: selectedPriceRanges.length > 0 && !selectedPriceRanges.some(r => priceRangesList.find(p => p.label === r)?.max === null)
+        ? Math.max(...selectedPriceRanges.map(r => priceRangesList.find(p => p.label === r)?.max ?? 0))
+        : undefined,
+      minRating: selectedRatings.length > 0 ? Math.min(...selectedRatings) : undefined,
+      color: selectedColors[0] || undefined,
+      size: selectedSizes[0] || undefined,
+      sort: sortBy,
+    };
   };
 
-  // Initial load and fetch on filter changes
+  // Filtrelerin herhangi biri değiştiğinde sıfırdan yükle
   useEffect(() => {
-    fetchProducts(true);
+    const load = async () => {
+      if (isFetchingRef.current) return;
+      isFetchingRef.current = true;
+      setIsLoading(true);
+      pageRef.current = 1;
+      try {
+        const response = await getProducts(buildParams(1));
+        setAllProducts(response.items);
+        setTotalProducts(response.total);
+        setHasMore(response.items.length >= 8 && 8 < response.total);
+        pageRef.current = 1;
+      } catch {
+        toast.error("Ürünler yüklenirken hata oluştu");
+        setAllProducts([]);
+        setHasMore(false);
+      } finally {
+        setIsLoading(false);
+        isFetchingRef.current = false;
+      }
+    };
+    load();
   }, [searchQuery, selectedCategories.join(","), selectedPriceRanges.join(","),
       selectedRatings.join(","), selectedColors.join(","), selectedSizes.join(","), sortBy]);
 
@@ -119,37 +127,44 @@ const Shop = () => {
       try {
         const data = await getCategories();
         setApiCategories(data);
-      } catch (error) {
-        console.error("Error fetching categories:", error);
+      } catch {
         toast.error("Kategoriler yüklenirken hata oluştu");
       }
     };
-
     fetchCategoriesData();
   }, []);
 
-  // Infinite scroll
+  // Infinite scroll — bir sonraki sayfayı yükle
   useEffect(() => {
     const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting && hasMore && !isLoading) {
-          setPage(prev => prev + 1);
-          fetchProducts(false);
+      async (entries) => {
+        if (!entries[0].isIntersecting || !hasMore || isLoading || isFetchingRef.current) return;
+        isFetchingRef.current = true;
+        const nextPage = pageRef.current + 1;
+        setIsLoading(true);
+        try {
+          const response = await getProducts(buildParams(nextPage));
+          if (response.items.length > 0) {
+            setAllProducts(prev => [...prev, ...response.items]);
+            pageRef.current = nextPage;
+          }
+          setTotalProducts(response.total);
+          setHasMore(response.items.length >= 8 && (nextPage * 8) < response.total);
+        } catch {
+          setHasMore(false);
+        } finally {
+          setIsLoading(false);
+          isFetchingRef.current = false;
         }
       },
       { threshold: 0.1 }
     );
 
-    if (observerTarget.current) {
-      observer.observe(observerTarget.current);
-    }
-
-    return () => {
-      if (observerTarget.current) {
-        observer.unobserve(observerTarget.current);
-      }
-    };
-  }, [hasMore, isLoading]);
+    const target = observerTarget.current;
+    if (target) observer.observe(target);
+    return () => { if (target) observer.unobserve(target); };
+  }, [hasMore, isLoading, searchQuery, selectedCategories, selectedPriceRanges,
+      selectedRatings, selectedColors, selectedSizes, sortBy]);
 
   // Filter options
   const priceRanges: PriceRange[] = [
@@ -173,7 +188,8 @@ const Shop = () => {
     { value: "price-low", label: "Fiyat: Düşükten Yükseğe" },
     { value: "price-high", label: "Fiyat: Yüksekten Düşüğe" },
     { value: "newest", label: "En Yeniler" },
-    { value: "rating", label: "En Yüksek Puanlı" }
+    { value: "rating", label: "En Yüksek Puanlı" },
+    { value: "discounted", label: "İndirimli Ürünler" },
   ];
 
   // Toggle filter section expansion

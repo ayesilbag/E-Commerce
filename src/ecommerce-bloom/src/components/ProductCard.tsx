@@ -2,26 +2,34 @@ import { useState } from "react";
 import type { Product } from "@/types";
 import { getImageUrl } from "@/lib/product-utils";
 import { Button } from "@/components/ui/button";
-import { Heart, ShoppingBag, Star } from "lucide-react";
+import { Heart, Loader2, ShoppingBag, Star } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useCart } from "@/contexts/CartContext";
 import { useWishlist } from "@/contexts/WishlistContext";
+import { toast } from "sonner";
 
 interface ProductCardProps {
   product: Product;
 }
 
 const ProductCard = ({ product }: ProductCardProps) => {
-  const [isHovered, setIsHovered] = useState(false);
   const { addToCart } = useCart();
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
+  const [isAdding, setIsAdding] = useState(false);
 
-  const getProductImageUrl = (path: string | undefined) => getImageUrl(path);
-
-  const handleAddToCart = (e: React.MouseEvent) => {
+  const handleAddToCart = async (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    addToCart(product);
+    if (isAdding) return;
+    setIsAdding(true);
+    try {
+      await addToCart(product);
+      toast.success("Sepete eklendi", { description: product.name, duration: 2000 });
+    } catch {
+      toast.error("Sepete eklenemedi");
+    } finally {
+      setIsAdding(false);
+    }
   };
 
   const handleWishlist = (e: React.MouseEvent) => {
@@ -38,8 +46,6 @@ const ProductCard = ({ product }: ProductCardProps) => {
     <Link
       to={`/product/${product.id}`}
       className="group relative bg-white rounded-xl md:rounded-2xl overflow-hidden border border-gray-100 transition-all duration-300 hover:shadow-md flex flex-col h-full"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
     >
       {/* Product badge */}
       {product.badge && (
@@ -51,45 +57,38 @@ const ProductCard = ({ product }: ProductCardProps) => {
         </div>
       )}
 
+      {/* Favori butonu — her zaman görünür */}
+      <button
+        className={`absolute top-2 right-2 z-10 w-7 h-7 flex items-center justify-center rounded-full shadow-sm border transition-colors
+          ${isInWishlist(product.id)
+            ? "bg-white text-red-500 border-red-200"
+            : "bg-white/80 text-gray-400 border-gray-200 hover:text-red-400"}`}
+        onClick={handleWishlist}
+        aria-label="Favorilere ekle"
+      >
+        <Heart size={13} className={isInWishlist(product.id) ? "fill-red-500" : ""} />
+      </button>
+
       {/* Product image */}
       <div className="relative aspect-square overflow-hidden">
         <img
           src={getImageUrl(product.image)}
           alt={product.name}
+          loading="lazy"
           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
         />
 
-        {/* Quick actions */}
-        <div
-          className={`
-            absolute bottom-0 left-0 right-0 p-1.5 md:p-2 lg:p-4 transition-all duration-300 transform
-            ${isHovered ? 'translate-y-0 opacity-100' : 'translate-y-full opacity-0'}
-          `}
-        >
-          <div className="flex gap-1 md:gap-2">
-            <Button
-              className="btn-gradient flex-1 text-xs md:text-sm"
-              size="sm"
-              onClick={handleAddToCart}
-            >
-              <ShoppingBag className="mr-1" size={12} />
-              <span className="hidden sm:inline">Sepete Ekle</span>
-              <span className="sm:hidden">Sepet</span>
-            </Button>
-            <Button
-              variant="outline"
-              size="icon"
-              className={`h-7 w-7 md:h-8 md:w-8 ${isInWishlist(product.id)
-                ? "bg-white/90 text-red-500 border-red-200"
-                : "bg-white/90"}`}
-              onClick={handleWishlist}
-            >
-              <Heart
-                size={10}
-                className={isInWishlist(product.id) ? "fill-red-500" : ""}
-              />
-            </Button>
-          </div>
+        {/* Sepete Ekle — masaüstünde hover'da, mobilde her zaman görünür */}
+        <div className="absolute bottom-0 left-0 right-0 p-1.5 md:p-2 translate-y-full opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 md:flex hidden">
+          <Button
+            className="btn-gradient flex-1 text-xs"
+            size="sm"
+            onClick={handleAddToCart}
+            disabled={isAdding}
+          >
+            {isAdding ? <Loader2 size={12} className="mr-1 animate-spin" /> : <ShoppingBag className="mr-1" size={12} />}
+            {isAdding ? "Ekleniyor..." : "Sepete Ekle"}
+          </Button>
         </div>
       </div>
 
@@ -116,14 +115,25 @@ const ProductCard = ({ product }: ProductCardProps) => {
           {product.description}
         </p>
 
-        <div className="flex items-baseline mt-2 md:mt-3">
+        <div className="flex items-baseline mt-2">
           <span className="font-semibold text-sm">₺{product.price.toFixed(2)}</span>
           {product.originalPrice && (
-            <span className="ml-1 md:ml-2 text-xs text-gray-400 line-through">
+            <span className="ml-1 text-xs text-gray-400 line-through">
               ₺{product.originalPrice.toFixed(2)}
             </span>
           )}
         </div>
+
+        {/* Mobilde her zaman görünen sepet butonu */}
+        <Button
+          className="btn-gradient w-full text-xs mt-2 h-8 md:hidden"
+          size="sm"
+          onClick={handleAddToCart}
+          disabled={isAdding}
+        >
+          {isAdding ? <Loader2 size={12} className="mr-1 animate-spin" /> : <ShoppingBag size={12} className="mr-1" />}
+          {isAdding ? "Ekleniyor..." : "Sepete Ekle"}
+        </Button>
       </div>
     </Link>
   );

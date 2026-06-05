@@ -101,13 +101,29 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
     loadCart();
   }, []);
 
-  // Clear cart when user logs out, reload when logs in
   const { isAuthenticated } = useAuth();
+
+  // Login: misafir sepetini API sepeti ile birleştir, ardından API sepetini göster
+  // Logout: sadece localStorage'ı temizle
   useEffect(() => {
     const handleAuthChange = async () => {
       if (isAuthenticated) {
+        const guestItems = loadCartFromStorage();
+        try {
+          // Önce misafir ürünlerini API'ye ekle (varsa)
+          if (guestItems.length > 0) {
+            await Promise.allSettled(
+              guestItems.map((item) =>
+                apiAddToCart({ productId: item.product.id, quantity: item.quantity })
+              )
+            );
+          }
+        } catch {
+          // Birleştirme hatası sessizce geçilir, API sepeti yüklenmeye devam eder
+        }
         await refreshCart();
-      } else if (cartItems.length > 0) {
+      } else {
+        // Çıkış: yerel sepeti sıfırla (misafir olarak boşla başla)
         setCartItems([]);
         saveCartToStorage([]);
       }

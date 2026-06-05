@@ -6,23 +6,18 @@ import type {
   ApplyCouponRequest,
 } from '@/types';
 
+const parseCartResponse = (data: any): Cart => {
+  if (data?.data?.cart) return data.data.cart;
+  if (data?.data) return data.data;
+  return data || { items: [], total: 0, itemCount: 0 };
+};
+
 // Get Cart
 export const getCart = async (): Promise<Cart> => {
   try {
     const response = await apiClient.get<any>('/api/cart');
-    console.log('Cart API Response:', response.data);
-    // Handle API response format: { success: true, data: { cart: {...} } }
-    if (response.data?.data?.cart) {
-      return response.data.data.cart;
-    }
-    // Handle API response format: { success: true, data: {...} }
-    if (response.data?.data) {
-      return response.data.data;
-    }
-    // Handle direct response
-    return response.data || { items: [], total: 0, itemCount: 0 };
+    return parseCartResponse(response.data);
   } catch (error) {
-    console.error('Error fetching cart:', error);
     throw new Error(handleApiError(error));
   }
 };
@@ -31,19 +26,8 @@ export const getCart = async (): Promise<Cart> => {
 export const addToCart = async (data: AddToCartRequest): Promise<Cart> => {
   try {
     const response = await apiClient.post<any>('/api/cart/add', data);
-    console.log('Add to Cart API Response:', response.data);
-    // Handle API response format: { success: true, data: { cart: {...} } }
-    if (response.data?.data?.cart) {
-      return response.data.data.cart;
-    }
-    // Handle API response format: { success: true, data: {...} }
-    if (response.data?.data) {
-      return response.data.data;
-    }
-    // Handle direct response
-    return response.data || { items: [], total: 0, itemCount: 0 };
+    return parseCartResponse(response.data);
   } catch (error) {
-    console.error('Error adding to cart:', error);
     throw new Error(handleApiError(error));
   }
 };
@@ -55,19 +39,8 @@ export const updateCartItem = async (
 ): Promise<Cart> => {
   try {
     const response = await apiClient.put<any>(`/api/cart/items/${productId}`, data);
-    console.log('Update Cart Item API Response:', response.data);
-    // Handle API response format: { success: true, data: { cart: {...} } }
-    if (response.data?.data?.cart) {
-      return response.data.data.cart;
-    }
-    // Handle API response format: { success: true, data: {...} }
-    if (response.data?.data) {
-      return response.data.data;
-    }
-    // Handle direct response
-    return response.data || { items: [], total: 0, itemCount: 0 };
+    return parseCartResponse(response.data);
   } catch (error) {
-    console.error('Error updating cart item:', error);
     throw new Error(handleApiError(error));
   }
 };
@@ -76,19 +49,8 @@ export const updateCartItem = async (
 export const removeFromCart = async (productId: string): Promise<Cart> => {
   try {
     const response = await apiClient.delete<any>(`/api/cart/items/${productId}`);
-    console.log('Remove from Cart API Response:', response.data);
-    // Handle API response format: { success: true, data: { cart: {...} } }
-    if (response.data?.data?.cart) {
-      return response.data.data.cart;
-    }
-    // Handle API response format: { success: true, data: {...} }
-    if (response.data?.data) {
-      return response.data.data;
-    }
-    // Handle direct response
-    return response.data || { items: [], total: 0, itemCount: 0 };
+    return parseCartResponse(response.data);
   } catch (error) {
-    console.error('Error removing from cart:', error);
     throw new Error(handleApiError(error));
   }
 };

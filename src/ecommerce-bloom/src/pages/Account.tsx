@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import usePageTitle from "@/hooks/usePageTitle";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -34,6 +35,7 @@ import type { Order } from "@/types";
 import { toast } from "sonner";
 
 const Account = () => {
+  usePageTitle("Hesabım");
   const navigate = useNavigate();
   const { cartCount } = useCart();
   const { wishlistCount } = useWishlist();
@@ -263,17 +265,24 @@ const Account = () => {
                               <div className="text-right">
                                 <p className="font-bold">₺{order.total.toFixed(2)}</p>
                                 <span className={`inline-block px-2 py-1 text-xs rounded-full mt-1 ${
-                                  order.status === 'delivered'
+                                  ['Delivered', 'delivered'].includes(order.status)
                                     ? 'bg-green-100 text-green-800'
-                                    : order.status === 'cancelled'
+                                    : ['Cancelled', 'cancelled'].includes(order.status)
                                     ? 'bg-red-100 text-red-800'
+                                    : ['Shipped', 'shipped'].includes(order.status)
+                                    ? 'bg-indigo-100 text-indigo-800'
                                     : 'bg-blue-100 text-blue-800'
                                 }`}>
-                                  {order.status === 'delivered' ? 'Teslim Edildi' :
-                                   order.status === 'pending' ? 'Beklemede' :
-                                   order.status === 'processing' ? 'İşleniyor' :
-                                   order.status === 'shipped' ? 'Gönderildi' :
-                                   order.status === 'cancelled' ? 'İptal Edildi' : order.status}
+                                  {(() => {
+                                    const s = order.status?.toLowerCase();
+                                    if (s === 'delivered') return 'Teslim Edildi';
+                                    if (s === 'pending') return 'Beklemede';
+                                    if (s === 'confirmed') return 'Onaylandı';
+                                    if (s === 'processing') return 'Hazırlanıyor';
+                                    if (s === 'shipped') return 'Kargolandı';
+                                    if (s === 'cancelled') return 'İptal Edildi';
+                                    return order.status;
+                                  })()}
                                 </span>
                               </div>
                               <Button variant="outline" className="w-full sm:w-auto" size="sm" asChild>

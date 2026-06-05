@@ -20,50 +20,75 @@ interface WishlistContextType {
 
 const WishlistContext = createContext<WishlistContextType | undefined>(undefined);
 
+const WISHLIST_STORAGE_KEY = "bizdenalbizdensat_wishlist";
+
+const saveWishlistToStorage = (items: Product[]) => {
+  try { localStorage.setItem(WISHLIST_STORAGE_KEY, JSON.stringify(items)); } catch {}
+};
+
+const loadWishlistFromStorage = (): Product[] => {
+  try {
+    const raw = localStorage.getItem(WISHLIST_STORAGE_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch { return []; }
+};
+
 const convertApiWishlist = (apiWishlist: any): Product[] =>
   (apiWishlist.items || [])
     .filter((item: any) => item?.product)
     .map((item: any) => item.product as Product);
 
 export const WishlistProvider = ({ children }: { children: React.ReactNode }) => {
-  const [wishlistItems, setWishlistItems] = useState<Product[]>([]);
+  const [wishlistItems, setWishlistItems] = useState<Product[]>(() => loadWishlistFromStorage());
+
+  const setAndPersistWishlist = useCallback((items: Product[]) => {
+    setWishlistItems(items);
+    saveWishlistToStorage(items);
+  }, []);
 
   const refreshWishlist = useCallback(async () => {
     const token = getToken();
     if (!token) return;
     try {
       const apiWishlist = await getWishlist();
-      setWishlistItems(convertApiWishlist(apiWishlist));
+      const items = convertApiWishlist(apiWishlist);
+      setAndPersistWishlist(items);
     } catch (error) {
       console.error("Error refreshing wishlist:", error);
     }
-  }, []);
+  }, [setAndPersistWishlist]);
 
-  // Load wishlist on mount — API for authenticated users, empty state for guests
+  // Load wishlist on mount — API for authenticated users, localStorage for guests
   useEffect(() => {
     const loadWishlist = async () => {
       const token = getToken();
       if (token) {
         try {
           const apiWishlist = await getWishlist();
-          setWishlistItems(convertApiWishlist(apiWishlist));
+          setAndPersistWishlist(convertApiWishlist(apiWishlist));
         } catch (error) {
           console.error("Error loading wishlist from API:", error);
         }
       }
-      // Guest users start with an empty wishlist (no persistence needed)
+      // Guest: başlangıç değeri zaten localStorage'dan useState initializer'da yüklendi
     };
     loadWishlist();
   }, []);
 
-  // Clear wishlist when user logs out, reload when logs in
+  // Login: misafir favorilerini API'ye senkronize et; Logout: localStorage'ı temizle
   const { isAuthenticated } = useAuth();
   useEffect(() => {
     const handleAuthChange = async () => {
       if (isAuthenticated) {
+        const guestItems = loadWishlistFromStorage();
+        if (guestItems.length > 0) {
+          await Promise.allSettled(
+            guestItems.map((p) => apiAddToWishlist({ productId: p.id }))
+          );
+        }
         await refreshWishlist();
-      } else if (wishlistItems.length > 0) {
-        setWishlistItems([]);
+      } else {
+        setAndPersistWishlist([]);
       }
     };
     handleAuthChange();
@@ -105,7 +130,7 @@ export const WishlistProvider = ({ children }: { children: React.ReactNode }) =>
         throw error;
       }
     } else {
-      setWishlistItems((prev) => [...prev, product]);
+      setAndPersistWishlist([...wishlistItems, product]);
       toast.success("Favorilere eklendi", {
         description: `${product.name} favorilerinize eklendi`,
       });
@@ -138,7 +163,7 @@ export const WishlistProvider = ({ children }: { children: React.ReactNode }) =>
         throw error;
       }
     } else {
-      setWishlistItems((prev) => prev.filter((item) => item.id !== productId));
+      setAndPersistWishlist(wishlistItems.filter((item) => item.id !== productId));
       toast.info("Favorilerden kaldırıldı", {
         description: "Ürün favorilerinizden kaldırıldı",
       });
