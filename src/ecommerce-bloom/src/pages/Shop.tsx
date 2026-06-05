@@ -208,110 +208,88 @@ const Shop = () => {
     } else {
       setSelectedCategories([...selectedCategories, category]);
     }
-    setDisplayedCount(8);
   };
-  
-  // Handle gender toggle
+
   const toggleGender = (gender: string) => {
     if (selectedGenders.includes(gender)) {
       setSelectedGenders(selectedGenders.filter(g => g !== gender));
     } else {
       setSelectedGenders([...selectedGenders, gender]);
     }
-    setDisplayedCount(8);
   };
 
-  // Handle size toggle
   const toggleSize = (size: string) => {
     if (selectedSizes.includes(size)) {
       setSelectedSizes(selectedSizes.filter(s => s !== size));
     } else {
       setSelectedSizes([...selectedSizes, size]);
     }
-    setDisplayedCount(8);
   };
 
-  // Handle color toggle
   const toggleColor = (color: string) => {
     if (selectedColors.includes(color)) {
       setSelectedColors(selectedColors.filter(c => c !== color));
     } else {
       setSelectedColors([...selectedColors, color]);
     }
-    setDisplayedCount(8);
   };
 
-  // Handle fit toggle
   const toggleFit = (fit: string) => {
     if (selectedFits.includes(fit)) {
       setSelectedFits(selectedFits.filter(f => f !== fit));
     } else {
       setSelectedFits([...selectedFits, fit]);
     }
-    setDisplayedCount(8);
   };
 
-  // Handle sleeve type toggle
   const toggleSleeveType = (sleeveType: string) => {
     if (selectedSleeveTypes.includes(sleeveType)) {
       setSelectedSleeveTypes(selectedSleeveTypes.filter(s => s !== sleeveType));
     } else {
       setSelectedSleeveTypes([...selectedSleeveTypes, sleeveType]);
     }
-    setDisplayedCount(8);
   };
 
-  // Handle neck type toggle
   const toggleNeckType = (neckType: string) => {
     if (selectedNeckTypes.includes(neckType)) {
       setSelectedNeckTypes(selectedNeckTypes.filter(n => n !== neckType));
     } else {
       setSelectedNeckTypes([...selectedNeckTypes, neckType]);
     }
-    setDisplayedCount(8);
   };
 
-  // Handle material toggle
   const toggleMaterial = (material: string) => {
     if (selectedMaterials.includes(material)) {
       setSelectedMaterials(selectedMaterials.filter(m => m !== material));
     } else {
       setSelectedMaterials([...selectedMaterials, material]);
     }
-    setDisplayedCount(8);
   };
 
-  // Handle season toggle
   const toggleSeason = (season: string) => {
     if (selectedSeasons.includes(season)) {
       setSelectedSeasons(selectedSeasons.filter(s => s !== season));
     } else {
       setSelectedSeasons([...selectedSeasons, season]);
     }
-    setDisplayedCount(8);
   };
-  
-  // Handle price range toggle
+
   const togglePriceRange = (range: string) => {
     if (selectedPriceRanges.includes(range)) {
       setSelectedPriceRanges(selectedPriceRanges.filter(r => r !== range));
     } else {
       setSelectedPriceRanges([...selectedPriceRanges, range]);
     }
-    setDisplayedCount(8);
   };
-  
-  // Handle rating toggle
+
   const toggleRating = (rating: number) => {
     if (selectedRatings.includes(rating)) {
       setSelectedRatings(selectedRatings.filter(r => r !== rating));
     } else {
       setSelectedRatings([...selectedRatings, rating]);
     }
-    setDisplayedCount(8);
   };
-  
-  // Clear all filters
+
   const clearFilters = () => {
     setSearchQuery("");
     setSelectedCategories([]);
@@ -326,7 +304,6 @@ const Shop = () => {
     setSelectedMaterials([]);
     setSelectedSeasons([]);
     setSortBy("featured");
-    setDisplayedCount(8);
   };
 
   // Filter Group Component
@@ -632,7 +609,6 @@ const Shop = () => {
                         value={sortBy}
                         onChange={(e) => {
                           setSortBy(e.target.value);
-                          setDisplayedCount(8);
                         }}
                         className="px-1.5 xs:px-2 sm:px-3 py-1 xs:py-1.5 md:py-2 border border-gray-200 rounded-lg text-xs bg-white focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
                       >
@@ -685,7 +661,7 @@ const Shop = () => {
                 )}
 
                 {/* Products Grid */}
-                {isLoading ? (
+                {isLoading && displayedProducts.length === 0 ? (
                   <div className="flex justify-center py-12">
                     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600"></div>
                   </div>
