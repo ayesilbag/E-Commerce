@@ -18,8 +18,9 @@ Her UI kendi benzersiz **`code`** değeriyle tanımlanır. Admin panelden her UI
 8. [İletişim Formu](#iletişim-formu)
 9. [Ödeme Entegrasyonu Kriterleri (iyzico)](#ödeme-entegrasyonu-kriterleri-iyzico)
 10. [Önerilen Mimari](#önerilen-mimari)
-11. [Fallback ve Hata Yönetimi](#fallback-ve-hata-yönetimi)
-12. [Kontrol Listesi](#kontrol-listesi)
+11. [Tema ve Light/Dark Mod](#tema-ve-lightdark-mod)
+12. [Fallback ve Hata Yönetimi](#fallback-ve-hata-yönetimi)
+13. [Kontrol Listesi](#kontrol-listesi)
 
 ---
 
@@ -120,6 +121,11 @@ Accept: application/json
         { "key": "aboutPage", "label": "Hakkımızda sayfası", "met": true }
       ]
     },
+    "theme": {
+      "primaryLight": "#8B5CF6",
+      "primaryDark": "#A78BFA",
+      "fontFamily": "Inter"
+    },
     "isActive": true,
     "isDefault": false
   }
@@ -184,6 +190,12 @@ export interface PaymentComplianceStatus {
   items: PaymentComplianceItem[];
 }
 
+export interface SiteTheme {
+  primaryLight?: string | null;
+  primaryDark?: string | null;
+  fontFamily?: string | null;
+}
+
 export interface SiteSettings {
   id: string;
   code: string;
@@ -199,6 +211,7 @@ export interface SiteSettings {
   socialLinks: SocialLinks;
   paymentCompliance: PaymentCompliance;
   paymentComplianceStatus: PaymentComplianceStatus;
+  theme?: SiteTheme | null;
   isActive: boolean;
   isDefault: boolean;
 }
@@ -559,6 +572,50 @@ admin-panel/             →  UI listesi + düzenleme
 
 ---
 
+## Tema ve Light/Dark Mod
+
+Her UI kaydı için admin panelden **ayrı bir renk teması** tanımlanabilir. Storefront bu renkleri CSS değişkenlerine (`--primary`, `--ring`, `--theme-gradient`) uygular.
+
+### API — `theme` alanı
+
+| Alan | Açıklama | Örnek |
+|------|----------|-------|
+| `theme.primaryLight` | Açık mod ana rengi (hex) | `#8B5CF6` |
+| `theme.primaryDark` | Koyu mod ana rengi (hex) | `#A78BFA` |
+| `theme.fontFamily` | Font ailesi | `Inter` |
+
+Boş bırakılırsa storefront varsayılan mor tema kullanılır.
+
+### Admin panel
+
+**Site ayarları → UI Düzenle → Tema** bölümünden:
+
+- Açık/koyu mod ana renkleri (renk seçici + hex)
+- Font ailesi
+
+### Storefront — light/dark geçişi
+
+Navbar'daki güneş/ay butonu `next-themes` ile `html` elementine `.dark` sınıfı ekler/kaldırır. Kullanıcı tercihi `localStorage`'da saklanır.
+
+`SiteSettingsContext` API'den gelen `theme` değerlerini uygular:
+
+```typescript
+// contexts/SiteSettingsContext.tsx — applyTheme()
+// hex → HSL dönüşümü → :root ve .dark CSS değişkenleri
+applyTheme(settings.theme);
+```
+
+### Çoklu UI örneği
+
+| UI kodu | primaryLight | primaryDark |
+|---------|--------------|-------------|
+| `bizdenal` | `#8B5CF6` (mor) | `#A78BFA` |
+| `digitalep` | `#2563EB` (mavi) | `#60A5FA` |
+
+Her storefront `VITE_UI_CODE` ile kendi temasını alır; aynı codebase farklı build'lerle farklı markalar sunabilir.
+
+---
+
 ## Fallback ve Hata Yönetimi
 
 ```typescript
@@ -620,6 +677,8 @@ Her storefront UI projesi için:
 - [ ] Footer'da yasal sayfa linkleri ve ödeme logoları `paymentCompliance`'ten
 - [ ] Medya URL'leri `resolveMediaUrl` ile çözümleniyor
 - [ ] React Query kullanılıyorsa `queryKey`'de `UI_CODE` var
+- [ ] Admin'de tema renkleri tanımlandı (isteğe bağlı)
+- [ ] Storefront'ta light/dark toggle çalışıyor
 - [ ] Production CORS'ta UI domain'i tanımlı
 
 ---

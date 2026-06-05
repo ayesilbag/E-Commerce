@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -17,30 +16,23 @@ import { useIsMobile } from "@/hooks/use-mobile";
 import {
   Sheet,
   SheetContent,
-  SheetFooter,
   SheetTrigger,
-  SheetClose
 } from "./ui/sheet";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "./ui/dropdown-menu";
 import { useCart } from "@/contexts/CartContext";
 import { useWishlist } from "@/contexts/WishlistContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { useSiteSettings } from "@/contexts/SiteSettingsContext";
 import { getImageUrl } from "@/lib/product-utils";
 import { getCategories } from "@/services/categories.service";
-import type { Category } from "@/types";
+import type { Category, NavbarUiContent } from "@/types";
 import CartSidebar from "./CartSidebar";
 import WishlistSidebar from "./WishlistSidebar";
+import { ThemeToggle } from "./ThemeToggle";
 
 const Navbar = () => {
   const isMobile = useIsMobile();
   const navigate = useNavigate();
-  const { user, isAuthenticated, logout } = useAuth();
+  const { user, isAuthenticated } = useAuth();
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isWishlistOpen, setIsWishlistOpen] = useState(false);
@@ -52,8 +44,12 @@ const Navbar = () => {
   const { wishlistCount } = useWishlist();
   const [categories, setCategories] = useState<Category[]>([]);
   const settings = useSiteSettings();
+  const nav = settings.storefrontContent?.navbar;
   const siteName = settings.siteName;
   const logoUrl = settings.logoUrl ? getImageUrl(settings.logoUrl) : null;
+  const showSearch = Boolean(nav?.searchPlaceholder);
+  const showCategories = Boolean(nav?.categoriesLabel) && categories.length > 0;
+  const primaryLinks = nav?.primaryLinks ?? [];
 
   useEffect(() => {
     getCategories()
@@ -61,21 +57,13 @@ const Navbar = () => {
       .catch((err) => console.error("Error fetching categories:", err));
   }, []);
 
-  const handleLogout = async () => {
-    await logout();
-    navigate('/');
-  };
-
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
 
-      // Sayfa yukarı kaydırılıyorsa navbar'ı göster
       if (currentScrollY < lastScrollY) {
         setIsHidden(false);
-      }
-      // Sayfa aşağı kaydırılıyorsa ve belirli bir mesafeden sonraysa navbar'ı gizle
-      else if (currentScrollY > 100 && currentScrollY > lastScrollY) {
+      } else if (currentScrollY > 100 && currentScrollY > lastScrollY) {
         setIsHidden(true);
       }
 
@@ -99,16 +87,17 @@ const Navbar = () => {
     }
   };
 
+  const accountLabel = isAuthenticated ? nav?.accountLabel : nav?.loginLabel;
+  const showBottomNav = showCategories || primaryLinks.length > 0;
+
   return (
     <header
-      className={`sticky top-0 z-40 bg-white border-b border-gray-200 transition-transform duration-300 ease-in-out ${
+      className={`sticky top-0 z-40 bg-background border-b border-border transition-transform duration-300 ease-in-out ${
         isHidden ? '-translate-y-full' : 'translate-y-0'
       } ${isScrolled ? 'shadow-sm' : ''}`}
     >
       <div className="container-custom px-2 xs:px-4 sm:px-6">
-        {/* Top Section */}
         <div className="flex items-center justify-between h-14 xs:h-16 md:h-20">
-          {/* Logo */}
           <Link to="/" className="flex items-center shrink-0">
             {logoUrl ? (
               <>
@@ -123,96 +112,88 @@ const Navbar = () => {
                   className="hidden md:block h-14 w-auto max-h-14"
                 />
               </>
-            ) : (
-              <>
-                <img
-                  src="/bizden-logo-mobile.png"
-                  alt={siteName}
-                  className="h-9 w-9 object-contain md:hidden"
-                />
-                <img
-                  src="/bizden-logo.png"
-                  alt={siteName}
-                  className="hidden md:block h-14 w-auto max-h-14"
-                />
-              </>
-            )}
+            ) : siteName ? (
+              <span className="font-semibold text-base md:text-lg truncate">{siteName}</span>
+            ) : null}
           </Link>
 
-          {/* Search Bar - Desktop */}
+          {showSearch && (
           <div className="hidden md:flex flex-1 max-w-xl mx-2 md:mx-4 lg:mx-8">
             <div className="relative w-full">
               <Input
                 type="text"
-                placeholder="Ürün, kategori veya marka ara"
+                placeholder={nav!.searchPlaceholder!}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onKeyDown={handleKeyPress}
-                className="w-full h-9 md:h-10 pr-10 md:pr-12 text-sm border-purple-200 focus:border-purple-500 focus:ring-purple-500"
+                className="w-full h-9 md:h-10 pr-10 md:pr-12 text-sm border-primary/30 focus:border-primary focus:ring-primary"
               />
               <button
                 onClick={handleSearch}
-                className="absolute right-2 md:right-3 top-1/2 -translate-y-1/2 text-purple-600 hover:text-purple-800 cursor-pointer"
+                className="absolute right-2 md:right-3 top-1/2 -translate-y-1/2 text-primary hover:text-primary/80 cursor-pointer"
               >
                 <Search size={16} />
               </button>
             </div>
           </div>
+          )}
 
-          {/* Action Buttons */}
           <div className="flex items-center gap-1 md:gap-2">
-            {/* User Account Button */}
+            {accountLabel && (
             <Button
               variant="outline"
-              className="hidden md:flex items-center gap-1.5 md:gap-2 border-purple-default bg-white text-purple-default hover:bg-purple-gradient hover:border-transparent hover:text-white px-2 md:px-3 py-1.5 md:py-2 rounded-lg h-auto transition-all duration-300 ease-in-out text-xs md:text-sm"
+              className="hidden md:flex items-center gap-1.5 md:gap-2 border-primary text-primary hover:bg-primary hover:border-primary hover:text-primary-foreground px-2 md:px-3 py-1.5 md:py-2 rounded-lg h-auto transition-all duration-300 ease-in-out text-xs md:text-sm"
               onClick={() => navigate(isAuthenticated ? '/account' : '/login')}
             >
               <User size={14} />
-              <span className="font-medium hidden md:inline">
-                {isAuthenticated ? 'Hesabım' : 'Giriş Yap'}
-              </span>
+              <span className="font-medium hidden md:inline">{accountLabel}</span>
             </Button>
+            )}
 
-            {/* Wishlist Button */}
+            {nav?.wishlistLabel && (
             <Button
               variant="outline"
-              className="hidden md:flex items-center gap-1.5 md:gap-2 border-purple-default bg-white text-purple-default hover:bg-purple-gradient hover:border-transparent hover:text-white px-2 md:px-3 py-1.5 md:py-2 rounded-lg h-auto transition-all duration-300 ease-in-out text-xs md:text-sm"
+              className="hidden md:flex items-center gap-1.5 md:gap-2 border-primary text-primary hover:bg-primary hover:border-primary hover:text-primary-foreground px-2 md:px-3 py-1.5 md:py-2 rounded-lg h-auto transition-all duration-300 ease-in-out text-xs md:text-sm"
               onClick={() => setIsWishlistOpen(true)}
             >
               <Heart size={14} />
-              <span className="font-medium hidden lg:inline">Favorilerim</span>
+              <span className="font-medium hidden lg:inline">{nav.wishlistLabel}</span>
               {wishlistCount > 0 && (
-                <span className="ml-1 bg-purple-gradient text-white text-xs md:text-sm rounded-full w-4 h-4 md:w-6 md:h-6 flex items-center justify-center">
+                <span className="ml-1 bg-primary text-primary-foreground text-xs md:text-sm rounded-full w-4 h-4 md:w-6 md:h-6 flex items-center justify-center">
                   {wishlistCount}
                 </span>
               )}
             </Button>
+            )}
 
-            {/* Cart Button */}
+            {nav?.cartLabel && (
             <Button
               variant="outline"
-              className="hidden md:flex items-center gap-1.5 md:gap-2 border-purple-default bg-white text-purple-default hover:bg-purple-gradient hover:border-transparent hover:text-white px-2 md:px-3 py-1.5 md:py-2 rounded-lg h-auto relative transition-all duration-300 ease-in-out text-xs md:text-sm"
+              className="hidden md:flex items-center gap-1.5 md:gap-2 border-primary text-primary hover:bg-primary hover:border-primary hover:text-primary-foreground px-2 md:px-3 py-1.5 md:py-2 rounded-lg h-auto relative transition-all duration-300 ease-in-out text-xs md:text-sm"
               onClick={() => setIsCartOpen(true)}
             >
               <ShoppingBag size={14} />
-              <span className="font-medium hidden lg:inline">Sepetim</span>
+              <span className="font-medium hidden lg:inline">{nav.cartLabel}</span>
               {cartCount > 0 && (
-                <span className="ml-1 bg-purple-gradient text-white text-xs md:text-sm rounded-full w-4 h-4 md:w-6 md:h-6 flex items-center justify-center">
+                <span className="ml-1 bg-primary text-primary-foreground text-xs md:text-sm rounded-full w-4 h-4 md:w-6 md:h-6 flex items-center justify-center">
                   {cartCount}
                 </span>
               )}
             </Button>
+            )}
 
-            {/* Mobile Menu Button - Using Sheet component */}
-            {isMobile && (
+            <ThemeToggle />
+
+            {isMobile && nav && (
               <Sheet open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
                 <SheetTrigger asChild>
                   <Button variant="ghost" size="icon" className="h-9 w-9 xs:h-10 xs:w-10">
                     <Menu size={18} />
                   </Button>
                 </SheetTrigger>
-                <SheetContent className="bg-purple-dark border-none p-0 rounded-l-xl w-[280px] sm:w-[320px] max-h-screen overflow-y-auto" side="right">
+                <SheetContent className="bg-background border-l border-border p-0 rounded-l-xl w-[280px] sm:w-[320px] max-h-screen overflow-y-auto" side="right">
                   <MobileNavigation
+                    nav={nav}
                     onClose={() => setIsDrawerOpen(false)}
                     onOpenCart={() => {
                       setIsDrawerOpen(false);
@@ -235,25 +216,22 @@ const Navbar = () => {
           </div>
         </div>
 
-        {/* Bottom Section - Categories */}
-        <div className="hidden md:flex items-center gap-3 md:gap-6 lg:gap-8 py-1.5 md:py-2 lg:py-3 border-t border-gray-100">
-          {/* Categories Dropdown */}
-          <div
-            className="relative group"
-          >
-            <button className="flex items-center gap-1 text-xs md:text-sm font-medium text-gray-700 hover:text-purple-700 transition-colors">
-              <span>Kategoriler</span>
+        {showBottomNav && (
+        <div className="hidden md:flex items-center gap-3 md:gap-6 lg:gap-8 py-1.5 md:py-2 lg:py-3 border-t border-border">
+          {showCategories && (
+          <div className="relative group">
+            <button className="flex items-center gap-1 text-xs md:text-sm font-medium text-muted-foreground hover:text-primary transition-colors">
+              <span>{nav!.categoriesLabel}</span>
               <ChevronRight size={12} className="rotate-90" />
             </button>
 
-            {/* Categories Dropdown Menu */}
-            <div className="absolute top-full left-0 mt-1 md:mt-2 w-48 md:w-60 bg-white rounded-lg shadow-lg border border-gray-200 py-1.5 md:py-2 z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
+            <div className="absolute top-full left-0 mt-1 md:mt-2 w-48 md:w-60 bg-popover rounded-lg shadow-lg border border-border py-1.5 md:py-2 z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
               <div className="max-h-48 md:max-h-64 lg:max-h-96 overflow-y-auto">
                 {categories.map((category) => (
                   <Link
                     key={category.id}
                     to={`/category/${encodeURIComponent(category.slug)}`}
-                    className="flex items-center justify-between px-2 md:px-4 py-1.5 md:py-2 hover:bg-gray-50 text-xs md:text-sm text-gray-700 hover:text-purple-700 transition-colors"
+                    className="flex items-center justify-between px-2 md:px-4 py-1.5 md:py-2 hover:bg-accent text-xs md:text-sm text-muted-foreground hover:text-primary transition-colors"
                   >
                     <span>{category.name}</span>
                     <ChevronRight size={10} />
@@ -262,27 +240,26 @@ const Navbar = () => {
               </div>
             </div>
           </div>
+          )}
 
-          {/* Quick Links */}
-          <Link to="/shop" className="text-xs md:text-sm font-medium text-gray-700 hover:text-purple-700 transition-colors">
-            Mağaza
-          </Link>
-          <Link to="/about" className="text-xs md:text-sm font-medium text-gray-700 hover:text-purple-700 transition-colors">
-            Hakkımızda
-          </Link>
-          <Link to="/contact" className="text-xs md:text-sm font-medium text-gray-700 hover:text-purple-700 transition-colors">
-            İletişim
-          </Link>
+          {primaryLinks.map((link) => (
+            <Link
+              key={`${link.href}-${link.label}`}
+              to={link.href}
+              className="text-xs md:text-sm font-medium text-muted-foreground hover:text-primary transition-colors"
+            >
+              {link.label}
+            </Link>
+          ))}
         </div>
+        )}
       </div>
 
-      {/* Cart Sidebar */}
       <CartSidebar
         open={isCartOpen}
         onClose={() => setIsCartOpen(false)}
       />
 
-      {/* Wishlist Sidebar */}
       <WishlistSidebar
         open={isWishlistOpen}
         onClose={() => setIsWishlistOpen(false)}
@@ -292,6 +269,7 @@ const Navbar = () => {
 };
 
 const MobileNavigation = ({
+  nav,
   onClose,
   onOpenCart,
   onOpenWishlist,
@@ -302,19 +280,23 @@ const MobileNavigation = ({
   siteName,
   logoUrl,
 }: {
+  nav: NavbarUiContent;
   onClose: () => void;
   onOpenCart: () => void;
   onOpenWishlist: () => void;
   cartCount: number;
   wishlistCount: number;
   isAuthenticated: boolean;
-  user: any;
+  user: { fullName?: string | null } | null;
   siteName: string;
   logoUrl: string | null;
 }) => {
   const navigate = useNavigate();
   const { logout } = useAuth();
   const [searchQuery, setSearchQuery] = useState("");
+  const primaryLinks = nav.primaryLinks ?? [];
+  const showShopSection = Boolean(nav.shopSectionTitle) && primaryLinks.length > 0;
+  const showAccountSection = Boolean(nav.accountSectionTitle);
 
   const handleSearch = () => {
     if (searchQuery.trim()) {
@@ -339,159 +321,176 @@ const MobileNavigation = ({
     onClose();
   };
 
+  const greetingName =
+    user?.fullName?.split(' ')[0] ||
+    nav.guestNameFallback ||
+    null;
+
   return (
-    <div className="flex flex-col h-full p-4 xs:p-6 text-white overflow-y-auto bg-purple-dark">
-      {/* Header */}
+    <div className="flex flex-col h-full p-4 xs:p-6 text-foreground overflow-y-auto bg-background">
       <div className="flex justify-between items-center mb-6 xs:mb-8">
         <button onClick={onClose} className="flex items-center gap-2 min-w-0">
-          <img
-            src={logoUrl ?? "/bizden-logo-mobile.png"}
-            alt={siteName}
-            className="h-10 w-10 object-contain shrink-0"
-          />
-          <span className="font-semibold text-sm text-white truncate">{siteName}</span>
+          {logoUrl ? (
+            <img
+              src={logoUrl}
+              alt={siteName}
+              className="h-10 w-10 object-contain shrink-0"
+            />
+          ) : null}
+          {siteName && <span className="font-semibold text-sm truncate">{siteName}</span>}
         </button>
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={onClose}
-          className="text-white hover:bg-white/10"
-        >
-          <X size={20} />
-        </Button>
+        <div className="flex items-center gap-1">
+          <ThemeToggle />
+          <Button variant="ghost" size="icon" onClick={onClose}>
+            <X size={20} />
+          </Button>
+        </div>
       </div>
 
-      {/* Mobile Search */}
+      {nav.searchPlaceholder && (
       <div className="mb-6">
         <div className="relative">
           <Input
             type="text"
-            placeholder="Ürün ara..."
+            placeholder={nav.searchPlaceholder}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             onKeyDown={handleKeyPress}
-            className="w-full h-10 pr-10 bg-white/10 border border-white/20 text-white placeholder-white/50 focus:bg-white/20 focus:border-white/40 rounded-md"
+            className="w-full h-10 pr-10"
           />
           <button
             onClick={handleSearch}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-white/70 hover:text-white"
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
           >
             <Search size={18} />
           </button>
         </div>
       </div>
+      )}
 
       <div className="flex-1">
-        {/* Navigation Links */}
+        {showShopSection && (
         <nav className="mb-8">
-          <h3 className="text-white/60 text-xs xs:text-sm font-semibold mb-3 uppercase tracking-wider px-2">Mağaza</h3>
+          <h3 className="text-muted-foreground text-xs xs:text-sm font-semibold mb-3 uppercase tracking-wider px-2">
+            {nav.shopSectionTitle}
+          </h3>
           <div className="flex flex-col gap-2">
-            <button
-              onClick={() => handleNavigate("/shop")}
-              className="w-full text-left px-3 py-2.5 rounded-md text-sm text-white hover:bg-white/10 transition-colors font-medium"
-            >
-              Tüm Ürünler
-            </button>
-            <button
-              onClick={() => handleNavigate("/about")}
-              className="w-full text-left px-3 py-2.5 rounded-md text-sm text-white hover:bg-white/10 transition-colors font-medium"
-            >
-              Hakkımızda
-            </button>
-            <button
-              onClick={() => handleNavigate("/contact")}
-              className="w-full text-left px-3 py-2.5 rounded-md text-sm text-white hover:bg-white/10 transition-colors font-medium"
-            >
-              İletişim
-            </button>
+            {primaryLinks.map((link) => (
+              <button
+                key={`${link.href}-${link.label}`}
+                onClick={() => handleNavigate(link.href)}
+                className="w-full text-left px-3 py-2.5 rounded-md text-sm hover:bg-accent transition-colors font-medium"
+              >
+                {link.label}
+              </button>
+            ))}
           </div>
         </nav>
+        )}
 
-        {/* Account Section */}
+        {showAccountSection && (
         <div className="space-y-2">
-          <h3 className="text-white/60 text-xs xs:text-sm font-semibold mb-3 uppercase tracking-wider px-2">Hesabım</h3>
+          <h3 className="text-muted-foreground text-xs xs:text-sm font-semibold mb-3 uppercase tracking-wider px-2">
+            {nav.accountSectionTitle}
+          </h3>
 
           {isAuthenticated ? (
             <>
-              <div className="px-3 py-2 text-white/80 text-sm">
-                Merhaba, {user?.fullName?.split(' ')[0] || 'Kullanıcı'}
+              {nav.greetingPrefix && greetingName && (
+              <div className="px-3 py-2 text-muted-foreground text-sm">
+                {nav.greetingPrefix} {greetingName}
               </div>
+              )}
+              {nav.accountLabel && (
               <button
                 onClick={() => handleNavigate("/account")}
-                className="w-full flex items-center gap-3 px-3 py-2.5 rounded-md text-sm text-white bg-white/5 hover:bg-white/15 transition-colors border border-white/10 font-medium"
+                className="w-full flex items-center gap-3 px-3 py-2.5 rounded-md text-sm bg-muted/50 hover:bg-accent transition-colors border border-border font-medium"
               >
                 <User size={18} />
-                <span>Hesabım</span>
+                <span>{nav.accountLabel}</span>
               </button>
+              )}
+              {nav.wishlistLabel && (
               <button
                 onClick={() => handleNavigate("/wishlist")}
-                className="w-full flex items-center gap-3 px-3 py-2.5 rounded-md text-sm text-white bg-white/5 hover:bg-white/15 transition-colors border border-white/10 font-medium"
+                className="w-full flex items-center gap-3 px-3 py-2.5 rounded-md text-sm bg-muted/50 hover:bg-accent transition-colors border border-border font-medium"
               >
                 <Heart size={18} />
-                <span className="flex-1 text-left">Favorilerim</span>
+                <span className="flex-1 text-left">{nav.wishlistLabel}</span>
                 {wishlistCount > 0 && (
-                  <span className="bg-purple-gradient text-white text-xs px-2 py-0.5 rounded-full font-semibold">
+                  <span className="bg-primary text-primary-foreground text-xs px-2 py-0.5 rounded-full font-semibold">
                     {wishlistCount}
                   </span>
                 )}
               </button>
+              )}
+              {nav.logoutLabel && (
               <button
                 onClick={handleLogout}
-                className="w-full flex items-center gap-3 px-3 py-2.5 rounded-md text-sm text-red-400 bg-white/5 hover:bg-red-500/20 transition-colors border border-red-500/30 font-medium"
+                className="w-full flex items-center gap-3 px-3 py-2.5 rounded-md text-sm text-red-500 bg-muted/50 hover:bg-red-500/10 transition-colors border border-red-500/30 font-medium"
               >
                 <LogOut size={18} />
-                <span>Çıkış Yap</span>
+                <span>{nav.logoutLabel}</span>
               </button>
+              )}
             </>
           ) : (
             <>
+              {nav.loginLabel && (
               <button
                 onClick={() => handleNavigate("/login")}
-                className="w-full flex items-center gap-3 px-3 py-2.5 rounded-md text-sm text-white bg-white/5 hover:bg-white/15 transition-colors border border-white/10 font-medium"
+                className="w-full flex items-center gap-3 px-3 py-2.5 rounded-md text-sm bg-muted/50 hover:bg-accent transition-colors border border-border font-medium"
               >
                 <User size={18} />
-                <span>Giriş Yap</span>
+                <span>{nav.loginLabel}</span>
               </button>
+              )}
+              {nav.registerLabel && (
               <button
                 onClick={() => handleNavigate("/register")}
-                className="w-full flex items-center gap-3 px-3 py-2.5 rounded-md text-sm text-white bg-white/5 hover:bg-white/15 transition-colors border border-white/10 font-medium"
+                className="w-full flex items-center gap-3 px-3 py-2.5 rounded-md text-sm bg-muted/50 hover:bg-accent transition-colors border border-border font-medium"
               >
                 <User size={18} />
-                <span>Kayıt Ol</span>
+                <span>{nav.registerLabel}</span>
               </button>
+              )}
             </>
           )}
 
+          {!isAuthenticated && nav.wishlistLabel && (
           <button
             onClick={onOpenWishlist}
-            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-md text-sm xs:text-base text-white bg-white/5 hover:bg-white/15 transition-colors border border-white/10 font-medium"
+            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-md text-sm bg-muted/50 hover:bg-accent transition-colors border border-border font-medium"
           >
             <Heart size={18} />
-            <span className="flex-1 text-left">Favorilerim</span>
+            <span className="flex-1 text-left">{nav.wishlistLabel}</span>
             {wishlistCount > 0 && (
-              <span className="bg-purple-gradient text-white text-xs px-2 py-0.5 rounded-full font-semibold">
+              <span className="bg-primary text-primary-foreground text-xs px-2 py-0.5 rounded-full font-semibold">
                 {wishlistCount}
               </span>
             )}
           </button>
+          )}
 
+          {nav.cartLabel && (
           <button
             onClick={onOpenCart}
-            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-md text-sm text-white bg-purple-gradient hover:bg-purple-700 transition-colors border border-purple-500 font-medium mt-4"
+            className="w-full flex items-center gap-3 px-3 py-2.5 rounded-md text-sm bg-primary text-primary-foreground hover:opacity-90 transition-opacity font-medium mt-4"
           >
             <ShoppingBag size={18} />
-            <span className="flex-1 text-left">Sepetim</span>
+            <span className="flex-1 text-left">{nav.cartLabel}</span>
             {cartCount > 0 && (
-              <span className="bg-white/20 text-white text-xs px-2 py-0.5 rounded-full font-semibold">
+              <span className="bg-primary-foreground/20 text-primary-foreground text-xs px-2 py-0.5 rounded-full font-semibold">
                 {cartCount}
               </span>
             )}
           </button>
+          )}
         </div>
+        )}
       </div>
     </div>
   );
 };
-
 
 export default Navbar;

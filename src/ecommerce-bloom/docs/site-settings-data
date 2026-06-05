@@ -1,0 +1,518 @@
+{
+    "success": true,
+    "data": {
+        "id": "019e872a-4f2c-7ade-ae71-b10658726eac",
+        "code": "bizdenalbizdensat",
+        "name": "bizdenalbizdensat",
+        "siteName": "bizdenalbizdensat.com",
+        "domain": "https://www.bizdenalbizdensat.com",
+        "logoUrl": null,
+        "faviconUrl": null,
+        "address": "Karabağlar Mahallesi \n5760 Sokak No:22/A \nKarabağlar İZMİR",
+        "emails": [
+            "info@bizdenalbizdensat.com"
+        ],
+        "phones": [
+            "0 554 449 04 49 (Selçuk Bey)",
+            "0 555 891 66 61 (Selçuk Bey)",
+            "0 532 310 74 54 (Serkan Bey)",
+            "0 541 310 74 54 (Serkan Bey)"
+        ],
+        "workingHours": [
+            "Pazartesi                  08:00–21:00",
+            "Salı                                 08:00–21:00",
+            "Çarşamba              08:00–21:00",
+            "Perşembe              08:00–21:00",
+            "Cuma                          08:00–21:00",
+            "Cumartesi              08:00–21:00",
+            "Pazar                            08:00–21:00"
+        ],
+        "socialLinks": {
+            "facebook": null,
+            "twitter": null,
+            "instagram": null,
+            "youTube": null
+        },
+        "paymentCompliance": {
+            "legalPages": [
+                {
+                    "slug": "hakkimizda",
+                    "title": null,
+                    "path": "/hakkimizda",
+                    "content": "<p><strong>Bizden Al Bizden Sat</strong>, <a href=\"https://www.bizdenalbizdensat.com\">bizdenalbizdensat.com</a> üzerinden teknoloji ve yaşam kategorilerinde perakende e-ticaret hizmeti sunar.</p>\r\n<h2>Misyonumuz</h2>\r\n<p>Güvenilir tedarik, şeffaf fiyatlandırma ve satış sonrası destek ile müşterilerimize sorunsuz bir alışveriş deneyimi sağlamak.</p>\r\n<h2>Hizmetlerimiz</h2>\r\n<ul>\r\n  <li>Geniş ürün yelpazesi ve güncel stok bilgisi</li>\r\n  <li>Güvenli ödeme altyapısı (3D Secure destekli kart ödemeleri)</li>\r\n  <li>Standart, hızlı ve express kargo seçenekleri</li>\r\n  <li>14 gün cayma hakkı ve iade süreçleri</li>\r\n  <li>Müşteri destek hattı ve e-posta desteği</li>\r\n</ul>\r\n<h2>İletişim</h2>\r\n<p>E-posta: <a href=\"mailto:destek@bizdenalbizdensat.com\">destek@bizdenalbizdensat.com</a><br />Telefon: +90 (850) 000 00 00</p>"
+                },
+                {
+                    "slug": "teslimat-ve-iade",
+                    "title": null,
+                    "path": "/teslimat-ve-iade",
+                    "content": "<h2>1. Teslimat Süreleri ve Yöntemi</h2>\r\n<p>Siparişiniz, ödemenin onaylanmasını takiben <strong>1–3 iş günü</strong> içinde anlaşmalı kargo firmasına teslim edilir. Resmî tatil ve hafta sonları iş gününe dahil değildir.</p>\r\n<table>\r\n  <thead><tr><th>Kargo türü</th><th>Tahmini süre</th></tr></thead>\r\n  <tbody>\r\n    <tr><td>Standart kargo</td><td>3–5 iş günü</td></tr>\r\n    <tr><td>Hızlı kargo</td><td>2 iş günü</td></tr>\r\n    <tr><td>Express kargo</td><td>1 iş günü (bölgeye göre değişebilir)</td></tr>\r\n  </tbody>\r\n</table>\r\n<p>Teslimat yalnızca Türkiye sınırları içinde yapılır. Kargo ücreti sipariş özetinde ayrıca gösterilir; kampanyalı dönemlerde ücretsiz kargo uygulanabilir.</p>\r\n<h2>2. Teslimatın Gecikmesi</h2>\r\n<p>Mücbir sebep, olağanüstü hava koşulları veya tedarikçi kaynaklı gecikmelerde müşteri bilgilendirilir; yeni teslimat tarihi paylaşılır.</p>\r\n<h2>3. Hasarlı veya Eksik Teslimat</h2>\r\n<p>Kargo tesliminde ambalaj hasarı veya eksik ürün fark ederseniz tutanak tutturarak <strong>3 iş günü</strong> içinde <a href=\"mailto:destek@bizdenalbizdensat.com\">destek@bizdenalbizdensat.com</a> adresine bildirin.</p>\r\n<h2>4. Cayma Hakkı ve İade</h2>\r\n<p>Mesafeli sözleşmelerde tüketici, malı teslim aldığı tarihten itibaren <strong>14 gün</strong> içinde cayma hakkını kullanabilir (6502 sayılı Kanun m.48 ve Mesafeli Sözleşmeler Yönetmeliği).</p>\r\n<ul>\r\n  <li>Ürün kullanılmamış, aksesuarları eksiksiz ve orijinal ambalajında olmalıdır.</li>\r\n  <li>Fatura veya e-fatura bilgisi iade sürecinde ibraz edilmelidir.</li>\r\n  <li>Cayma bildirimi yazılı olarak (e-posta veya kayıtlı destek talebi) yapılmalıdır.</li>\r\n</ul>\r\n<p>İade onayı sonrası ödeme, yasal süreler içinde aynı ödeme yöntemine iade edilir. Ayıplı mal, yanlış ürün veya kampanyalı “değişim yok” ürünlerinde ayrı kurallar ürün sayfasında belirtilir.</p>\r\n<h2>5. İade Kargo Masrafı</h2>\r\n<p>Cayma hakkı kapsamındaki iadelerde, aksi ürün sayfasında belirtilmedikçe iade kargo ücreti tüketiciye aittir. Satıcı kaynaklı hatalarda kargo masrafı satıcıya aittir.</p>"
+                },
+                {
+                    "slug": "gizlilik",
+                    "title": null,
+                    "path": "/gizlilik",
+                    "content": "<h2>1. Veri Sorumlusu</h2>\r\n<p><strong>Bizden Al Bizden Sat</strong> (bizdenalbizdensat.com), 6698 sayılı Kişisel Verilerin Korunması Kanunu (“KVKK”) kapsamında veri sorumlusudur.</p>\r\n<h2>2. İşlenen Kişisel Veriler</h2>\r\n<ul>\r\n  <li><strong>Kimlik:</strong> ad, soyad</li>\r\n  <li><strong>İletişim:</strong> e-posta, telefon, teslimat/fatura adresi</li>\r\n  <li><strong>Müşteri işlem:</strong> sipariş geçmişi, sepet, fatura bilgileri</li>\r\n  <li><strong>İşlem güvenliği:</strong> IP, oturum logları, ödeme doğrulama kayıtları (kart numarası saklanmaz)</li>\r\n  <li><strong>Pazarlama:</strong> bülten izni verilmişse e-posta tercihleri</li>\r\n</ul>\r\n<h2>3. İşleme Amaçları ve Hukuki Sebepler</h2>\r\n<p>Verileriniz; sözleşmenin kurulması ve ifası, hukuki yükümlülüklerin yerine getirilmesi, meşru menfaat ve açık rızanıza dayalı olarak sipariş, teslimat, faturalama, müşteri hizmetleri, dolandırıcılık önleme ve (izin vermeniz halinde) kampanya iletişimi amaçlarıyla işlenir.</p>\r\n<h2>4. Aktarım</h2>\r\n<p>Veriler; kargo firmaları, ödeme hizmet sağlayıcıları (ör. iyzico), barındırma/e-posta altyapı sağlayıcıları ve kanunen yetkili kamu kurumlarıyla paylaşılabilir.</p>\r\n<h2>5. Saklama Süresi</h2>\r\n<p>Ticari ve vergi mevzuatı gereği en az 5 yıl; uyuşmazlık halinde zamanaşımı süreleri boyunca saklanır.</p>\r\n<h2>6. Haklarınız</h2>\r\n<p>KVKK m.11 kapsamında bilgi talep etme, düzeltme, silme, işlemeyi kısıtlama ve itiraz haklarına sahipsiniz. Başvuru: <a href=\"mailto:destek@bizdenalbizdensat.com\">destek@bizdenalbizdensat.com</a></p>\r\n<h2>7. Çerezler</h2>\r\n<p>Site deneyimini iyileştirmek için zorunlu ve (tercihinize bağlı) analitik/pazarlama çerezleri kullanılabilir. Tarayıcı ayarlarından çerezleri yönetebilirsiniz.</p>"
+                },
+                {
+                    "slug": "mesafeli-satis",
+                    "title": null,
+                    "path": "/mesafeli-satis",
+                    "content": "<h2>Mesafeli Satış Sözleşmesi</h2>\r\n<p>İşbu sözleşme, aşağıda bilgileri yer alan <strong>Satıcı</strong> ile <strong>Alıcı</strong> arasında, 6502 sayılı Tüketicinin Korunması Hakkında Kanun ve Mesafeli Sözleşmeler Yönetmeliği uyarınca elektronik ortamda kurulmuştur.</p>\r\n<h2>Madde 1 — Taraflar</h2>\r\n<p><strong>Satıcı:</strong><br />\r\nUnvan: Bizden Al Bizden Sat<br />\r\nWeb: <a href=\"https://www.bizdenalbizdensat.com\">https://www.bizdenalbizdensat.com</a><br />\r\nE-posta: destek@bizdenalbizdensat.com<br />\r\nTelefon: +90 (850) 000 00 00</p>\r\n<p><strong>Alıcı:</strong> Sipariş sırasında sisteme girilen ad-soyad, adres ve iletişim bilgileri esas alınır.</p>\r\n<h2>Madde 2 — Konu</h2>\r\n<p>Alıcının, Satıcıya ait internet sitesinden elektronik ortamda siparişini verdiği mal/ürünlerin satışı ve teslimine ilişkin tarafların hak ve yükümlülüklerinin belirlenmesidir.</p>\r\n<h2>Madde 3 — Ürün ve Bedel</h2>\r\n<p>Ürünün türü, miktarı, marka/modeli, KDV dahil satış bedeli, varsa kargo ücreti sipariş özet ekranında ve onay e-postasında gösterilir. Kampanya ve indirimler o an geçerli koşullara tabidir.</p>\r\n<h2>Madde 4 — Ödeme</h2>\r\n<p>Ödeme; kredi/banka kartı veya sitede sunulan diğer yöntemlerle, güvenli ödeme altyapısı üzerinden tahsil edilir. Sipariş, ödeme onayı ile kesinleşir.</p>\r\n<h2>Madde 5 — Teslimat</h2>\r\n<p>Ürün, Alıcının bildirdiği adrese, <a href=\"/teslimat-ve-iade\">Teslimat ve İade Şartları</a>’nda belirtilen süre ve usulle teslim edilir. Mülkiyet, ürünün Alıcıya teslimiyle Alıcıya geçer.</p>\r\n<h2>Madde 6 — Cayma Hakkı</h2>\r\n<p>Alıcı, malı teslim aldığı tarihten itibaren 14 gün içinde cayma hakkını kullanabilir. Cayma bildirimi kalıcı veri saklayıcısı ile (e-posta veya kayıtlı destek kanalı) yapılmalıdır. Cayma hakkının kullanımına ilişkin usul <a href=\"/teslimat-ve-iade\">Teslimat ve İade Şartları</a>’nda açıklanmıştır.</p>\r\n<h2>Madde 7 — Ayıplı Mal</h2>\r\n<p>Ayıplı mal durumunda tüketici, seçimlik haklarını (ücretsiz onarım, yenisi ile değişim, bedel indirimi veya sözleşmeden dönme) kullanabilir.</p>\r\n<h2>Madde 8 — Uyuşmazlık</h2>\r\n<p>Şikâyet ve itirazlarda, her yıl Gümrük ve Ticaret Bakanlığınca ilan edilen parasal sınırlara göre İl/İlçe Tüketici Hakem Heyetleri ile Tüketici Mahkemeleri yetkilidir.</p>\r\n<p>Alıcı, siparişi onaylayarak işbu sözleşmenin tüm maddelerini okuduğunu ve kabul ettiğini beyan eder.</p>"
+                },
+                {
+                    "slug": "on-bilgilendirme-formu",
+                    "title": null,
+                    "path": "/on-bilgilendirme-formu",
+                    "content": "<h2>Ön Bilgilendirme Formu</h2>\r\n<p>İşbu form, 6502 sayılı Kanun ve Mesafeli Sözleşmeler Yönetmeliği’nin 5. maddesi uyarınca, sipariş öncesi tüketicinin bilgilendirilmesi amacıyla hazırlanmıştır.</p>\r\n<h2>1. Satıcının Kimliği</h2>\r\n<p>\r\n  <strong>Ticari unvan:</strong> Bizden Al Bizden Sat<br />\r\n  <strong>İnternet adresi:</strong> <a href=\"https://www.bizdenalbizdensat.com\">https://www.bizdenalbizdensat.com</a><br />\r\n  <strong>E-posta:</strong> <a href=\"mailto:destek@bizdenalbizdensat.com\">destek@bizdenalbizdensat.com</a><br />\r\n  <strong>Telefon:</strong> +90 (850) 000 00 00<br />\r\n  <strong>MERSİS / Vergi no:</strong> (Şirket sicil bilgileri fatura üzerinde yer alır.)\r\n</p>\r\n<h2>2. Mal / Hizmetin Temel Nitelikleri</h2>\r\n<p>Sipariş konusu ürünler; elektronik, teknoloji ve yaşam kategorilerinde perakende satışa sunulan tüketim mallarıdır. Her ürünün adı, modeli, miktarı, renk/özellik bilgisi, satış bedeli ve varsa vergiler sipariş özeti ekranında ayrıntılı gösterilir.</p>\r\n<h2>3. Toplam Bedel (Vergiler Dahil)</h2>\r\n<p>Ürünlerin KDV dahil satış fiyatı, varsa indirim tutarı, kargo ücreti ve ödenecek <strong>genel toplam</strong> sipariş onay adımında tek tek listelenir. Ek masraf (paketleme vb.) uygulanmıyorsa ayrıca belirtilmez.</p>\r\n<h2>4. Ödeme, Teslimat ve İfa</h2>\r\n<ul>\r\n  <li><strong>Ödeme:</strong> Kredi/banka kartı veya sitede sunulan diğer güvenli yöntemlerle peşin tahsilat.</li>\r\n  <li><strong>Teslimat:</strong> Ödeme onayından sonra 1–3 iş günü içinde kargoya verilir; süre kargo türüne göre değişir.</li>\r\n  <li><strong>Teslimat adresi:</strong> Alıcının siparişte belirttiği Türkiye içi adres.</li>\r\n</ul>\r\n<h2>5. Cayma Hakkı</h2>\r\n<p>Tüketici, malı teslim aldığı tarihten itibaren <strong>14 gün</strong> içinde herhangi bir gerekçe göstermeksizin cayma hakkına sahiptir. Cayma hakkının kullanımı, süresi ve iade usulü <a href=\"/teslimat-ve-iade\">Teslimat ve İade Şartları</a> sayfasında açıklanmıştır.</p>\r\n<p>Cayma hakkı kullanılamayacak ürünler (hijyen, kişiye özel, ambalajı açılmış yazılım vb.) ilgili mevzuat ve ürün sayfasında ayrıca belirtilir.</p>\r\n<h2>6. Garanti ve Müşteri Hizmetleri</h2>\r\n<p>Ürünler, üretici/tedarikçi garantisi ve mevzuattaki zorunlu garanti hakları kapsamındadır. Garanti belgesi ve süresi ürünle birlikte teslim edilir veya ürün sayfasında belirtilir. Destek: destek@bizdenalbizdensat.com / +90 (850) 000 00 00</p>\r\n<h2>7. Uyuşmazlık Çözümü</h2>\r\n<p>Şikâyetleriniz için öncelikle satıcıya başvurabilirsiniz. Çözülemeyen uyuşmazlıklarda Tüketici Hakem Heyetleri ve Tüketici Mahkemeleri yetkilidir.</p>\r\n<h2>8. Onay</h2>\r\n<p>“Siparişi Tamamla” veya eşdeğer onay adımında; işbu Ön Bilgilendirme Formu, <a href=\"/mesafeli-satis\">Mesafeli Satış Sözleşmesi</a> ve <a href=\"/gizlilik\">Gizlilik Sözleşmesi</a>’ni okuduğunuzu ve kabul ettiğinizi beyan etmiş olursunuz.</p>"
+                }
+            ],
+            "aboutPageTitle": null,
+            "aboutPageContent": "<p><strong>Bizden Al Bizden Sat</strong>, <a href=\"https://www.bizdenalbizdensat.com\">bizdenalbizdensat.com</a> üzerinden teknoloji ve yaşam kategorilerinde perakende e-ticaret hizmeti sunar.</p>\r\n<h2>Misyonumuz</h2>\r\n<p>Güvenilir tedarik, şeffaf fiyatlandırma ve satış sonrası destek ile müşterilerimize sorunsuz bir alışveriş deneyimi sağlamak.</p>\r\n<h2>Hizmetlerimiz</h2>\r\n<ul>\r\n  <li>Geniş ürün yelpazesi ve güncel stok bilgisi</li>\r\n  <li>Güvenli ödeme altyapısı (3D Secure destekli kart ödemeleri)</li>\r\n  <li>Standart, hızlı ve express kargo seçenekleri</li>\r\n  <li>14 gün cayma hakkı ve iade süreçleri</li>\r\n  <li>Müşteri destek hattı ve e-posta desteği</li>\r\n</ul>\r\n<h2>İletişim</h2>\r\n<p>E-posta: <a href=\"mailto:destek@bizdenalbizdensat.com\">destek@bizdenalbizdensat.com</a><br />Telefon: +90 (850) 000 00 00</p>",
+            "deliveryReturnsPageTitle": null,
+            "deliveryReturnsPageContent": "<h2>1. Teslimat Süreleri ve Yöntemi</h2>\r\n<p>Siparişiniz, ödemenin onaylanmasını takiben <strong>1–3 iş günü</strong> içinde anlaşmalı kargo firmasına teslim edilir. Resmî tatil ve hafta sonları iş gününe dahil değildir.</p>\r\n<table>\r\n  <thead><tr><th>Kargo türü</th><th>Tahmini süre</th></tr></thead>\r\n  <tbody>\r\n    <tr><td>Standart kargo</td><td>3–5 iş günü</td></tr>\r\n    <tr><td>Hızlı kargo</td><td>2 iş günü</td></tr>\r\n    <tr><td>Express kargo</td><td>1 iş günü (bölgeye göre değişebilir)</td></tr>\r\n  </tbody>\r\n</table>\r\n<p>Teslimat yalnızca Türkiye sınırları içinde yapılır. Kargo ücreti sipariş özetinde ayrıca gösterilir; kampanyalı dönemlerde ücretsiz kargo uygulanabilir.</p>\r\n<h2>2. Teslimatın Gecikmesi</h2>\r\n<p>Mücbir sebep, olağanüstü hava koşulları veya tedarikçi kaynaklı gecikmelerde müşteri bilgilendirilir; yeni teslimat tarihi paylaşılır.</p>\r\n<h2>3. Hasarlı veya Eksik Teslimat</h2>\r\n<p>Kargo tesliminde ambalaj hasarı veya eksik ürün fark ederseniz tutanak tutturarak <strong>3 iş günü</strong> içinde <a href=\"mailto:destek@bizdenalbizdensat.com\">destek@bizdenalbizdensat.com</a> adresine bildirin.</p>\r\n<h2>4. Cayma Hakkı ve İade</h2>\r\n<p>Mesafeli sözleşmelerde tüketici, malı teslim aldığı tarihten itibaren <strong>14 gün</strong> içinde cayma hakkını kullanabilir (6502 sayılı Kanun m.48 ve Mesafeli Sözleşmeler Yönetmeliği).</p>\r\n<ul>\r\n  <li>Ürün kullanılmamış, aksesuarları eksiksiz ve orijinal ambalajında olmalıdır.</li>\r\n  <li>Fatura veya e-fatura bilgisi iade sürecinde ibraz edilmelidir.</li>\r\n  <li>Cayma bildirimi yazılı olarak (e-posta veya kayıtlı destek talebi) yapılmalıdır.</li>\r\n</ul>\r\n<p>İade onayı sonrası ödeme, yasal süreler içinde aynı ödeme yöntemine iade edilir. Ayıplı mal, yanlış ürün veya kampanyalı “değişim yok” ürünlerinde ayrı kurallar ürün sayfasında belirtilir.</p>\r\n<h2>5. İade Kargo Masrafı</h2>\r\n<p>Cayma hakkı kapsamındaki iadelerde, aksi ürün sayfasında belirtilmedikçe iade kargo ücreti tüketiciye aittir. Satıcı kaynaklı hatalarda kargo masrafı satıcıya aittir.</p>",
+            "privacyPolicyPageTitle": null,
+            "privacyPolicyPageContent": "<h2>1. Veri Sorumlusu</h2>\r\n<p><strong>Bizden Al Bizden Sat</strong> (bizdenalbizdensat.com), 6698 sayılı Kişisel Verilerin Korunması Kanunu (“KVKK”) kapsamında veri sorumlusudur.</p>\r\n<h2>2. İşlenen Kişisel Veriler</h2>\r\n<ul>\r\n  <li><strong>Kimlik:</strong> ad, soyad</li>\r\n  <li><strong>İletişim:</strong> e-posta, telefon, teslimat/fatura adresi</li>\r\n  <li><strong>Müşteri işlem:</strong> sipariş geçmişi, sepet, fatura bilgileri</li>\r\n  <li><strong>İşlem güvenliği:</strong> IP, oturum logları, ödeme doğrulama kayıtları (kart numarası saklanmaz)</li>\r\n  <li><strong>Pazarlama:</strong> bülten izni verilmişse e-posta tercihleri</li>\r\n</ul>\r\n<h2>3. İşleme Amaçları ve Hukuki Sebepler</h2>\r\n<p>Verileriniz; sözleşmenin kurulması ve ifası, hukuki yükümlülüklerin yerine getirilmesi, meşru menfaat ve açık rızanıza dayalı olarak sipariş, teslimat, faturalama, müşteri hizmetleri, dolandırıcılık önleme ve (izin vermeniz halinde) kampanya iletişimi amaçlarıyla işlenir.</p>\r\n<h2>4. Aktarım</h2>\r\n<p>Veriler; kargo firmaları, ödeme hizmet sağlayıcıları (ör. iyzico), barındırma/e-posta altyapı sağlayıcıları ve kanunen yetkili kamu kurumlarıyla paylaşılabilir.</p>\r\n<h2>5. Saklama Süresi</h2>\r\n<p>Ticari ve vergi mevzuatı gereği en az 5 yıl; uyuşmazlık halinde zamanaşımı süreleri boyunca saklanır.</p>\r\n<h2>6. Haklarınız</h2>\r\n<p>KVKK m.11 kapsamında bilgi talep etme, düzeltme, silme, işlemeyi kısıtlama ve itiraz haklarına sahipsiniz. Başvuru: <a href=\"mailto:destek@bizdenalbizdensat.com\">destek@bizdenalbizdensat.com</a></p>\r\n<h2>7. Çerezler</h2>\r\n<p>Site deneyimini iyileştirmek için zorunlu ve (tercihinize bağlı) analitik/pazarlama çerezleri kullanılabilir. Tarayıcı ayarlarından çerezleri yönetebilirsiniz.</p>",
+            "distanceSellingAgreementPageTitle": null,
+            "distanceSellingAgreementPageContent": "<h2>Mesafeli Satış Sözleşmesi</h2>\r\n<p>İşbu sözleşme, aşağıda bilgileri yer alan <strong>Satıcı</strong> ile <strong>Alıcı</strong> arasında, 6502 sayılı Tüketicinin Korunması Hakkında Kanun ve Mesafeli Sözleşmeler Yönetmeliği uyarınca elektronik ortamda kurulmuştur.</p>\r\n<h2>Madde 1 — Taraflar</h2>\r\n<p><strong>Satıcı:</strong><br />\r\nUnvan: Bizden Al Bizden Sat<br />\r\nWeb: <a href=\"https://www.bizdenalbizdensat.com\">https://www.bizdenalbizdensat.com</a><br />\r\nE-posta: destek@bizdenalbizdensat.com<br />\r\nTelefon: +90 (850) 000 00 00</p>\r\n<p><strong>Alıcı:</strong> Sipariş sırasında sisteme girilen ad-soyad, adres ve iletişim bilgileri esas alınır.</p>\r\n<h2>Madde 2 — Konu</h2>\r\n<p>Alıcının, Satıcıya ait internet sitesinden elektronik ortamda siparişini verdiği mal/ürünlerin satışı ve teslimine ilişkin tarafların hak ve yükümlülüklerinin belirlenmesidir.</p>\r\n<h2>Madde 3 — Ürün ve Bedel</h2>\r\n<p>Ürünün türü, miktarı, marka/modeli, KDV dahil satış bedeli, varsa kargo ücreti sipariş özet ekranında ve onay e-postasında gösterilir. Kampanya ve indirimler o an geçerli koşullara tabidir.</p>\r\n<h2>Madde 4 — Ödeme</h2>\r\n<p>Ödeme; kredi/banka kartı veya sitede sunulan diğer yöntemlerle, güvenli ödeme altyapısı üzerinden tahsil edilir. Sipariş, ödeme onayı ile kesinleşir.</p>\r\n<h2>Madde 5 — Teslimat</h2>\r\n<p>Ürün, Alıcının bildirdiği adrese, <a href=\"/teslimat-ve-iade\">Teslimat ve İade Şartları</a>’nda belirtilen süre ve usulle teslim edilir. Mülkiyet, ürünün Alıcıya teslimiyle Alıcıya geçer.</p>\r\n<h2>Madde 6 — Cayma Hakkı</h2>\r\n<p>Alıcı, malı teslim aldığı tarihten itibaren 14 gün içinde cayma hakkını kullanabilir. Cayma bildirimi kalıcı veri saklayıcısı ile (e-posta veya kayıtlı destek kanalı) yapılmalıdır. Cayma hakkının kullanımına ilişkin usul <a href=\"/teslimat-ve-iade\">Teslimat ve İade Şartları</a>’nda açıklanmıştır.</p>\r\n<h2>Madde 7 — Ayıplı Mal</h2>\r\n<p>Ayıplı mal durumunda tüketici, seçimlik haklarını (ücretsiz onarım, yenisi ile değişim, bedel indirimi veya sözleşmeden dönme) kullanabilir.</p>\r\n<h2>Madde 8 — Uyuşmazlık</h2>\r\n<p>Şikâyet ve itirazlarda, her yıl Gümrük ve Ticaret Bakanlığınca ilan edilen parasal sınırlara göre İl/İlçe Tüketici Hakem Heyetleri ile Tüketici Mahkemeleri yetkilidir.</p>\r\n<p>Alıcı, siparişi onaylayarak işbu sözleşmenin tüm maddelerini okuduğunu ve kabul ettiğini beyan eder.</p>",
+            "preInformationFormPageTitle": null,
+            "preInformationFormPageContent": "<h2>Ön Bilgilendirme Formu</h2>\r\n<p>İşbu form, 6502 sayılı Kanun ve Mesafeli Sözleşmeler Yönetmeliği’nin 5. maddesi uyarınca, sipariş öncesi tüketicinin bilgilendirilmesi amacıyla hazırlanmıştır.</p>\r\n<h2>1. Satıcının Kimliği</h2>\r\n<p>\r\n  <strong>Ticari unvan:</strong> Bizden Al Bizden Sat<br />\r\n  <strong>İnternet adresi:</strong> <a href=\"https://www.bizdenalbizdensat.com\">https://www.bizdenalbizdensat.com</a><br />\r\n  <strong>E-posta:</strong> <a href=\"mailto:destek@bizdenalbizdensat.com\">destek@bizdenalbizdensat.com</a><br />\r\n  <strong>Telefon:</strong> +90 (850) 000 00 00<br />\r\n  <strong>MERSİS / Vergi no:</strong> (Şirket sicil bilgileri fatura üzerinde yer alır.)\r\n</p>\r\n<h2>2. Mal / Hizmetin Temel Nitelikleri</h2>\r\n<p>Sipariş konusu ürünler; elektronik, teknoloji ve yaşam kategorilerinde perakende satışa sunulan tüketim mallarıdır. Her ürünün adı, modeli, miktarı, renk/özellik bilgisi, satış bedeli ve varsa vergiler sipariş özeti ekranında ayrıntılı gösterilir.</p>\r\n<h2>3. Toplam Bedel (Vergiler Dahil)</h2>\r\n<p>Ürünlerin KDV dahil satış fiyatı, varsa indirim tutarı, kargo ücreti ve ödenecek <strong>genel toplam</strong> sipariş onay adımında tek tek listelenir. Ek masraf (paketleme vb.) uygulanmıyorsa ayrıca belirtilmez.</p>\r\n<h2>4. Ödeme, Teslimat ve İfa</h2>\r\n<ul>\r\n  <li><strong>Ödeme:</strong> Kredi/banka kartı veya sitede sunulan diğer güvenli yöntemlerle peşin tahsilat.</li>\r\n  <li><strong>Teslimat:</strong> Ödeme onayından sonra 1–3 iş günü içinde kargoya verilir; süre kargo türüne göre değişir.</li>\r\n  <li><strong>Teslimat adresi:</strong> Alıcının siparişte belirttiği Türkiye içi adres.</li>\r\n</ul>\r\n<h2>5. Cayma Hakkı</h2>\r\n<p>Tüketici, malı teslim aldığı tarihten itibaren <strong>14 gün</strong> içinde herhangi bir gerekçe göstermeksizin cayma hakkına sahiptir. Cayma hakkının kullanımı, süresi ve iade usulü <a href=\"/teslimat-ve-iade\">Teslimat ve İade Şartları</a> sayfasında açıklanmıştır.</p>\r\n<p>Cayma hakkı kullanılamayacak ürünler (hijyen, kişiye özel, ambalajı açılmış yazılım vb.) ilgili mevzuat ve ürün sayfasında ayrıca belirtilir.</p>\r\n<h2>6. Garanti ve Müşteri Hizmetleri</h2>\r\n<p>Ürünler, üretici/tedarikçi garantisi ve mevzuattaki zorunlu garanti hakları kapsamındadır. Garanti belgesi ve süresi ürünle birlikte teslim edilir veya ürün sayfasında belirtilir. Destek: destek@bizdenalbizdensat.com / +90 (850) 000 00 00</p>\r\n<h2>7. Uyuşmazlık Çözümü</h2>\r\n<p>Şikâyetleriniz için öncelikle satıcıya başvurabilirsiniz. Çözülemeyen uyuşmazlıklarda Tüketici Hakem Heyetleri ve Tüketici Mahkemeleri yetkilidir.</p>\r\n<h2>8. Onay</h2>\r\n<p>“Siparişi Tamamla” veya eşdeğer onay adımında; işbu Ön Bilgilendirme Formu, <a href=\"/mesafeli-satis\">Mesafeli Satış Sözleşmesi</a> ve <a href=\"/gizlilik\">Gizlilik Sözleşmesi</a>’ni okuduğunuzu ve kabul ettiğinizi beyan etmiş olursunuz.</p>",
+            "iyzicoPayLogoUrl": "/uploads/site/ef98d04ba81145beb8f3eab5b1a7e59c.png"
+        },
+        "paymentComplianceStatus": {
+            "completed": 1,
+            "total": 6,
+            "items": [
+                {
+                    "key": "aboutPage",
+                    "label": "Hakkımızda sayfası",
+                    "met": false
+                },
+                {
+                    "key": "deliveryReturns",
+                    "label": "Teslimat ve iade şartları",
+                    "met": false
+                },
+                {
+                    "key": "privacyPolicy",
+                    "label": "Gizlilik sözleşmesi",
+                    "met": false
+                },
+                {
+                    "key": "distanceSelling",
+                    "label": "Mesafeli satış sözleşmesi",
+                    "met": false
+                },
+                {
+                    "key": "preInformation",
+                    "label": "Ön bilgilendirme formu",
+                    "met": false
+                },
+                {
+                    "key": "iyzicoLogo",
+                    "label": "iyzico ile Öde logosu",
+                    "met": true
+                }
+            ]
+        },
+        "theme": {
+            "primaryLight": "#2563EB",
+            "primaryDark": "#60A5FA",
+            "fontFamily": null
+        },
+        "seo": {
+            "defaultTitle": null,
+            "defaultDescription": null,
+            "defaultKeywords": null,
+            "ogImageUrl": null,
+            "twitterHandle": null,
+            "pages": [
+                {
+                    "pageKey": "home",
+                    "label": "Anasayfa",
+                    "path": "/",
+                    "title": null,
+                    "description": null,
+                    "keywords": null,
+                    "ogImageUrl": null
+                },
+                {
+                    "pageKey": "shop",
+                    "label": "Mağaza",
+                    "path": "/shop",
+                    "title": null,
+                    "description": null,
+                    "keywords": null,
+                    "ogImageUrl": null
+                },
+                {
+                    "pageKey": "contact",
+                    "label": "İletişim",
+                    "path": "/contact",
+                    "title": null,
+                    "description": null,
+                    "keywords": null,
+                    "ogImageUrl": null
+                },
+                {
+                    "pageKey": "about",
+                    "label": "Hakkımızda",
+                    "path": "/about",
+                    "title": null,
+                    "description": null,
+                    "keywords": null,
+                    "ogImageUrl": null
+                },
+                {
+                    "pageKey": "pre-information",
+                    "label": "Ön Bilgilendirme Formu",
+                    "path": "/pre-information",
+                    "title": null,
+                    "description": null,
+                    "keywords": null,
+                    "ogImageUrl": null
+                },
+                {
+                    "pageKey": "delivery-returns",
+                    "label": "Teslimat ve İade",
+                    "path": "/delivery-returns",
+                    "title": null,
+                    "description": null,
+                    "keywords": null,
+                    "ogImageUrl": null
+                },
+                {
+                    "pageKey": "privacy",
+                    "label": "Gizlilik Sözleşmesi",
+                    "path": "/privacy",
+                    "title": null,
+                    "description": null,
+                    "keywords": null,
+                    "ogImageUrl": null
+                },
+                {
+                    "pageKey": "distance-selling",
+                    "label": "Mesafeli Satış Sözleşmesi",
+                    "path": "/distance-selling",
+                    "title": null,
+                    "description": null,
+                    "keywords": null,
+                    "ogImageUrl": null
+                },
+                {
+                    "pageKey": "login",
+                    "label": "Giriş",
+                    "path": "/login",
+                    "title": null,
+                    "description": null,
+                    "keywords": null,
+                    "ogImageUrl": null
+                },
+                {
+                    "pageKey": "register",
+                    "label": "Kayıt",
+                    "path": "/register",
+                    "title": null,
+                    "description": null,
+                    "keywords": null,
+                    "ogImageUrl": null
+                },
+                {
+                    "pageKey": "checkout",
+                    "label": "Ödeme",
+                    "path": "/checkout",
+                    "title": null,
+                    "description": null,
+                    "keywords": null,
+                    "ogImageUrl": null
+                },
+                {
+                    "pageKey": "wishlist",
+                    "label": "Favoriler",
+                    "path": "/wishlist",
+                    "title": null,
+                    "description": null,
+                    "keywords": null,
+                    "ogImageUrl": null
+                }
+            ]
+        },
+        "storefrontContent": {
+            "footerDescription": null,
+            "heroSlides": [],
+            "trustItems": [],
+            "campaignBanners": [],
+            "productRows": [],
+            "newsletter": null,
+            "faq": null,
+            "contactMap": null,
+            "footerNav": null,
+            "notFound": null,
+            "legalPageUi": null,
+            "contactPageUi": null,
+            "checkoutConsent": null,
+            "navbar": null,
+            "appPagesUi": null
+        },
+        "isActive": true,
+        "isDefault": true
+    }
+},
+{
+    "success": true,
+    "data": {
+        "id": "a06e331c-38d3-49ea-b535-102a8a68e643",
+        "code": "tedarikdukkani",
+        "name": "tedarikdukkani",
+        "siteName": "tedarikdukkani.com",
+        "domain": "https://wwwtedarikdukkani.com",
+        "logoUrl": "",
+        "faviconUrl": "",
+        "address": "Karabağlar Mahallesi \n5760 Sokak No:22/A \nKarabağlar İZMİR",
+        "emails": [
+            "info@bizdenalbizdensat.com"
+        ],
+        "phones": [
+            "0 554 449 04 49 (Selçuk Bey)",
+            "0 555 891 66 61 (Selçuk Bey)",
+            "0 532 310 74 54 (Serkan Bey)",
+            "0 541 310 74 54 (Serkan Bey)"
+        ],
+        "workingHours": [
+            "Pazartesi                  08:00–21:00",
+            "Salı                                 08:00–21:00",
+            "Çarşamba              08:00–21:00",
+            "Perşembe              08:00–21:00",
+            "Cuma                          08:00–21:00",
+            "Cumartesi              08:00–21:00",
+            "Pazar                            08:00–21:00"
+        ],
+        "socialLinks": {
+            "facebook": "",
+            "twitter": "",
+            "instagram": "",
+            "youTube": ""
+        },
+        "paymentCompliance": {
+            "legalPages": [
+                {
+                    "slug": "hakkimizda",
+                    "title": null,
+                    "path": "/hakkimizda",
+                    "content": "<p><strong>Bizden Al Bizden Sat</strong>, <a href=\"https://www.bizdenalbizdensat.com\">bizdenalbizdensat.com</a> üzerinden teknoloji ve yaşam kategorilerinde perakende e-ticaret hizmeti sunar.</p>\r\n<h2>Misyonumuz</h2>\r\n<p>Güvenilir tedarik, şeffaf fiyatlandırma ve satış sonrası destek ile müşterilerimize sorunsuz bir alışveriş deneyimi sağlamak.</p>\r\n<h2>Hizmetlerimiz</h2>\r\n<ul>\r\n  <li>Geniş ürün yelpazesi ve güncel stok bilgisi</li>\r\n  <li>Güvenli ödeme altyapısı (3D Secure destekli kart ödemeleri)</li>\r\n  <li>Standart, hızlı ve express kargo seçenekleri</li>\r\n  <li>14 gün cayma hakkı ve iade süreçleri</li>\r\n  <li>Müşteri destek hattı ve e-posta desteği</li>\r\n</ul>\r\n<h2>İletişim</h2>\r\n<p>E-posta: <a href=\"mailto:destek@bizdenalbizdensat.com\">destek@bizdenalbizdensat.com</a><br />Telefon: +90 (850) 000 00 00</p>"
+                },
+                {
+                    "slug": "teslimat-ve-iade",
+                    "title": null,
+                    "path": "/teslimat-ve-iade",
+                    "content": "<h2>1. Teslimat Süreleri ve Yöntemi</h2>\r\n<p>Siparişiniz, ödemenin onaylanmasını takiben <strong>1–3 iş günü</strong> içinde anlaşmalı kargo firmasına teslim edilir. Resmî tatil ve hafta sonları iş gününe dahil değildir.</p>\r\n<table>\r\n  <thead><tr><th>Kargo türü</th><th>Tahmini süre</th></tr></thead>\r\n  <tbody>\r\n    <tr><td>Standart kargo</td><td>3–5 iş günü</td></tr>\r\n    <tr><td>Hızlı kargo</td><td>2 iş günü</td></tr>\r\n    <tr><td>Express kargo</td><td>1 iş günü (bölgeye göre değişebilir)</td></tr>\r\n  </tbody>\r\n</table>\r\n<p>Teslimat yalnızca Türkiye sınırları içinde yapılır. Kargo ücreti sipariş özetinde ayrıca gösterilir; kampanyalı dönemlerde ücretsiz kargo uygulanabilir.</p>\r\n<h2>2. Teslimatın Gecikmesi</h2>\r\n<p>Mücbir sebep, olağanüstü hava koşulları veya tedarikçi kaynaklı gecikmelerde müşteri bilgilendirilir; yeni teslimat tarihi paylaşılır.</p>\r\n<h2>3. Hasarlı veya Eksik Teslimat</h2>\r\n<p>Kargo tesliminde ambalaj hasarı veya eksik ürün fark ederseniz tutanak tutturarak <strong>3 iş günü</strong> içinde <a href=\"mailto:destek@bizdenalbizdensat.com\">destek@bizdenalbizdensat.com</a> adresine bildirin.</p>\r\n<h2>4. Cayma Hakkı ve İade</h2>\r\n<p>Mesafeli sözleşmelerde tüketici, malı teslim aldığı tarihten itibaren <strong>14 gün</strong> içinde cayma hakkını kullanabilir (6502 sayılı Kanun m.48 ve Mesafeli Sözleşmeler Yönetmeliği).</p>\r\n<ul>\r\n  <li>Ürün kullanılmamış, aksesuarları eksiksiz ve orijinal ambalajında olmalıdır.</li>\r\n  <li>Fatura veya e-fatura bilgisi iade sürecinde ibraz edilmelidir.</li>\r\n  <li>Cayma bildirimi yazılı olarak (e-posta veya kayıtlı destek talebi) yapılmalıdır.</li>\r\n</ul>\r\n<p>İade onayı sonrası ödeme, yasal süreler içinde aynı ödeme yöntemine iade edilir. Ayıplı mal, yanlış ürün veya kampanyalı “değişim yok” ürünlerinde ayrı kurallar ürün sayfasında belirtilir.</p>\r\n<h2>5. İade Kargo Masrafı</h2>\r\n<p>Cayma hakkı kapsamındaki iadelerde, aksi ürün sayfasında belirtilmedikçe iade kargo ücreti tüketiciye aittir. Satıcı kaynaklı hatalarda kargo masrafı satıcıya aittir.</p>"
+                },
+                {
+                    "slug": "gizlilik",
+                    "title": null,
+                    "path": "/gizlilik",
+                    "content": "<h2>1. Veri Sorumlusu</h2>\r\n<p><strong>Bizden Al Bizden Sat</strong> (bizdenalbizdensat.com), 6698 sayılı Kişisel Verilerin Korunması Kanunu (“KVKK”) kapsamında veri sorumlusudur.</p>\r\n<h2>2. İşlenen Kişisel Veriler</h2>\r\n<ul>\r\n  <li><strong>Kimlik:</strong> ad, soyad</li>\r\n  <li><strong>İletişim:</strong> e-posta, telefon, teslimat/fatura adresi</li>\r\n  <li><strong>Müşteri işlem:</strong> sipariş geçmişi, sepet, fatura bilgileri</li>\r\n  <li><strong>İşlem güvenliği:</strong> IP, oturum logları, ödeme doğrulama kayıtları (kart numarası saklanmaz)</li>\r\n  <li><strong>Pazarlama:</strong> bülten izni verilmişse e-posta tercihleri</li>\r\n</ul>\r\n<h2>3. İşleme Amaçları ve Hukuki Sebepler</h2>\r\n<p>Verileriniz; sözleşmenin kurulması ve ifası, hukuki yükümlülüklerin yerine getirilmesi, meşru menfaat ve açık rızanıza dayalı olarak sipariş, teslimat, faturalama, müşteri hizmetleri, dolandırıcılık önleme ve (izin vermeniz halinde) kampanya iletişimi amaçlarıyla işlenir.</p>\r\n<h2>4. Aktarım</h2>\r\n<p>Veriler; kargo firmaları, ödeme hizmet sağlayıcıları (ör. iyzico), barındırma/e-posta altyapı sağlayıcıları ve kanunen yetkili kamu kurumlarıyla paylaşılabilir.</p>\r\n<h2>5. Saklama Süresi</h2>\r\n<p>Ticari ve vergi mevzuatı gereği en az 5 yıl; uyuşmazlık halinde zamanaşımı süreleri boyunca saklanır.</p>\r\n<h2>6. Haklarınız</h2>\r\n<p>KVKK m.11 kapsamında bilgi talep etme, düzeltme, silme, işlemeyi kısıtlama ve itiraz haklarına sahipsiniz. Başvuru: <a href=\"mailto:destek@bizdenalbizdensat.com\">destek@bizdenalbizdensat.com</a></p>\r\n<h2>7. Çerezler</h2>\r\n<p>Site deneyimini iyileştirmek için zorunlu ve (tercihinize bağlı) analitik/pazarlama çerezleri kullanılabilir. Tarayıcı ayarlarından çerezleri yönetebilirsiniz.</p>"
+                },
+                {
+                    "slug": "mesafeli-satis",
+                    "title": null,
+                    "path": "/mesafeli-satis",
+                    "content": "<h2>Mesafeli Satış Sözleşmesi</h2>\r\n<p>İşbu sözleşme, aşağıda bilgileri yer alan <strong>Satıcı</strong> ile <strong>Alıcı</strong> arasında, 6502 sayılı Tüketicinin Korunması Hakkında Kanun ve Mesafeli Sözleşmeler Yönetmeliği uyarınca elektronik ortamda kurulmuştur.</p>\r\n<h2>Madde 1 — Taraflar</h2>\r\n<p><strong>Satıcı:</strong><br />\r\nUnvan: Bizden Al Bizden Sat<br />\r\nWeb: <a href=\"https://www.bizdenalbizdensat.com\">https://www.bizdenalbizdensat.com</a><br />\r\nE-posta: destek@bizdenalbizdensat.com<br />\r\nTelefon: +90 (850) 000 00 00</p>\r\n<p><strong>Alıcı:</strong> Sipariş sırasında sisteme girilen ad-soyad, adres ve iletişim bilgileri esas alınır.</p>\r\n<h2>Madde 2 — Konu</h2>\r\n<p>Alıcının, Satıcıya ait internet sitesinden elektronik ortamda siparişini verdiği mal/ürünlerin satışı ve teslimine ilişkin tarafların hak ve yükümlülüklerinin belirlenmesidir.</p>\r\n<h2>Madde 3 — Ürün ve Bedel</h2>\r\n<p>Ürünün türü, miktarı, marka/modeli, KDV dahil satış bedeli, varsa kargo ücreti sipariş özet ekranında ve onay e-postasında gösterilir. Kampanya ve indirimler o an geçerli koşullara tabidir.</p>\r\n<h2>Madde 4 — Ödeme</h2>\r\n<p>Ödeme; kredi/banka kartı veya sitede sunulan diğer yöntemlerle, güvenli ödeme altyapısı üzerinden tahsil edilir. Sipariş, ödeme onayı ile kesinleşir.</p>\r\n<h2>Madde 5 — Teslimat</h2>\r\n<p>Ürün, Alıcının bildirdiği adrese, <a href=\"/teslimat-ve-iade\">Teslimat ve İade Şartları</a>’nda belirtilen süre ve usulle teslim edilir. Mülkiyet, ürünün Alıcıya teslimiyle Alıcıya geçer.</p>\r\n<h2>Madde 6 — Cayma Hakkı</h2>\r\n<p>Alıcı, malı teslim aldığı tarihten itibaren 14 gün içinde cayma hakkını kullanabilir. Cayma bildirimi kalıcı veri saklayıcısı ile (e-posta veya kayıtlı destek kanalı) yapılmalıdır. Cayma hakkının kullanımına ilişkin usul <a href=\"/teslimat-ve-iade\">Teslimat ve İade Şartları</a>’nda açıklanmıştır.</p>\r\n<h2>Madde 7 — Ayıplı Mal</h2>\r\n<p>Ayıplı mal durumunda tüketici, seçimlik haklarını (ücretsiz onarım, yenisi ile değişim, bedel indirimi veya sözleşmeden dönme) kullanabilir.</p>\r\n<h2>Madde 8 — Uyuşmazlık</h2>\r\n<p>Şikâyet ve itirazlarda, her yıl Gümrük ve Ticaret Bakanlığınca ilan edilen parasal sınırlara göre İl/İlçe Tüketici Hakem Heyetleri ile Tüketici Mahkemeleri yetkilidir.</p>\r\n<p>Alıcı, siparişi onaylayarak işbu sözleşmenin tüm maddelerini okuduğunu ve kabul ettiğini beyan eder.</p>"
+                },
+                {
+                    "slug": "on-bilgilendirme-formu",
+                    "title": null,
+                    "path": "/on-bilgilendirme-formu",
+                    "content": "<h2>Ön Bilgilendirme Formu</h2>\r\n<p>İşbu form, 6502 sayılı Kanun ve Mesafeli Sözleşmeler Yönetmeliği’nin 5. maddesi uyarınca, sipariş öncesi tüketicinin bilgilendirilmesi amacıyla hazırlanmıştır.</p>\r\n<h2>1. Satıcının Kimliği</h2>\r\n<p>\r\n  <strong>Ticari unvan:</strong> Bizden Al Bizden Sat<br />\r\n  <strong>İnternet adresi:</strong> <a href=\"https://www.bizdenalbizdensat.com\">https://www.bizdenalbizdensat.com</a><br />\r\n  <strong>E-posta:</strong> <a href=\"mailto:destek@bizdenalbizdensat.com\">destek@bizdenalbizdensat.com</a><br />\r\n  <strong>Telefon:</strong> +90 (850) 000 00 00<br />\r\n  <strong>MERSİS / Vergi no:</strong> (Şirket sicil bilgileri fatura üzerinde yer alır.)\r\n</p>\r\n<h2>2. Mal / Hizmetin Temel Nitelikleri</h2>\r\n<p>Sipariş konusu ürünler; elektronik, teknoloji ve yaşam kategorilerinde perakende satışa sunulan tüketim mallarıdır. Her ürünün adı, modeli, miktarı, renk/özellik bilgisi, satış bedeli ve varsa vergiler sipariş özeti ekranında ayrıntılı gösterilir.</p>\r\n<h2>3. Toplam Bedel (Vergiler Dahil)</h2>\r\n<p>Ürünlerin KDV dahil satış fiyatı, varsa indirim tutarı, kargo ücreti ve ödenecek <strong>genel toplam</strong> sipariş onay adımında tek tek listelenir. Ek masraf (paketleme vb.) uygulanmıyorsa ayrıca belirtilmez.</p>\r\n<h2>4. Ödeme, Teslimat ve İfa</h2>\r\n<ul>\r\n  <li><strong>Ödeme:</strong> Kredi/banka kartı veya sitede sunulan diğer güvenli yöntemlerle peşin tahsilat.</li>\r\n  <li><strong>Teslimat:</strong> Ödeme onayından sonra 1–3 iş günü içinde kargoya verilir; süre kargo türüne göre değişir.</li>\r\n  <li><strong>Teslimat adresi:</strong> Alıcının siparişte belirttiği Türkiye içi adres.</li>\r\n</ul>\r\n<h2>5. Cayma Hakkı</h2>\r\n<p>Tüketici, malı teslim aldığı tarihten itibaren <strong>14 gün</strong> içinde herhangi bir gerekçe göstermeksizin cayma hakkına sahiptir. Cayma hakkının kullanımı, süresi ve iade usulü <a href=\"/teslimat-ve-iade\">Teslimat ve İade Şartları</a> sayfasında açıklanmıştır.</p>\r\n<p>Cayma hakkı kullanılamayacak ürünler (hijyen, kişiye özel, ambalajı açılmış yazılım vb.) ilgili mevzuat ve ürün sayfasında ayrıca belirtilir.</p>\r\n<h2>6. Garanti ve Müşteri Hizmetleri</h2>\r\n<p>Ürünler, üretici/tedarikçi garantisi ve mevzuattaki zorunlu garanti hakları kapsamındadır. Garanti belgesi ve süresi ürünle birlikte teslim edilir veya ürün sayfasında belirtilir. Destek: destek@bizdenalbizdensat.com / +90 (850) 000 00 00</p>\r\n<h2>7. Uyuşmazlık Çözümü</h2>\r\n<p>Şikâyetleriniz için öncelikle satıcıya başvurabilirsiniz. Çözülemeyen uyuşmazlıklarda Tüketici Hakem Heyetleri ve Tüketici Mahkemeleri yetkilidir.</p>\r\n<h2>8. Onay</h2>\r\n<p>“Siparişi Tamamla” veya eşdeğer onay adımında; işbu Ön Bilgilendirme Formu, <a href=\"/mesafeli-satis\">Mesafeli Satış Sözleşmesi</a> ve <a href=\"/gizlilik\">Gizlilik Sözleşmesi</a>’ni okuduğunuzu ve kabul ettiğinizi beyan etmiş olursunuz.</p>"
+                }
+            ],
+            "aboutPageTitle": null,
+            "aboutPageContent": "<p><strong>Bizden Al Bizden Sat</strong>, <a href=\"https://www.bizdenalbizdensat.com\">bizdenalbizdensat.com</a> üzerinden teknoloji ve yaşam kategorilerinde perakende e-ticaret hizmeti sunar.</p>\r\n<h2>Misyonumuz</h2>\r\n<p>Güvenilir tedarik, şeffaf fiyatlandırma ve satış sonrası destek ile müşterilerimize sorunsuz bir alışveriş deneyimi sağlamak.</p>\r\n<h2>Hizmetlerimiz</h2>\r\n<ul>\r\n  <li>Geniş ürün yelpazesi ve güncel stok bilgisi</li>\r\n  <li>Güvenli ödeme altyapısı (3D Secure destekli kart ödemeleri)</li>\r\n  <li>Standart, hızlı ve express kargo seçenekleri</li>\r\n  <li>14 gün cayma hakkı ve iade süreçleri</li>\r\n  <li>Müşteri destek hattı ve e-posta desteği</li>\r\n</ul>\r\n<h2>İletişim</h2>\r\n<p>E-posta: <a href=\"mailto:destek@bizdenalbizdensat.com\">destek@bizdenalbizdensat.com</a><br />Telefon: +90 (850) 000 00 00</p>",
+            "deliveryReturnsPageTitle": null,
+            "deliveryReturnsPageContent": "<h2>1. Teslimat Süreleri ve Yöntemi</h2>\r\n<p>Siparişiniz, ödemenin onaylanmasını takiben <strong>1–3 iş günü</strong> içinde anlaşmalı kargo firmasına teslim edilir. Resmî tatil ve hafta sonları iş gününe dahil değildir.</p>\r\n<table>\r\n  <thead><tr><th>Kargo türü</th><th>Tahmini süre</th></tr></thead>\r\n  <tbody>\r\n    <tr><td>Standart kargo</td><td>3–5 iş günü</td></tr>\r\n    <tr><td>Hızlı kargo</td><td>2 iş günü</td></tr>\r\n    <tr><td>Express kargo</td><td>1 iş günü (bölgeye göre değişebilir)</td></tr>\r\n  </tbody>\r\n</table>\r\n<p>Teslimat yalnızca Türkiye sınırları içinde yapılır. Kargo ücreti sipariş özetinde ayrıca gösterilir; kampanyalı dönemlerde ücretsiz kargo uygulanabilir.</p>\r\n<h2>2. Teslimatın Gecikmesi</h2>\r\n<p>Mücbir sebep, olağanüstü hava koşulları veya tedarikçi kaynaklı gecikmelerde müşteri bilgilendirilir; yeni teslimat tarihi paylaşılır.</p>\r\n<h2>3. Hasarlı veya Eksik Teslimat</h2>\r\n<p>Kargo tesliminde ambalaj hasarı veya eksik ürün fark ederseniz tutanak tutturarak <strong>3 iş günü</strong> içinde <a href=\"mailto:destek@bizdenalbizdensat.com\">destek@bizdenalbizdensat.com</a> adresine bildirin.</p>\r\n<h2>4. Cayma Hakkı ve İade</h2>\r\n<p>Mesafeli sözleşmelerde tüketici, malı teslim aldığı tarihten itibaren <strong>14 gün</strong> içinde cayma hakkını kullanabilir (6502 sayılı Kanun m.48 ve Mesafeli Sözleşmeler Yönetmeliği).</p>\r\n<ul>\r\n  <li>Ürün kullanılmamış, aksesuarları eksiksiz ve orijinal ambalajında olmalıdır.</li>\r\n  <li>Fatura veya e-fatura bilgisi iade sürecinde ibraz edilmelidir.</li>\r\n  <li>Cayma bildirimi yazılı olarak (e-posta veya kayıtlı destek talebi) yapılmalıdır.</li>\r\n</ul>\r\n<p>İade onayı sonrası ödeme, yasal süreler içinde aynı ödeme yöntemine iade edilir. Ayıplı mal, yanlış ürün veya kampanyalı “değişim yok” ürünlerinde ayrı kurallar ürün sayfasında belirtilir.</p>\r\n<h2>5. İade Kargo Masrafı</h2>\r\n<p>Cayma hakkı kapsamındaki iadelerde, aksi ürün sayfasında belirtilmedikçe iade kargo ücreti tüketiciye aittir. Satıcı kaynaklı hatalarda kargo masrafı satıcıya aittir.</p>",
+            "privacyPolicyPageTitle": null,
+            "privacyPolicyPageContent": "<h2>1. Veri Sorumlusu</h2>\r\n<p><strong>Bizden Al Bizden Sat</strong> (bizdenalbizdensat.com), 6698 sayılı Kişisel Verilerin Korunması Kanunu (“KVKK”) kapsamında veri sorumlusudur.</p>\r\n<h2>2. İşlenen Kişisel Veriler</h2>\r\n<ul>\r\n  <li><strong>Kimlik:</strong> ad, soyad</li>\r\n  <li><strong>İletişim:</strong> e-posta, telefon, teslimat/fatura adresi</li>\r\n  <li><strong>Müşteri işlem:</strong> sipariş geçmişi, sepet, fatura bilgileri</li>\r\n  <li><strong>İşlem güvenliği:</strong> IP, oturum logları, ödeme doğrulama kayıtları (kart numarası saklanmaz)</li>\r\n  <li><strong>Pazarlama:</strong> bülten izni verilmişse e-posta tercihleri</li>\r\n</ul>\r\n<h2>3. İşleme Amaçları ve Hukuki Sebepler</h2>\r\n<p>Verileriniz; sözleşmenin kurulması ve ifası, hukuki yükümlülüklerin yerine getirilmesi, meşru menfaat ve açık rızanıza dayalı olarak sipariş, teslimat, faturalama, müşteri hizmetleri, dolandırıcılık önleme ve (izin vermeniz halinde) kampanya iletişimi amaçlarıyla işlenir.</p>\r\n<h2>4. Aktarım</h2>\r\n<p>Veriler; kargo firmaları, ödeme hizmet sağlayıcıları (ör. iyzico), barındırma/e-posta altyapı sağlayıcıları ve kanunen yetkili kamu kurumlarıyla paylaşılabilir.</p>\r\n<h2>5. Saklama Süresi</h2>\r\n<p>Ticari ve vergi mevzuatı gereği en az 5 yıl; uyuşmazlık halinde zamanaşımı süreleri boyunca saklanır.</p>\r\n<h2>6. Haklarınız</h2>\r\n<p>KVKK m.11 kapsamında bilgi talep etme, düzeltme, silme, işlemeyi kısıtlama ve itiraz haklarına sahipsiniz. Başvuru: <a href=\"mailto:destek@bizdenalbizdensat.com\">destek@bizdenalbizdensat.com</a></p>\r\n<h2>7. Çerezler</h2>\r\n<p>Site deneyimini iyileştirmek için zorunlu ve (tercihinize bağlı) analitik/pazarlama çerezleri kullanılabilir. Tarayıcı ayarlarından çerezleri yönetebilirsiniz.</p>",
+            "distanceSellingAgreementPageTitle": null,
+            "distanceSellingAgreementPageContent": "<h2>Mesafeli Satış Sözleşmesi</h2>\r\n<p>İşbu sözleşme, aşağıda bilgileri yer alan <strong>Satıcı</strong> ile <strong>Alıcı</strong> arasında, 6502 sayılı Tüketicinin Korunması Hakkında Kanun ve Mesafeli Sözleşmeler Yönetmeliği uyarınca elektronik ortamda kurulmuştur.</p>\r\n<h2>Madde 1 — Taraflar</h2>\r\n<p><strong>Satıcı:</strong><br />\r\nUnvan: Bizden Al Bizden Sat<br />\r\nWeb: <a href=\"https://www.bizdenalbizdensat.com\">https://www.bizdenalbizdensat.com</a><br />\r\nE-posta: destek@bizdenalbizdensat.com<br />\r\nTelefon: +90 (850) 000 00 00</p>\r\n<p><strong>Alıcı:</strong> Sipariş sırasında sisteme girilen ad-soyad, adres ve iletişim bilgileri esas alınır.</p>\r\n<h2>Madde 2 — Konu</h2>\r\n<p>Alıcının, Satıcıya ait internet sitesinden elektronik ortamda siparişini verdiği mal/ürünlerin satışı ve teslimine ilişkin tarafların hak ve yükümlülüklerinin belirlenmesidir.</p>\r\n<h2>Madde 3 — Ürün ve Bedel</h2>\r\n<p>Ürünün türü, miktarı, marka/modeli, KDV dahil satış bedeli, varsa kargo ücreti sipariş özet ekranında ve onay e-postasında gösterilir. Kampanya ve indirimler o an geçerli koşullara tabidir.</p>\r\n<h2>Madde 4 — Ödeme</h2>\r\n<p>Ödeme; kredi/banka kartı veya sitede sunulan diğer yöntemlerle, güvenli ödeme altyapısı üzerinden tahsil edilir. Sipariş, ödeme onayı ile kesinleşir.</p>\r\n<h2>Madde 5 — Teslimat</h2>\r\n<p>Ürün, Alıcının bildirdiği adrese, <a href=\"/teslimat-ve-iade\">Teslimat ve İade Şartları</a>’nda belirtilen süre ve usulle teslim edilir. Mülkiyet, ürünün Alıcıya teslimiyle Alıcıya geçer.</p>\r\n<h2>Madde 6 — Cayma Hakkı</h2>\r\n<p>Alıcı, malı teslim aldığı tarihten itibaren 14 gün içinde cayma hakkını kullanabilir. Cayma bildirimi kalıcı veri saklayıcısı ile (e-posta veya kayıtlı destek kanalı) yapılmalıdır. Cayma hakkının kullanımına ilişkin usul <a href=\"/teslimat-ve-iade\">Teslimat ve İade Şartları</a>’nda açıklanmıştır.</p>\r\n<h2>Madde 7 — Ayıplı Mal</h2>\r\n<p>Ayıplı mal durumunda tüketici, seçimlik haklarını (ücretsiz onarım, yenisi ile değişim, bedel indirimi veya sözleşmeden dönme) kullanabilir.</p>\r\n<h2>Madde 8 — Uyuşmazlık</h2>\r\n<p>Şikâyet ve itirazlarda, her yıl Gümrük ve Ticaret Bakanlığınca ilan edilen parasal sınırlara göre İl/İlçe Tüketici Hakem Heyetleri ile Tüketici Mahkemeleri yetkilidir.</p>\r\n<p>Alıcı, siparişi onaylayarak işbu sözleşmenin tüm maddelerini okuduğunu ve kabul ettiğini beyan eder.</p>",
+            "preInformationFormPageTitle": null,
+            "preInformationFormPageContent": "<h2>Ön Bilgilendirme Formu</h2>\r\n<p>İşbu form, 6502 sayılı Kanun ve Mesafeli Sözleşmeler Yönetmeliği’nin 5. maddesi uyarınca, sipariş öncesi tüketicinin bilgilendirilmesi amacıyla hazırlanmıştır.</p>\r\n<h2>1. Satıcının Kimliği</h2>\r\n<p>\r\n  <strong>Ticari unvan:</strong> Bizden Al Bizden Sat<br />\r\n  <strong>İnternet adresi:</strong> <a href=\"https://www.bizdenalbizdensat.com\">https://www.bizdenalbizdensat.com</a><br />\r\n  <strong>E-posta:</strong> <a href=\"mailto:destek@bizdenalbizdensat.com\">destek@bizdenalbizdensat.com</a><br />\r\n  <strong>Telefon:</strong> +90 (850) 000 00 00<br />\r\n  <strong>MERSİS / Vergi no:</strong> (Şirket sicil bilgileri fatura üzerinde yer alır.)\r\n</p>\r\n<h2>2. Mal / Hizmetin Temel Nitelikleri</h2>\r\n<p>Sipariş konusu ürünler; elektronik, teknoloji ve yaşam kategorilerinde perakende satışa sunulan tüketim mallarıdır. Her ürünün adı, modeli, miktarı, renk/özellik bilgisi, satış bedeli ve varsa vergiler sipariş özeti ekranında ayrıntılı gösterilir.</p>\r\n<h2>3. Toplam Bedel (Vergiler Dahil)</h2>\r\n<p>Ürünlerin KDV dahil satış fiyatı, varsa indirim tutarı, kargo ücreti ve ödenecek <strong>genel toplam</strong> sipariş onay adımında tek tek listelenir. Ek masraf (paketleme vb.) uygulanmıyorsa ayrıca belirtilmez.</p>\r\n<h2>4. Ödeme, Teslimat ve İfa</h2>\r\n<ul>\r\n  <li><strong>Ödeme:</strong> Kredi/banka kartı veya sitede sunulan diğer güvenli yöntemlerle peşin tahsilat.</li>\r\n  <li><strong>Teslimat:</strong> Ödeme onayından sonra 1–3 iş günü içinde kargoya verilir; süre kargo türüne göre değişir.</li>\r\n  <li><strong>Teslimat adresi:</strong> Alıcının siparişte belirttiği Türkiye içi adres.</li>\r\n</ul>\r\n<h2>5. Cayma Hakkı</h2>\r\n<p>Tüketici, malı teslim aldığı tarihten itibaren <strong>14 gün</strong> içinde herhangi bir gerekçe göstermeksizin cayma hakkına sahiptir. Cayma hakkının kullanımı, süresi ve iade usulü <a href=\"/teslimat-ve-iade\">Teslimat ve İade Şartları</a> sayfasında açıklanmıştır.</p>\r\n<p>Cayma hakkı kullanılamayacak ürünler (hijyen, kişiye özel, ambalajı açılmış yazılım vb.) ilgili mevzuat ve ürün sayfasında ayrıca belirtilir.</p>\r\n<h2>6. Garanti ve Müşteri Hizmetleri</h2>\r\n<p>Ürünler, üretici/tedarikçi garantisi ve mevzuattaki zorunlu garanti hakları kapsamındadır. Garanti belgesi ve süresi ürünle birlikte teslim edilir veya ürün sayfasında belirtilir. Destek: destek@bizdenalbizdensat.com / +90 (850) 000 00 00</p>\r\n<h2>7. Uyuşmazlık Çözümü</h2>\r\n<p>Şikâyetleriniz için öncelikle satıcıya başvurabilirsiniz. Çözülemeyen uyuşmazlıklarda Tüketici Hakem Heyetleri ve Tüketici Mahkemeleri yetkilidir.</p>\r\n<h2>8. Onay</h2>\r\n<p>“Siparişi Tamamla” veya eşdeğer onay adımında; işbu Ön Bilgilendirme Formu, <a href=\"/mesafeli-satis\">Mesafeli Satış Sözleşmesi</a> ve <a href=\"/gizlilik\">Gizlilik Sözleşmesi</a>’ni okuduğunuzu ve kabul ettiğinizi beyan etmiş olursunuz.</p>",
+            "iyzicoPayLogoUrl": "/uploads/site/ef98d04ba81145beb8f3eab5b1a7e59c.png"
+        },
+        "paymentComplianceStatus": {
+            "completed": 1,
+            "total": 6,
+            "items": [
+                {
+                    "key": "aboutPage",
+                    "label": "Hakkımızda sayfası",
+                    "met": false
+                },
+                {
+                    "key": "deliveryReturns",
+                    "label": "Teslimat ve iade şartları",
+                    "met": false
+                },
+                {
+                    "key": "privacyPolicy",
+                    "label": "Gizlilik sözleşmesi",
+                    "met": false
+                },
+                {
+                    "key": "distanceSelling",
+                    "label": "Mesafeli satış sözleşmesi",
+                    "met": false
+                },
+                {
+                    "key": "preInformation",
+                    "label": "Ön bilgilendirme formu",
+                    "met": false
+                },
+                {
+                    "key": "iyzicoLogo",
+                    "label": "iyzico ile Öde logosu",
+                    "met": true
+                }
+            ]
+        },
+        "theme": {
+            "primaryLight": null,
+            "primaryDark": null,
+            "fontFamily": null
+        },
+        "seo": {
+            "defaultTitle": null,
+            "defaultDescription": null,
+            "defaultKeywords": null,
+            "ogImageUrl": null,
+            "twitterHandle": null,
+            "pages": [
+                {
+                    "pageKey": "home",
+                    "label": "Anasayfa",
+                    "path": "/",
+                    "title": null,
+                    "description": null,
+                    "keywords": null,
+                    "ogImageUrl": null
+                },
+                {
+                    "pageKey": "shop",
+                    "label": "Mağaza",
+                    "path": "/shop",
+                    "title": null,
+                    "description": null,
+                    "keywords": null,
+                    "ogImageUrl": null
+                },
+                {
+                    "pageKey": "contact",
+                    "label": "İletişim",
+                    "path": "/contact",
+                    "title": null,
+                    "description": null,
+                    "keywords": null,
+                    "ogImageUrl": null
+                },
+                {
+                    "pageKey": "about",
+                    "label": "Hakkımızda",
+                    "path": "/about",
+                    "title": null,
+                    "description": null,
+                    "keywords": null,
+                    "ogImageUrl": null
+                },
+                {
+                    "pageKey": "pre-information",
+                    "label": "Ön Bilgilendirme Formu",
+                    "path": "/pre-information",
+                    "title": null,
+                    "description": null,
+                    "keywords": null,
+                    "ogImageUrl": null
+                },
+                {
+                    "pageKey": "delivery-returns",
+                    "label": "Teslimat ve İade",
+                    "path": "/delivery-returns",
+                    "title": null,
+                    "description": null,
+                    "keywords": null,
+                    "ogImageUrl": null
+                },
+                {
+                    "pageKey": "privacy",
+                    "label": "Gizlilik Sözleşmesi",
+                    "path": "/privacy",
+                    "title": null,
+                    "description": null,
+                    "keywords": null,
+                    "ogImageUrl": null
+                },
+                {
+                    "pageKey": "distance-selling",
+                    "label": "Mesafeli Satış Sözleşmesi",
+                    "path": "/distance-selling",
+                    "title": null,
+                    "description": null,
+                    "keywords": null,
+                    "ogImageUrl": null
+                },
+                {
+                    "pageKey": "login",
+                    "label": "Giriş",
+                    "path": "/login",
+                    "title": null,
+                    "description": null,
+                    "keywords": null,
+                    "ogImageUrl": null
+                },
+                {
+                    "pageKey": "register",
+                    "label": "Kayıt",
+                    "path": "/register",
+                    "title": null,
+                    "description": null,
+                    "keywords": null,
+                    "ogImageUrl": null
+                },
+                {
+                    "pageKey": "checkout",
+                    "label": "Ödeme",
+                    "path": "/checkout",
+                    "title": null,
+                    "description": null,
+                    "keywords": null,
+                    "ogImageUrl": null
+                },
+                {
+                    "pageKey": "wishlist",
+                    "label": "Favoriler",
+                    "path": "/wishlist",
+                    "title": null,
+                    "description": null,
+                    "keywords": null,
+                    "ogImageUrl": null
+                }
+            ]
+        },
+        "storefrontContent": {
+            "footerDescription": null,
+            "heroSlides": [],
+            "trustItems": [],
+            "campaignBanners": [],
+            "productRows": [],
+            "newsletter": null,
+            "faq": null,
+            "contactMap": null,
+            "footerNav": null,
+            "notFound": null,
+            "legalPageUi": null,
+            "contactPageUi": null,
+            "checkoutConsent": null,
+            "navbar": null,
+            "appPagesUi": null
+        },
+        "isActive": true,
+        "isDefault": false
+    }
+}

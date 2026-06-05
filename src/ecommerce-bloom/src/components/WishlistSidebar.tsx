@@ -11,6 +11,7 @@ import {
   SheetFooter,
   SheetClose
 } from "@/components/ui/sheet";
+import { uiLabel, useAppPagesUi } from "@/hooks/useAppPagesUi";
 
 interface WishlistSidebarProps {
   open: boolean;
@@ -20,6 +21,11 @@ interface WishlistSidebarProps {
 const WishlistSidebar = ({ open, onClose }: WishlistSidebarProps) => {
   const { wishlistItems, removeFromWishlist, wishlistCount } = useWishlist();
   const { addToCart } = useCart();
+  const wishlist = useAppPagesUi()?.wishlist;
+  const global = useAppPagesUi()?.global;
+  const closeLabel = uiLabel(global?.closeLabel);
+  const productFallback = uiLabel(global?.productFallbackName);
+  const titlePrefix = uiLabel(wishlist?.sidebarTitlePrefix);
 
   const handleAddToCart = (product: any) => {
     addToCart(product);
@@ -28,27 +34,35 @@ const WishlistSidebar = ({ open, onClose }: WishlistSidebarProps) => {
   return (
     <Sheet open={open} onOpenChange={onClose}>
       <SheetContent className="w-full max-w-sm sm:max-w-md flex flex-col p-3 xs:p-4 md:p-6">
+        {titlePrefix && (
         <SheetHeader className="space-y-0.5 pr-6">
           <SheetTitle className="flex items-center gap-2 text-sm">
             <Heart className="h-4 xs:h-5 md:h-5 w-4 xs:w-5 md:w-5 fill-red-500 text-red-500" />
-            Favorilerim ({wishlistCount})
+            {titlePrefix} ({wishlistCount})
           </SheetTitle>
         </SheetHeader>
+        )}
         <SheetClose className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none">
           <X className="h-4 w-4" />
-          <span className="sr-only">Kapat</span>
+          {closeLabel && <span className="sr-only">{closeLabel}</span>}
         </SheetClose>
 
         {wishlistItems.length === 0 ? (
           <div className="flex flex-col items-center justify-center flex-1 py-8 xs:py-10 md:py-12">
-            <Heart className="h-12 xs:h-14 md:h-16 w-12 xs:w-14 md:w-16 text-gray-300 mb-3 xs:mb-4 md:mb-4" />
-            <p className="text-sm font-medium text-gray-500 mb-1">Favorileriniz boş</p>
-            <p className="text-xs xs:text-sm md:text-sm text-gray-400 text-center mb-4 xs:mb-6 md:mb-6">Henüz favorilerinize ürün eklemediniz.</p>
+            <Heart className="h-12 xs:h-14 md:h-16 w-12 xs:w-14 md:w-16 text-muted-foreground/50 mb-3 xs:mb-4 md:mb-4" />
+            {uiLabel(wishlist?.sidebarEmptyTitle) && (
+              <p className="text-sm font-medium text-muted-foreground mb-1">{wishlist!.sidebarEmptyTitle}</p>
+            )}
+            {uiLabel(wishlist?.sidebarEmptyDescription) && (
+              <p className="text-xs xs:text-sm md:text-sm text-muted-foreground text-center mb-4 xs:mb-6 md:mb-6">{wishlist!.sidebarEmptyDescription}</p>
+            )}
+            {uiLabel(wishlist?.sidebarExploreButton) && (
             <SheetClose asChild>
               <Link to="/shop">
-                <Button variant="outline" className="text-sm h-9">Ürünleri Keşfet</Button>
+                <Button variant="outline" className="text-sm h-9">{wishlist!.sidebarExploreButton}</Button>
               </Link>
             </SheetClose>
+            )}
           </div>
         ) : (
           <>
@@ -59,7 +73,7 @@ const WishlistSidebar = ({ open, onClose }: WishlistSidebarProps) => {
                     <div className="h-20 xs:h-24 md:h-24 w-20 xs:w-24 md:w-24 flex-shrink-0 rounded-md border overflow-hidden">
                       <img
                         src={item.image}
-                        alt={item.name}
+                        alt={item.name || productFallback || ''}
                         className="h-full w-full object-cover object-center"
                       />
                     </div>
@@ -67,17 +81,20 @@ const WishlistSidebar = ({ open, onClose }: WishlistSidebarProps) => {
                       <div>
                         <div className="flex justify-between text-xs font-medium gap-1">
                           <h3>
-                            <Link to={`/product/${item.id}`} onClick={onClose} className="hover:text-purple-default line-clamp-2">
-                              {item.name}
+                            <Link to={`/product/${item.id}`} onClick={onClose} className="hover:text-primary line-clamp-2">
+                              {item.name || productFallback}
                             </Link>
                           </h3>
                           <p className="flex-shrink-0">₺{item.price.toFixed(2)}</p>
                         </div>
-                        <p className="mt-0.5 xs:mt-1 md:mt-1 text-xs text-gray-500 line-clamp-1">
+                        {item.description && (
+                        <p className="mt-0.5 xs:mt-1 md:mt-1 text-xs text-muted-foreground line-clamp-1">
                           {item.description}
                         </p>
+                        )}
                       </div>
                       <div className="flex flex-1 items-end justify-between mt-1 xs:mt-2 md:mt-2">
+                        {uiLabel(wishlist?.sidebarAddToCartLabel) && (
                         <Button
                           variant="outline"
                           size="sm"
@@ -85,8 +102,9 @@ const WishlistSidebar = ({ open, onClose }: WishlistSidebarProps) => {
                           onClick={() => handleAddToCart(item)}
                         >
                           <ShoppingBag className="h-3 xs:h-3 md:h-3.5 w-3 xs:w-3 md:w-3.5" />
-                          <span className="hidden xs:inline">Ekle</span>
+                          <span className="hidden xs:inline">{wishlist!.sidebarAddToCartLabel}</span>
                         </Button>
+                        )}
                         <Button
                           variant="ghost"
                           size="sm"
@@ -102,15 +120,17 @@ const WishlistSidebar = ({ open, onClose }: WishlistSidebarProps) => {
               </div>
             </div>
 
+            {uiLabel(wishlist?.sidebarContinueButton) && (
             <SheetFooter className="border-t pt-3 xs:pt-4 md:pt-4">
               <div className="w-full space-y-3 xs:space-y-4 md:space-y-4">
                 <SheetClose asChild>
-                  <Button className="w-full bg-purple-gradient h-9 text-sm">
-                    Alışverişe Devam Et
+                  <Button className="w-full bg-primary text-primary-foreground h-9 text-sm">
+                    {wishlist!.sidebarContinueButton}
                   </Button>
                 </SheetClose>
               </div>
             </SheetFooter>
+            )}
           </>
         )}
       </SheetContent>

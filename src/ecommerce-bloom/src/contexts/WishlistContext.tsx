@@ -6,6 +6,8 @@ import {
   addToWishlist as apiAddToWishlist,
   removeFromWishlist as apiRemoveFromWishlist,
 } from "@/services/wishlist.service";
+import { useSiteSettings } from "@/contexts/SiteSettingsContext";
+import { uiLabel } from "@/hooks/useAppPagesUi";
 import { getToken } from "@/lib/api-client";
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -40,6 +42,7 @@ const convertApiWishlist = (apiWishlist: any): Product[] =>
 
 export const WishlistProvider = ({ children }: { children: React.ReactNode }) => {
   const [wishlistItems, setWishlistItems] = useState<Product[]>(() => loadWishlistFromStorage());
+  const contextUi = useSiteSettings().storefrontContent?.appPagesUi?.context;
 
   const setAndPersistWishlist = useCallback((items: Product[]) => {
     setWishlistItems(items);
@@ -99,9 +102,9 @@ export const WishlistProvider = ({ children }: { children: React.ReactNode }) =>
 
   const addToWishlist = async (product: Product) => {
     if (isInWishlist(product.id)) {
-      toast.info("Zaten favorilerinizde", {
-        description: `${product.name} zaten favorilerinizde`,
-      });
+      if (uiLabel(contextUi?.wishlistAlreadyInTitle)) {
+        toast.info(contextUi!.wishlistAlreadyInTitle!, { description: product.name });
+      }
       return;
     }
 
@@ -111,29 +114,31 @@ export const WishlistProvider = ({ children }: { children: React.ReactNode }) =>
       try {
         await apiAddToWishlist({ productId: product.id });
         await refreshWishlist();
-        toast.success("Favorilere eklendi", {
-          description: `${product.name} favorilerinize eklendi`,
-        });
-      } catch (error: any) {
-        const errorMessage = error?.message || "Ürün favorilere eklenemedi";
+        if (uiLabel(contextUi?.wishlistAddSuccessTitle)) {
+          toast.success(contextUi!.wishlistAddSuccessTitle!, { description: product.name });
+        }
+      } catch (error: unknown) {
+        const errorMessage = error instanceof Error ? error.message : '';
         if (
           errorMessage.includes("zaten favorilerde") ||
           errorMessage.includes("already in wishlist")
         ) {
           await refreshWishlist();
-          toast.info("Zaten favorilerinizde", {
-            description: `${product.name} zaten favorilerinizde`,
-          });
+          if (uiLabel(contextUi?.wishlistAlreadyInTitle)) {
+            toast.info(contextUi!.wishlistAlreadyInTitle!, { description: product.name });
+          }
           return;
         }
-        toast.error("Favorilere ekleme hatası", { description: errorMessage });
+        if (uiLabel(contextUi?.wishlistAddErrorTitle)) {
+          toast.error(contextUi!.wishlistAddErrorTitle!, { description: errorMessage || undefined });
+        }
         throw error;
       }
     } else {
       setAndPersistWishlist([...wishlistItems, product]);
-      toast.success("Favorilere eklendi", {
-        description: `${product.name} favorilerinize eklendi`,
-      });
+      if (uiLabel(contextUi?.wishlistAddSuccessTitle)) {
+        toast.success(contextUi!.wishlistAddSuccessTitle!, { description: product.name });
+      }
     }
   };
 
@@ -144,29 +149,37 @@ export const WishlistProvider = ({ children }: { children: React.ReactNode }) =>
       try {
         const apiWishlist = await getWishlist();
         const item = apiWishlist.items.find(
-          (i: any) => i.productId === productId
+          (i: { productId: string; id: string }) => i.productId === productId
         );
         if (item) {
           await apiRemoveFromWishlist(item.id);
         }
         await refreshWishlist();
-        toast.info("Favorilerden kaldırıldı", {
-          description: "Ürün favorilerinizden kaldırıldı",
-        });
+        if (uiLabel(contextUi?.wishlistRemoveInfoTitle)) {
+          toast.info(contextUi!.wishlistRemoveInfoTitle!, {
+            description: uiLabel(contextUi?.wishlistRemoveInfoDescription)
+              ? contextUi!.wishlistRemoveInfoDescription!
+              : undefined,
+          });
+        }
       } catch (error) {
-        toast.error("Favorilerden kaldırma hatası", {
-          description:
-            error instanceof Error
-              ? error.message
-              : "Ürün favorilerden kaldırılamadı",
-        });
+        if (uiLabel(contextUi?.wishlistRemoveErrorTitle)) {
+          toast.error(contextUi!.wishlistRemoveErrorTitle!, {
+            description:
+              error instanceof Error ? error.message : contextUi?.wishlistRemoveErrorFallback || undefined,
+          });
+        }
         throw error;
       }
     } else {
       setAndPersistWishlist(wishlistItems.filter((item) => item.id !== productId));
-      toast.info("Favorilerden kaldırıldı", {
-        description: "Ürün favorilerinizden kaldırıldı",
-      });
+      if (uiLabel(contextUi?.wishlistRemoveInfoTitle)) {
+        toast.info(contextUi!.wishlistRemoveInfoTitle!, {
+          description: uiLabel(contextUi?.wishlistRemoveInfoDescription)
+            ? contextUi!.wishlistRemoveInfoDescription!
+            : undefined,
+        });
+      }
     }
   };
 

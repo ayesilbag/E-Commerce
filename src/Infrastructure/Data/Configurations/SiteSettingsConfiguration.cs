@@ -23,12 +23,27 @@ public class SiteSettingsConfiguration : IEntityTypeConfiguration<SiteSettings>
         builder.Property(x => x.TwitterUrl).HasMaxLength(500);
         builder.Property(x => x.InstagramUrl).HasMaxLength(500);
         builder.Property(x => x.YouTubeUrl).HasMaxLength(500);
+        builder.Property(x => x.AboutPageTitle).HasMaxLength(200);
         builder.Property(x => x.AboutPageContent);
+        builder.Property(x => x.DeliveryReturnsPageTitle).HasMaxLength(200);
         builder.Property(x => x.DeliveryReturnsPageContent);
+        builder.Property(x => x.PrivacyPolicyPageTitle).HasMaxLength(200);
         builder.Property(x => x.PrivacyPolicyPageContent);
+        builder.Property(x => x.DistanceSellingAgreementPageTitle).HasMaxLength(200);
         builder.Property(x => x.DistanceSellingAgreementPageContent);
+        builder.Property(x => x.PreInformationFormPageTitle).HasMaxLength(200);
         builder.Property(x => x.PreInformationFormPageContent);
         builder.Property(x => x.IyzicoPayLogoUrl).HasMaxLength(500);
+        builder.Property(x => x.ThemePrimaryLight).HasMaxLength(20);
+        builder.Property(x => x.ThemePrimaryDark).HasMaxLength(20);
+        builder.Property(x => x.ThemeFontFamily).HasMaxLength(100);
+        builder.Property(x => x.SeoDefaultTitle).HasMaxLength(200);
+        builder.Property(x => x.SeoDefaultDescription).HasMaxLength(500);
+        builder.Property(x => x.SeoDefaultKeywords).HasMaxLength(500);
+        builder.Property(x => x.SeoOgImageUrl).HasMaxLength(500);
+        builder.Property(x => x.SeoTwitterHandle).HasMaxLength(100);
+        builder.Property(x => x.PageSeoJson);
+        builder.Property(x => x.StorefrontContentJson);
 
         builder.HasIndex(x => x.Code).IsUnique();
         builder.HasIndex(x => new { x.IsActive, x.IsDefault });

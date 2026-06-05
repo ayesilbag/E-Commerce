@@ -10,6 +10,8 @@ import {
 } from "@/services/cart.service";
 import { getToken } from "@/lib/api-client";
 import { useAuth } from "@/contexts/AuthContext";
+import { useSiteSettings } from "@/contexts/SiteSettingsContext";
+import { uiLabel } from "@/hooks/useAppPagesUi";
 
 type CartItem = {
   product: Product;
@@ -60,8 +62,8 @@ const loadCartFromStorage = (): CartItem[] => {
 
 export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   const [cartItems, setCartItems] = useState<CartItem[]>(() => loadCartFromStorage());
-  // Track whether the initial authenticated cart load has been handled
   const initialLoadDone = React.useRef(false);
+  const contextUi = useSiteSettings().storefrontContent?.appPagesUi?.context;
 
   const setAndPersistCart = useCallback((updater: CartItem[] | ((prev: CartItem[]) => CartItem[])) => {
     setCartItems((prev) => {
@@ -133,13 +135,17 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
       try {
         await apiAddToCart({ productId: product.id, quantity });
         await refreshCart();
-        toast.success("Sepete eklendi", {
-          description: `${product.name} sepetinize eklendi`,
-        });
+        if (uiLabel(contextUi?.cartAddSuccessTitle)) {
+          toast.success(contextUi!.cartAddSuccessTitle!, {
+            description: product.name,
+          });
+        }
       } catch (error) {
-        toast.error("Sepete ekleme hatası", {
-          description: error instanceof Error ? error.message : "Ürün sepete eklenemedi",
-        });
+        if (uiLabel(contextUi?.cartAddErrorTitle)) {
+          toast.error(contextUi!.cartAddErrorTitle!, {
+            description: error instanceof Error ? error.message : contextUi?.cartAddErrorFallback || undefined,
+          });
+        }
         throw error;
       }
     } else {
@@ -154,9 +160,11 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
         }
         return [...prev, { product, quantity }];
       });
-      toast.success("Sepete eklendi", {
-        description: `${product.name} sepetinize eklendi`,
-      });
+      if (uiLabel(contextUi?.cartAddSuccessTitle)) {
+        toast.success(contextUi!.cartAddSuccessTitle!, {
+          description: product.name,
+        });
+      }
     }
   };
 
@@ -167,20 +175,26 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
       try {
         await apiRemoveFromCart(productId);
         await refreshCart();
-        toast.info("Sepetten kaldırıldı", {
-          description: "Ürün sepetinizden kaldırıldı",
-        });
+        if (uiLabel(contextUi?.cartRemoveInfoTitle)) {
+          toast.info(contextUi!.cartRemoveInfoTitle!, {
+            description: uiLabel(contextUi?.cartRemoveInfoDescription) ? contextUi!.cartRemoveInfoDescription! : undefined,
+          });
+        }
       } catch (error) {
-        toast.error("Ürün kaldırma hatası", {
-          description: error instanceof Error ? error.message : "Ürün sepetten kaldırılamadı",
-        });
+        if (uiLabel(contextUi?.cartRemoveErrorTitle)) {
+          toast.error(contextUi!.cartRemoveErrorTitle!, {
+            description: error instanceof Error ? error.message : contextUi?.cartRemoveErrorFallback || undefined,
+          });
+        }
         throw error;
       }
     } else {
       setAndPersistCart((prev) => prev.filter((item) => item.product?.id !== productId));
-      toast.info("Sepetten kaldırıldı", {
-        description: "Ürün sepetinizden kaldırıldı",
-      });
+      if (uiLabel(contextUi?.cartRemoveInfoTitle)) {
+        toast.info(contextUi!.cartRemoveInfoTitle!, {
+          description: uiLabel(contextUi?.cartRemoveInfoDescription) ? contextUi!.cartRemoveInfoDescription! : undefined,
+        });
+      }
     }
   };
 
@@ -194,9 +208,11 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
         await apiUpdateCartItem(productId, { quantity });
         await refreshCart();
       } catch (error) {
-        toast.error("Miktar güncelleme hatası", {
-          description: error instanceof Error ? error.message : "Miktar güncellenemedi",
-        });
+        if (uiLabel(contextUi?.cartQuantityErrorTitle)) {
+          toast.error(contextUi!.cartQuantityErrorTitle!, {
+            description: error instanceof Error ? error.message : undefined,
+          });
+        }
         throw error;
       }
     } else {
@@ -216,21 +232,23 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
         await apiClearCart();
         setCartItems([]);
         saveCartToStorage([]);
-        toast.success("Sepet temizlendi", {
-          description: "Tüm ürünler sepetinizden kaldırıldı",
-        });
+        if (uiLabel(contextUi?.cartClearSuccessTitle)) {
+          toast.success(contextUi!.cartClearSuccessTitle!);
+        }
       } catch (error) {
-        toast.error("Sepet temizleme hatası", {
-          description: error instanceof Error ? error.message : "Sepet temizlenemedi",
-        });
+        if (uiLabel(contextUi?.cartClearErrorTitle)) {
+          toast.error(contextUi!.cartClearErrorTitle!, {
+            description: error instanceof Error ? error.message : contextUi?.cartClearErrorFallback || undefined,
+          });
+        }
         throw error;
       }
     } else {
       setCartItems([]);
       saveCartToStorage([]);
-      toast.success("Sepet temizlendi", {
-        description: "Tüm ürünler sepetinizden kaldırıldı",
-      });
+      if (uiLabel(contextUi?.cartClearSuccessTitle)) {
+        toast.success(contextUi!.cartClearSuccessTitle!);
+      }
     }
   };
 

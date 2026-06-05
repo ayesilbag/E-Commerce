@@ -6,52 +6,37 @@ import ProductRow from "@/components/ProductRow";
 import CampaignBanner from "@/components/CampaignBanner";
 import NewsletterSection from "@/components/NewsletterSection";
 import Footer from "@/components/Footer";
+import { useSiteSettings } from "@/contexts/SiteSettingsContext";
 
 const Index = () => {
+  const { storefrontContent } = useSiteSettings();
+  const productRows = storefrontContent?.productRows ?? [];
+  const banners = storefrontContent?.campaignBanners ?? [];
+  const showCampaignAfterFirstRow = banners.length > 0 && productRows.length > 0;
+
   return (
-    <div className="min-h-screen flex flex-col bg-white">
+    <div className="min-h-screen flex flex-col bg-background">
       <Navbar />
       <main className="flex-1">
-        {/* 1. Hero Slider - Kampanya görselleri */}
         <HeroBanner />
-
-        {/* 2. Güven Bandı - Kargo / İade / Güvence */}
         <TrustBar />
-
-        {/* 3. Kategoriler - Yatay scroll */}
         <Categories />
 
-        {/* 4. Çok Satanlar ürün rafı */}
-        <ProductRow
-          title="Çok Satanlar"
-          subtitle="Müşterilerimizin en çok tercih ettiği ürünler"
-          viewAllHref="/shop?sort=featured"
-          params={{ sort: "featured" }}
-          limit={12}
-        />
+        {productRows.map((row, index) => (
+          <div key={`${row.title}-${index}`}>
+            <ProductRow
+              title={row.title}
+              subtitle={row.subtitle ?? undefined}
+              viewAllHref={row.viewAllHref}
+              params={{ sort: row.sort }}
+              limit={row.limit}
+            />
+            {showCampaignAfterFirstRow && index === 0 && <CampaignBanner />}
+          </div>
+        ))}
 
-        {/* 5. Kampanya Bannerları */}
-        <CampaignBanner />
+        {productRows.length === 0 && banners.length > 0 && <CampaignBanner />}
 
-        {/* 6. Yeni Gelenler ürün rafı */}
-        <ProductRow
-          title="Yeni Gelenler"
-          subtitle="Mağazamıza yeni eklenen ürünleri keşfet"
-          viewAllHref="/shop?sort=newest"
-          params={{ sort: "newest" }}
-          limit={12}
-        />
-
-        {/* 7. İndirimli Ürünler ürün rafı */}
-        <ProductRow
-          title="Fırsatlar"
-          subtitle="Sınırlı stok, sınırsız tasarruf"
-          viewAllHref="/shop?sort=discounted"
-          params={{ sort: "discounted" }}
-          limit={12}
-        />
-
-        {/* 8. Bülten */}
         <NewsletterSection />
       </main>
       <Footer />

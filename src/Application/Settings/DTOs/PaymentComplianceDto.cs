@@ -4,10 +4,15 @@ namespace ECommerce.Application.Settings.DTOs;
 public class PaymentComplianceDto
 {
     public IReadOnlyList<SiteLegalPageDto> LegalPages { get; set; } = [];
+    public string? AboutPageTitle { get; set; }
     public string? AboutPageContent { get; set; }
+    public string? DeliveryReturnsPageTitle { get; set; }
     public string? DeliveryReturnsPageContent { get; set; }
+    public string? PrivacyPolicyPageTitle { get; set; }
     public string? PrivacyPolicyPageContent { get; set; }
+    public string? DistanceSellingAgreementPageTitle { get; set; }
     public string? DistanceSellingAgreementPageContent { get; set; }
+    public string? PreInformationFormPageTitle { get; set; }
     public string? PreInformationFormPageContent { get; set; }
     public string? IyzicoPayLogoUrl { get; set; }
 }
@@ -15,7 +20,7 @@ public class PaymentComplianceDto
 public class SiteLegalPageDto
 {
     public required string Slug { get; set; }
-    public required string Title { get; set; }
+    public string? Title { get; set; }
     public required string Path { get; set; }
     public string? Content { get; set; }
 }

@@ -201,6 +201,16 @@ public class AdminSiteSettingsRequest
     public List<string>? WorkingHours { get; set; }
     public SocialLinksDto? SocialLinks { get; set; }
     public PaymentComplianceDto? PaymentCompliance { get; set; }
+    public SiteThemeRequest? Theme { get; set; }
+    public SiteSeoDto? Seo { get; set; }
+    public SiteStorefrontContentDto? StorefrontContent { get; set; }
     public bool IsActive { get; set; } = true;
     public bool IsDefault { get; set; }
+}
+
+public class SiteThemeRequest
+{
+    public string? PrimaryLight { get; set; }
+    public string? PrimaryDark { get; set; }
+    public string? FontFamily { get; set; }
 }

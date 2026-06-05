@@ -39,8 +39,8 @@ const SocialLinks = ({ links, variant = 'contact', className }: SocialLinksProps
           aria-label={label}
           className={
             isFooter
-              ? 'p-1.5 md:p-2 bg-white/10 rounded-full hover:bg-white/20 transition-colors'
-              : 'bg-purple-gradient w-10 h-10 rounded-full flex items-center justify-center text-white hover:opacity-90 transition-opacity'
+              ? 'p-1.5 md:p-2 bg-primary/10 text-primary rounded-full hover:bg-primary/20 transition-colors'
+              : 'bg-primary w-10 h-10 rounded-full flex items-center justify-center text-primary-foreground hover:opacity-90 transition-opacity'
           }
         >
           <Icon size={isFooter ? 14 : 20} />

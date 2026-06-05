@@ -3,8 +3,9 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ThemeProvider } from "next-themes";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { BrowserRouter, Routes, Route, Navigate, useSearchParams } from "react-router-dom";
-import ErrorBoundary from "@/components/ErrorBoundary";
 import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Shop from "./pages/Shop";
@@ -32,7 +33,9 @@ import { AddressProvider } from "./contexts/AddressContext";
 import { SiteSettingsProvider } from "./contexts/SiteSettingsContext";
 import ProtectedRoute from "./components/ProtectedRoute";
 import LegalPage from "./pages/LegalPage";
+import PageSeoManager from "./components/PageSeoManager";
 import { LEGAL_PAGE_ROUTES, LEGACY_LEGAL_REDIRECTS } from "./constants/legal-pages";
+import { UI_CODE } from "./services/site-settings.service";
 
 const IyzicoReturnRedirect = () => {
   const [searchParams] = useSearchParams();
@@ -54,7 +57,7 @@ const queryClient = new QueryClient({
 });
 
 const App = () => (
-  <ErrorBoundary>
+  <ThemeProvider attribute="class" defaultTheme="light" enableSystem={false} storageKey={UI_CODE ? `theme-${UI_CODE}` : "theme"}>
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <SiteSettingsProvider>
@@ -65,6 +68,7 @@ const App = () => (
             <Toaster />
             <Sonner />
             <BrowserRouter>
+              <PageSeoManager />
               <Routes>
                 <Route path="/" element={<Index />} />
                 <Route path="/shop" element={<Shop />} />
@@ -127,7 +131,7 @@ const App = () => (
       </SiteSettingsProvider>
     </TooltipProvider>
   </QueryClientProvider>
-  </ErrorBoundary>
+  </ThemeProvider>
 );
 
 export default App;

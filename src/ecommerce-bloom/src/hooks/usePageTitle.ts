@@ -7,16 +7,16 @@ import { useSiteSettings } from "@/contexts/SiteSettingsContext";
  * pageTitle boşsa sadece siteName kullanılır.
  */
 const usePageTitle = (pageTitle?: string) => {
-  const { siteName } = useSiteSettings();
+  const { siteName, name } = useSiteSettings();
 
   useEffect(() => {
-    const base = siteName || "Bizdenalbizdensat";
+    const base = siteName || name || '';
     document.title = pageTitle ? `${pageTitle} | ${base}` : base;
 
     return () => {
       document.title = base;
     };
-  }, [pageTitle, siteName]);
+  }, [pageTitle, siteName, name]);
 };
 
 export default usePageTitle;

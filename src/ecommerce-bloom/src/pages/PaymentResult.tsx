@@ -19,6 +19,7 @@ import {
 } from "@/services/payments.service";
 import { useCart } from "@/contexts/CartContext";
 import { toast } from "sonner";
+import { findStatusLabel, uiLabel, useAppPagesUi } from "@/hooks/useAppPagesUi";
 
 const POLL_INTERVAL_MS = 2500;
 const MAX_POLL_ATTEMPTS = 10;
@@ -27,6 +28,8 @@ const PaymentResult = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const { refreshCart } = useCart();
+  const checkout = useAppPagesUi()?.checkout;
+  const global = useAppPagesUi()?.global;
 
   const orderId = searchParams.get("orderId") || "";
 
@@ -73,15 +76,21 @@ const PaymentResult = () => {
         await refreshCart();
         sessionStorage.removeItem("bizdenalbizdensat_pending_iyzico_order");
       } catch (error) {
-        const msg = error instanceof Error ? error.message : "Sipariş doğrulanamadı";
-        toast.error("Hata", { description: msg });
+        const msg =
+          error instanceof Error
+            ? error.message
+            : (uiLabel(checkout?.orderDetailLoadError) ?? "");
+        const title = uiLabel(global?.errorTitle);
+        if (title || msg) {
+          toast.error(title ?? "", { description: msg });
+        }
       } finally {
         setIsLoading(false);
       }
     };
 
     load();
-  }, [orderId, fetchAndSetOrder, pollOrderStatus, refreshCart]);
+  }, [orderId, fetchAndSetOrder, pollOrderStatus, refreshCart, checkout?.orderDetailLoadError, global?.errorTitle]);
 
   const handleRetryPayment = async () => {
     if (!order?.id) return;
@@ -90,25 +99,33 @@ const PaymentResult = () => {
       const initData = await initializeIyzicoPayment({ orderId: order.id });
       redirectToIyzicoPayment(initData.paymentPageUrl);
     } catch (error) {
-      const msg = error instanceof Error ? error.message : "Ödeme başlatılamadı";
-      toast.error("Hata", { description: msg });
+      const msg =
+        error instanceof Error ? error.message : (uiLabel(checkout?.paymentErrorFallback) ?? "");
+      const title = uiLabel(global?.errorTitle);
+      if (title || msg) {
+        toast.error(title ?? "", { description: msg });
+      }
       setIsRetrying(false);
     }
   };
 
   const handleCancelOrder = async () => {
     if (!order?.id) return;
-    const reason = window.prompt("İptal sebebini yazınız:");
+    const placeholder = uiLabel(checkout?.cancelReasonPlaceholder);
+    const reason = placeholder ? window.prompt(placeholder) : window.prompt("");
     if (!reason) return;
 
     try {
       setIsCancelling(true);
       await cancelOrder(order.id, { reason });
-      toast.success("Sipariş iptal edildi");
       navigate("/orders");
     } catch (error) {
-      const msg = error instanceof Error ? error.message : "İptal başarısız";
-      toast.error("Hata", { description: msg });
+      const msg =
+        error instanceof Error ? error.message : (uiLabel(checkout?.paymentErrorFallback) ?? "");
+      const title = uiLabel(global?.errorTitle);
+      if (title || msg) {
+        toast.error(title ?? "", { description: msg });
+      }
     } finally {
       setIsCancelling(false);
     }
@@ -126,22 +143,26 @@ const PaymentResult = () => {
 
   const paymentStatus: PaymentStatus | "unknown" = order?.paymentStatus ?? "unknown";
 
+  const pollNote = uiLabel(checkout?.paymentResultPollNote)
+    ?.replace("{current}", String(pollAttempt))
+    ?.replace("{max}", String(MAX_POLL_ATTEMPTS));
+
   const renderStatusHeader = () => {
     if (isLoading) {
       return {
-        icon: <Loader2 className="w-16 h-16 animate-spin text-purple-600 mx-auto mb-4" />,
-        title: "Ödeme durumu kontrol ediliyor...",
-        subtitle: pollAttempt > 0 ? `Kontrol ${pollAttempt}/${MAX_POLL_ATTEMPTS}` : undefined,
-        bg: "bg-gray-100",
-        titleClass: "text-gray-900",
+        icon: <Loader2 className="w-16 h-16 animate-spin text-primary mx-auto mb-4" />,
+        title: uiLabel(checkout?.paymentResultCheckingTitle),
+        subtitle: pollAttempt > 0 ? pollNote : undefined,
+        bg: "bg-muted",
+        titleClass: "text-foreground",
       };
     }
 
     if (!orderId) {
       return {
         icon: <XCircle size={64} className="mx-auto text-red-600 mb-4" />,
-        title: "Sipariş bulunamadı",
-        subtitle: "Geçersiz veya eksik ödeme dönüş bağlantısı.",
+        title: uiLabel(checkout?.paymentResultMissingOrderTitle),
+        subtitle: uiLabel(checkout?.paymentResultMissingOrderDescription),
         bg: "bg-red-50",
         titleClass: "text-red-900",
       };
@@ -151,24 +172,24 @@ const PaymentResult = () => {
       case "Completed":
         return {
           icon: <CheckCircle2 size={64} className="mx-auto text-green-600 mb-4" />,
-          title: "Ödeme Başarılı!",
-          subtitle: "Siparişiniz onaylandı.",
+          title: uiLabel(checkout?.paymentResultSuccessTitle),
+          subtitle: uiLabel(checkout?.paymentResultSuccessDescription),
           bg: "bg-green-50",
           titleClass: "text-green-900",
         };
       case "Failed":
         return {
           icon: <XCircle size={64} className="mx-auto text-red-600 mb-4" />,
-          title: "Ödeme Başarısız",
-          subtitle: "Ödemeniz tamamlanamadı. Tekrar deneyebilirsiniz.",
+          title: uiLabel(checkout?.paymentResultFailedTitle),
+          subtitle: uiLabel(checkout?.paymentResultFailedDescription),
           bg: "bg-red-50",
           titleClass: "text-red-900",
         };
       case "Refunded":
         return {
           icon: <CreditCard size={64} className="mx-auto text-blue-600 mb-4" />,
-          title: "İade Edildi",
-          subtitle: "Bu sipariş için ödeme iade edilmiştir.",
+          title: uiLabel(checkout?.paymentResultRefundedTitle),
+          subtitle: uiLabel(checkout?.paymentResultRefundedDescription),
           bg: "bg-blue-50",
           titleClass: "text-blue-900",
         };
@@ -176,8 +197,8 @@ const PaymentResult = () => {
       default:
         return {
           icon: <Clock size={64} className="mx-auto text-yellow-600 mb-4" />,
-          title: "Ödeme Bekleniyor",
-          subtitle: "Ödeme henüz onaylanmadı. Birkaç saniye sonra yenileyin veya tekrar ödeyin.",
+          title: uiLabel(checkout?.paymentResultPendingTitle),
+          subtitle: uiLabel(checkout?.paymentResultPendingDescription),
           bg: "bg-yellow-50",
           titleClass: "text-yellow-900",
         };
@@ -189,39 +210,47 @@ const PaymentResult = () => {
     order && paymentStatus !== "Completed" && order.status === "Pending";
   const canCancel = order?.status === "Pending";
 
+  const completedPaymentLabel = findStatusLabel(checkout?.paymentStatusLabels, "Completed");
+
   return (
-    <div className="min-h-screen flex flex-col bg-gray-100">
+    <div className="min-h-screen flex flex-col bg-muted">
       <Navbar />
 
       <main className="flex-1 py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-2xl mx-auto">
-          <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+          <div className="bg-card rounded-lg shadow-sm overflow-hidden">
             <div className={`px-6 py-8 text-center ${header.bg}`}>
               {header.icon}
-              <h1 className={`text-base font-semibold mb-2 ${header.titleClass}`}>{header.title}</h1>
+              {header.title && (
+                <h1 className={`text-base font-semibold mb-2 ${header.titleClass}`}>{header.title}</h1>
+              )}
               {header.subtitle && (
-                <p className="text-gray-700 max-w-md mx-auto">{header.subtitle}</p>
+                <p className="text-foreground max-w-md mx-auto">{header.subtitle}</p>
               )}
 
               {paymentStatus === "Pending" && orderId && !isLoading && (
                 <div className="mt-4 flex flex-wrap justify-center gap-2">
-                  <Button variant="outline" onClick={handleRefresh} disabled={isLoading}>
-                    <RefreshCw className="w-4 h-4 mr-2" />
-                    Yenile
-                  </Button>
-                  {canRetry && (
+                  {uiLabel(checkout?.refreshButton) && (
+                    <Button variant="outline" onClick={handleRefresh} disabled={isLoading}>
+                      <RefreshCw className="w-4 h-4 mr-2" />
+                      {checkout!.refreshButton}
+                    </Button>
+                  )}
+                  {canRetry && uiLabel(checkout?.retryPaymentButton) && (
                     <Button
                       onClick={handleRetryPayment}
                       disabled={isRetrying}
-                      className="bg-purple-600 hover:bg-purple-700 text-white"
+                      className="bg-primary hover:bg-primary/90 text-white"
                     >
-                      {isRetrying ? "Yönlendiriliyor..." : "Tekrar Öde"}
+                      {isRetrying
+                        ? (uiLabel(checkout?.iyzicoRedirectingLabel) ?? checkout!.retryPaymentButton)
+                        : checkout!.retryPaymentButton}
                     </Button>
                   )}
                 </div>
               )}
 
-              {paymentStatus === "Failed" && canRetry && !isLoading && (
+              {paymentStatus === "Failed" && canRetry && !isLoading && uiLabel(checkout?.retryPaymentButton) && (
                 <Button
                   onClick={handleRetryPayment}
                   disabled={isRetrying}
@@ -229,33 +258,40 @@ const PaymentResult = () => {
                   className="mt-4"
                 >
                   <RefreshCw className="w-4 h-4 mr-2" />
-                  Tekrar Öde
+                  {checkout!.retryPaymentButton}
                 </Button>
               )}
             </div>
 
             {order && paymentStatus === "Completed" && (
-              <div className="px-6 py-6 border-t border-gray-200 space-y-3 text-sm">
-                <h2 className="text-sm font-semibold text-gray-900">Sipariş Detayları</h2>
-                <div className="flex justify-between py-2 border-b border-gray-100">
-                  <span className="text-gray-600">Sipariş Numarası</span>
-                  <span className="font-medium">{order.orderNumber}</span>
-                </div>
-                <div className="flex justify-between py-2 border-b border-gray-100">
-                  <span className="text-gray-600">Toplam</span>
-                  <span className="font-medium">{order.total?.toFixed(2)} TL</span>
-                </div>
-                <div className="flex justify-between py-2">
-                  <span className="text-gray-600">Durum</span>
-                  <span className="font-medium text-green-600">Ödeme Tamamlandı</span>
-                </div>
+              <div className="px-6 py-6 border-t border-border space-y-3 text-sm">
+                {uiLabel(checkout?.orderDetailsTitle) && (
+                  <h2 className="text-sm font-semibold text-foreground">{checkout!.orderDetailsTitle}</h2>
+                )}
+                {uiLabel(checkout?.orderNumberLabel) && (
+                  <div className="flex justify-between py-2 border-b border-border">
+                    <span className="text-muted-foreground">{checkout!.orderNumberLabel}</span>
+                    <span className="font-medium">{order.orderNumber}</span>
+                  </div>
+                )}
+                {uiLabel(checkout?.totalLabel) && (
+                  <div className="flex justify-between py-2 border-b border-border">
+                    <span className="text-muted-foreground">{checkout!.totalLabel}</span>
+                    <span className="font-medium">{order.total?.toFixed(2)} TL</span>
+                  </div>
+                )}
+                {uiLabel(checkout?.statusLabel) && completedPaymentLabel && (
+                  <div className="flex justify-between py-2">
+                    <span className="text-muted-foreground">{checkout!.statusLabel}</span>
+                    <span className="font-medium text-green-600">{completedPaymentLabel}</span>
+                  </div>
+                )}
               </div>
             )}
 
-            {order && paymentStatus === "Failed" && (
+            {order && paymentStatus === "Failed" && uiLabel(checkout?.paymentResultFailedBanner) && (
               <div className="px-6 py-4 border-t bg-yellow-50 text-xs text-yellow-800">
-                Ödeme başarısız. Sepetiniz korunur; tekrar ödeme deneyebilir veya siparişi iptal
-                edebilirsiniz.
+                {checkout!.paymentResultFailedBanner}
               </div>
             )}
           </div>
@@ -263,36 +299,46 @@ const PaymentResult = () => {
           <div className="mt-6 flex flex-col sm:flex-row gap-3">
             {paymentStatus === "Completed" && order ? (
               <>
-                <Button
-                  onClick={() => navigate(`/order/${order.id}`)}
-                  className="flex-1 bg-purple-600 hover:bg-purple-700 text-white"
-                >
-                  Sipariş Detayı
-                  <ArrowRight className="w-4 h-4 ml-2" />
-                </Button>
-                <Button onClick={() => navigate("/orders")} variant="outline" className="flex-1">
-                  Tüm Siparişlerim
-                </Button>
+                {uiLabel(checkout?.viewOrderDetailButton) && (
+                  <Button
+                    onClick={() => navigate(`/order/${order.id}`)}
+                    className="flex-1 bg-primary hover:bg-primary/90 text-white"
+                  >
+                    {checkout!.viewOrderDetailButton}
+                    <ArrowRight className="w-4 h-4 ml-2" />
+                  </Button>
+                )}
+                {uiLabel(checkout?.goToOrdersButton) && (
+                  <Button onClick={() => navigate("/orders")} variant="outline" className="flex-1">
+                    {checkout!.goToOrdersButton}
+                  </Button>
+                )}
               </>
             ) : (
               <>
-                <Button onClick={() => navigate("/shop")} variant="outline" className="flex-1">
-                  Alışverişe Devam Et
-                </Button>
-                <Button
-                  onClick={() => navigate("/orders")}
-                  className="flex-1 bg-purple-600 hover:bg-purple-700 text-white"
-                >
-                  Siparişlerim
-                </Button>
-                {canCancel && (
+                {uiLabel(checkout?.continueShoppingButton) && (
+                  <Button onClick={() => navigate("/shop")} variant="outline" className="flex-1">
+                    {checkout!.continueShoppingButton}
+                  </Button>
+                )}
+                {uiLabel(checkout?.goToOrdersButton) && (
+                  <Button
+                    onClick={() => navigate("/orders")}
+                    className="flex-1 bg-primary hover:bg-primary/90 text-white"
+                  >
+                    {checkout!.goToOrdersButton}
+                  </Button>
+                )}
+                {canCancel && uiLabel(checkout?.cancelOrderButton) && (
                   <Button
                     variant="outline"
                     className="flex-1 border-red-200 text-red-600"
                     onClick={handleCancelOrder}
                     disabled={isCancelling}
                   >
-                    {isCancelling ? "İptal ediliyor..." : "Siparişi İptal Et"}
+                    {isCancelling
+                      ? (uiLabel(checkout?.cancelDialogSubmitting) ?? checkout!.cancelOrderButton)
+                      : checkout!.cancelOrderButton}
                   </Button>
                 )}
               </>

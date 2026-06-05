@@ -12,6 +12,7 @@ import {
   SheetClose
 } from "@/components/ui/sheet";
 import { getImageUrl } from "@/lib/product-utils";
+import { uiLabel, useAppPagesUi } from "@/hooks/useAppPagesUi";
 
 interface CartSidebarProps {
   open: boolean;
@@ -21,31 +22,45 @@ interface CartSidebarProps {
 const CartSidebar = ({ open, onClose }: CartSidebarProps) => {
   const { isAuthenticated } = useAuth();
   const { cartItems, removeFromCart, updateQuantity, cartTotal, cartCount } = useCart();
+  const cart = useAppPagesUi()?.cart;
+  const global = useAppPagesUi()?.global;
+  const productFallback = uiLabel(global?.productFallbackName);
+  const closeLabel = uiLabel(global?.closeLabel);
+
+  const titlePrefix = uiLabel(cart?.titlePrefix);
 
   return (
     <Sheet open={open} onOpenChange={onClose}>
       <SheetContent className="w-full max-w-sm sm:max-w-md flex flex-col p-3 xs:p-4 md:p-6">
+        {titlePrefix && (
         <SheetHeader className="space-y-0.5 pr-6">
           <SheetTitle className="flex items-center gap-2 text-sm">
             <ShoppingBag className="h-4 xs:h-5 md:h-5 w-4 xs:w-5 md:w-5" />
-            Sepetim ({cartCount})
+            {titlePrefix} ({cartCount})
           </SheetTitle>
         </SheetHeader>
+        )}
         <SheetClose className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none">
           <X className="h-4 w-4" />
-          <span className="sr-only">Kapat</span>
+          {closeLabel && <span className="sr-only">{closeLabel}</span>}
         </SheetClose>
 
         {cartItems.length === 0 ? (
           <div className="flex flex-col items-center justify-center flex-1 py-8 xs:py-10 md:py-12">
-            <ShoppingBag className="h-12 xs:h-14 md:h-16 w-12 xs:w-14 md:w-16 text-gray-300 mb-3 xs:mb-4 md:mb-4" />
-            <p className="text-sm font-medium text-gray-500 mb-1">Sepetiniz boş</p>
-            <p className="text-xs xs:text-sm md:text-sm text-gray-400 text-center mb-4 xs:mb-6 md:mb-6">Henüz sepetinize ürün eklemediniz.</p>
+            <ShoppingBag className="h-12 xs:h-14 md:h-16 w-12 xs:w-14 md:w-16 text-muted-foreground/50 mb-3 xs:mb-4 md:mb-4" />
+            {uiLabel(cart?.emptyTitle) && (
+              <p className="text-sm font-medium text-muted-foreground mb-1">{cart!.emptyTitle}</p>
+            )}
+            {uiLabel(cart?.emptyDescription) && (
+              <p className="text-xs xs:text-sm md:text-sm text-muted-foreground text-center mb-4 xs:mb-6 md:mb-6">{cart!.emptyDescription}</p>
+            )}
+            {uiLabel(cart?.continueShoppingButton) && (
             <SheetClose asChild>
               <Link to="/shop">
-                <Button variant="outline" className="text-sm h-9">Alışverişe Devam Et</Button>
+                <Button variant="outline" className="text-sm h-9">{cart!.continueShoppingButton}</Button>
               </Link>
             </SheetClose>
+            )}
           </div>
         ) : (
           <>
@@ -56,7 +71,7 @@ const CartSidebar = ({ open, onClose }: CartSidebarProps) => {
                     <div className="h-20 xs:h-24 md:h-24 w-20 xs:w-24 md:w-24 flex-shrink-0 rounded-md border overflow-hidden">
                       <img
                         src={getImageUrl(item.product?.image)}
-                        alt={item.product?.name || 'Ürün'}
+                        alt={item.product?.name || productFallback || ''}
                         className="h-full w-full object-cover object-center"
                       />
                     </div>
@@ -64,15 +79,17 @@ const CartSidebar = ({ open, onClose }: CartSidebarProps) => {
                       <div>
                         <div className="flex justify-between text-xs font-medium gap-1">
                           <h3>
-                            <Link to={`/product/${item.product?.id}`} onClick={onClose} className="hover:text-purple-default line-clamp-2">
-                              {item.product?.name || 'Ürün'}
+                            <Link to={`/product/${item.product?.id}`} onClick={onClose} className="hover:text-primary line-clamp-2">
+                              {item.product?.name || productFallback}
                             </Link>
                           </h3>
                           <p className="flex-shrink-0">₺{((item.product?.price ?? 0) * item.quantity).toFixed(2)}</p>
                         </div>
-                        <p className="mt-0.5 xs:mt-1 md:mt-1 text-xs text-gray-500 line-clamp-1">
-                          {item.product?.description}
+                        {item.product?.description && (
+                        <p className="mt-0.5 xs:mt-1 md:mt-1 text-xs text-muted-foreground line-clamp-1">
+                          {item.product.description}
                         </p>
+                        )}
                       </div>
                       <div className="flex flex-1 items-end justify-between mt-1 xs:mt-2 md:mt-2">
                         <div className="flex items-center">
@@ -112,45 +129,59 @@ const CartSidebar = ({ open, onClose }: CartSidebarProps) => {
 
             <SheetFooter className="border-t pt-3 xs:pt-4 md:pt-4">
               <div className="w-full space-y-2 xs:space-y-3 md:space-y-3">
+                {uiLabel(cart?.subtotalLabel) && (
                 <div className="flex justify-between text-sm font-medium">
-                  <p>Ara Toplam</p>
+                  <p>{cart!.subtotalLabel}</p>
                   <p>₺{cartTotal.toFixed(2)}</p>
                 </div>
-                <p className="text-xs text-gray-400 leading-relaxed">
-                  Kargo ve vergiler ödeme sırasında hesaplanır.
+                )}
+                {uiLabel(cart?.shippingNote) && (
+                <p className="text-xs text-muted-foreground leading-relaxed">
+                  {cart!.shippingNote}
                 </p>
+                )}
                 <div className="pt-2 xs:pt-3 md:pt-3">
                   {isAuthenticated ? (
+                    uiLabel(cart?.checkoutButton) && (
                     <SheetClose asChild>
                       <Link to="/order">
-                        <Button className="w-full bg-purple-gradient h-9 text-sm">
-                          Ödemeye Geç
+                        <Button className="w-full bg-primary text-primary-foreground h-9 text-sm">
+                          {cart!.checkoutButton}
                         </Button>
                       </Link>
                     </SheetClose>
+                    )
                   ) : (
+                    (uiLabel(cart?.loginRequiredNote) || uiLabel(cart?.loginAndContinueButton)) && (
                     <div className="space-y-2">
-                      <p className="text-xs text-center text-gray-500">
-                        Ödemeye geçmek için giriş yapmanız gerekiyor
+                      {uiLabel(cart?.loginRequiredNote) && (
+                      <p className="text-xs text-center text-muted-foreground">
+                        {cart!.loginRequiredNote}
                       </p>
+                      )}
+                      {uiLabel(cart?.loginAndContinueButton) && (
                       <SheetClose asChild>
                         <Link to="/login" state={{ from: "/order" }}>
-                          <Button className="w-full bg-purple-gradient h-9 text-sm gap-2">
+                          <Button className="w-full bg-primary text-primary-foreground h-9 text-sm gap-2">
                             <LogIn size={14} />
-                            Giriş Yap ve Devam Et
+                            {cart!.loginAndContinueButton}
                           </Button>
                         </Link>
                       </SheetClose>
+                      )}
                     </div>
+                    )
                   )}
                 </div>
+                {uiLabel(cart?.continueShoppingButton) && (
                 <div className="flex justify-center">
                   <SheetClose asChild>
-                    <Link to="/shop" className="text-xs xs:text-sm md:text-sm font-medium text-purple-default hover:text-purple-dark">
-                      Alışverişe Devam Et
+                    <Link to="/shop" className="text-xs xs:text-sm md:text-sm font-medium text-primary hover:text-foreground">
+                      {cart!.continueShoppingButton}
                     </Link>
                   </SheetClose>
                 </div>
+                )}
               </div>
             </SheetFooter>
           </>

@@ -5,6 +5,7 @@ import { getProducts } from "@/services/products.service";
 import ProductCard from "@/components/ProductCard";
 import type { Product } from "@/types";
 import type { ProductsFilterParams } from "@/types";
+import { uiLabel, useAppPagesUi } from "@/hooks/useAppPagesUi";
 
 interface ProductRowProps {
   title: string;
@@ -17,11 +18,11 @@ interface ProductRowProps {
 
 const ProductCardSkeleton = () => (
   <div className="shrink-0 w-40 xs:w-44 sm:w-48 md:w-52 animate-pulse">
-    <div className="aspect-square bg-gray-100 rounded-xl mb-3" />
+    <div className="aspect-square bg-muted rounded-xl mb-3" />
     <div className="space-y-2 px-1">
-      <div className="h-3 bg-gray-100 rounded w-3/4" />
-      <div className="h-3 bg-gray-100 rounded w-1/2" />
-      <div className="h-4 bg-gray-100 rounded w-1/3" />
+      <div className="h-3 bg-muted rounded w-3/4" />
+      <div className="h-3 bg-muted rounded w-1/2" />
+      <div className="h-4 bg-muted rounded w-1/3" />
     </div>
   </div>
 );
@@ -38,6 +39,7 @@ const ProductRow = ({
   const scrollRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
+  const viewAllLink = uiLabel(useAppPagesUi()?.category?.viewAllLink);
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -82,42 +84,42 @@ const ProductRow = ({
   if (!isLoading && products.length === 0) return null;
 
   return (
-    <section className="py-6 sm:py-8 bg-white border-b border-gray-100">
+    <section className="py-6 sm:py-8 bg-card border-b border-border">
       <div className="container-custom px-4 sm:px-6">
-        {/* Header */}
         <div className="flex items-end justify-between mb-4 sm:mb-5">
           <div>
-            <h2 className="text-sm sm:text-base font-semibold text-gray-900 uppercase tracking-wide">
+            <h2 className="text-sm sm:text-base font-semibold text-foreground uppercase tracking-wide">
               {title}
             </h2>
             {subtitle && (
-              <p className="text-xs text-gray-500 mt-0.5">{subtitle}</p>
+              <p className="text-xs text-muted-foreground mt-0.5">{subtitle}</p>
             )}
           </div>
+          {viewAllLink && (
           <Link
             to={viewAllHref}
-            className="text-xs font-medium text-purple-600 hover:text-purple-800 hover:underline transition-colors shrink-0"
+            className="text-xs font-medium text-primary hover:text-primary/80 hover:underline transition-colors shrink-0"
           >
-            Tümünü Gör →
+            {viewAllLink}
           </Link>
+          )}
         </div>
 
-        {/* Horizontal scroll row */}
         <div className="relative">
           {canScrollLeft && (
             <button
               onClick={() => scroll("left")}
-              className="absolute -left-3 top-1/2 -translate-y-1/2 z-10 w-8 h-8 flex items-center justify-center bg-white rounded-full shadow-md border border-gray-100 hover:bg-gray-50 transition-all"
+              className="absolute -left-3 top-1/2 -translate-y-1/2 z-10 w-8 h-8 flex items-center justify-center bg-card rounded-full shadow-md border border-border hover:bg-muted/50 transition-all"
             >
-              <ChevronLeft className="w-4 h-4 text-gray-600" />
+              <ChevronLeft className="w-4 h-4 text-muted-foreground" />
             </button>
           )}
           {canScrollRight && (
             <button
               onClick={() => scroll("right")}
-              className="absolute -right-3 top-1/2 -translate-y-1/2 z-10 w-8 h-8 flex items-center justify-center bg-white rounded-full shadow-md border border-gray-100 hover:bg-gray-50 transition-all"
+              className="absolute -right-3 top-1/2 -translate-y-1/2 z-10 w-8 h-8 flex items-center justify-center bg-card rounded-full shadow-md border border-border hover:bg-muted/50 transition-all"
             >
-              <ChevronRight className="w-4 h-4 text-gray-600" />
+              <ChevronRight className="w-4 h-4 text-muted-foreground" />
             </button>
           )}
 

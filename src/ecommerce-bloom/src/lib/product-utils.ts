@@ -2,19 +2,21 @@ import type { Product } from '@/types';
 
 export const getApiBaseUrl = () =>
   import.meta.env.VITE_API_BASE_URL ||
-  (import.meta.env.DEV ? '' : 'https://test-bayi.digitalep.net');
+  (import.meta.env.DEV ? '' : 'https://e-commerce.digitalep.net');
 
 export const getApiOrigin = () =>
   import.meta.env.VITE_API_ORIGIN ||
   getApiBaseUrl().replace(/\/api\/?$/, '') ||
-  (import.meta.env.DEV ? '' : 'https://test-bayi.digitalep.net');
+  (import.meta.env.DEV ? '' : 'https://e-commerce.digitalep.net');
 
 export const getImageUrl = (path: string | undefined): string => {
   if (!path) return '/placeholder.svg';
   if (path.startsWith('http://') || path.startsWith('https://')) return path;
   if (path.startsWith('/')) {
-    const base = getApiOrigin() || 'https://test-bayi.digitalep.net';
-    return `${base}${path}`;
+    const origin = getApiOrigin();
+    // Dev: relative path → Vite proxy (/uploads → localhost:5001)
+    if (origin) return `${origin}${path}`;
+    return path;
   }
   return path;
 };

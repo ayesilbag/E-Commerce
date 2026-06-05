@@ -184,6 +184,14 @@ internal static class SiteSettingsHelper
         },
         PaymentCompliance = PaymentComplianceRules.ToDto(settings),
         PaymentComplianceStatus = PaymentComplianceRules.BuildStatus(settings),
+        Theme = new SiteThemeDto
+        {
+            PrimaryLight = settings.ThemePrimaryLight,
+            PrimaryDark = settings.ThemePrimaryDark,
+            FontFamily = settings.ThemeFontFamily
+        },
+        Seo = SiteSeoRules.ToDto(settings),
+        StorefrontContent = SiteStorefrontContentRules.ToDto(settings),
         IsActive = settings.IsActive,
         IsDefault = settings.IsDefault
     };
@@ -242,6 +250,11 @@ internal static class SiteSettingsHelper
         settings.InstagramUrl = NullIfWhiteSpace(request.SocialLinks?.Instagram);
         settings.YouTubeUrl = NullIfWhiteSpace(request.SocialLinks?.YouTube);
         PaymentComplianceRules.Apply(settings, request.PaymentCompliance);
+        settings.ThemePrimaryLight = NullIfWhiteSpace(request.Theme?.PrimaryLight);
+        settings.ThemePrimaryDark = NullIfWhiteSpace(request.Theme?.PrimaryDark);
+        settings.ThemeFontFamily = NullIfWhiteSpace(request.Theme?.FontFamily);
+        SiteSeoRules.Apply(settings, request.Seo);
+        SiteStorefrontContentRules.Apply(settings, request.StorefrontContent);
         settings.IsActive = request.IsActive;
         settings.IsDefault = request.IsDefault;
     }

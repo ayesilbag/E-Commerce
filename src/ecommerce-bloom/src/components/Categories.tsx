@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { ChevronLeft, ChevronRight, ImageIcon } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { getCategories } from "@/services/categories.service";
 import {
   sortCategoriesForDisplay,
@@ -9,6 +9,7 @@ import {
   resolveCategoryImageUrl,
 } from "@/lib/category-utils";
 import type { Category } from "@/types";
+import { uiLabel, useAppPagesUi } from "@/hooks/useAppPagesUi";
 
 const CategoryPill = ({ category }: { category: Category }) => {
   const Icon = getCategoryIcon(category.name);
@@ -22,7 +23,7 @@ const CategoryPill = ({ category }: { category: Category }) => {
       to={`/category/${encodeURIComponent(category.slug)}`}
       className="group flex flex-col items-center gap-2 shrink-0 w-20 sm:w-24"
     >
-      <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-full border-2 border-gray-100 group-hover:border-purple-400 overflow-hidden bg-gray-50 transition-all duration-200 group-hover:shadow-md">
+      <div className="relative w-16 h-16 sm:w-20 sm:h-20 rounded-full border-2 border-border group-hover:border-primary/50 overflow-hidden bg-muted/50 transition-all duration-200 group-hover:shadow-md">
         {showImage ? (
           <img
             src={imageUrl!}
@@ -32,13 +33,13 @@ const CategoryPill = ({ category }: { category: Category }) => {
             onError={() => setImageFailed(true)}
           />
         ) : (
-          <div className="w-full h-full flex items-center justify-center bg-purple-50">
-            <Icon className="w-7 h-7 sm:w-8 sm:h-8 text-purple-400" strokeWidth={1.5} />
+          <div className="w-full h-full flex items-center justify-center bg-primary/10">
+            <Icon className="w-7 h-7 sm:w-8 sm:h-8 text-primary/70" strokeWidth={1.5} />
           </div>
         )}
-        <div className="absolute inset-0 bg-purple-600/10 opacity-0 group-hover:opacity-100 transition-opacity duration-200 rounded-full" />
+        <div className="absolute inset-0 bg-primary/10 opacity-0 group-hover:opacity-100 transition-opacity duration-200 rounded-full" />
       </div>
-      <span className="text-[10px] sm:text-xs font-medium text-gray-700 text-center leading-tight line-clamp-2 group-hover:text-purple-700 transition-colors">
+      <span className="text-[10px] sm:text-xs font-medium text-foreground text-center leading-tight line-clamp-2 group-hover:text-primary/80 transition-colors">
         {displayName}
       </span>
     </Link>
@@ -47,8 +48,8 @@ const CategoryPill = ({ category }: { category: Category }) => {
 
 const CategorySkeleton = () => (
   <div className="flex flex-col items-center gap-2 shrink-0 w-20 sm:w-24 animate-pulse">
-    <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-gray-100" />
-    <div className="h-3 bg-gray-100 rounded w-14" />
+    <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-muted" />
+    <div className="h-3 bg-muted rounded w-14" />
   </div>
 );
 
@@ -58,6 +59,9 @@ const Categories = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
+  const categoryUi = useAppPagesUi()?.category;
+  const sectionTitle = uiLabel(categoryUi?.sectionTitle);
+  const viewAllLink = uiLabel(categoryUi?.viewAllLink);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -100,40 +104,42 @@ const Categories = () => {
   };
 
   return (
-    <section className="py-6 sm:py-8 bg-white border-b border-gray-100">
+    <section className="py-6 sm:py-8 bg-card border-b border-border">
       <div className="container-custom px-4 sm:px-6">
-        {/* Header */}
+        {(sectionTitle || viewAllLink) && (
         <div className="flex items-center justify-between mb-4 sm:mb-5">
-          <h2 className="text-sm sm:text-base font-semibold text-gray-900 uppercase tracking-wide">
-            Kategoriler
+          {sectionTitle && (
+          <h2 className="text-sm sm:text-base font-semibold text-foreground uppercase tracking-wide">
+            {sectionTitle}
           </h2>
+          )}
+          {viewAllLink && (
           <Link
             to="/categories"
-            className="text-xs font-medium text-purple-600 hover:text-purple-800 hover:underline transition-colors"
+            className="text-xs font-medium text-primary hover:text-primary/80 hover:underline transition-colors"
           >
-            Tümünü Gör →
+            {viewAllLink}
           </Link>
+          )}
         </div>
+        )}
 
-        {/* Scroll Container */}
         <div className="relative">
-          {/* Left Arrow */}
           {canScrollLeft && (
             <button
               onClick={() => scroll("left")}
-              className="absolute -left-3 top-1/2 -translate-y-1/2 z-10 w-8 h-8 flex items-center justify-center bg-white rounded-full shadow-md border border-gray-100 hover:bg-gray-50 transition-all"
+              className="absolute -left-3 top-1/2 -translate-y-1/2 z-10 w-8 h-8 flex items-center justify-center bg-card rounded-full shadow-md border border-border hover:bg-muted/50 transition-all"
             >
-              <ChevronLeft className="w-4 h-4 text-gray-600" />
+              <ChevronLeft className="w-4 h-4 text-muted-foreground" />
             </button>
           )}
 
-          {/* Right Arrow */}
           {canScrollRight && (
             <button
               onClick={() => scroll("right")}
-              className="absolute -right-3 top-1/2 -translate-y-1/2 z-10 w-8 h-8 flex items-center justify-center bg-white rounded-full shadow-md border border-gray-100 hover:bg-gray-50 transition-all"
+              className="absolute -right-3 top-1/2 -translate-y-1/2 z-10 w-8 h-8 flex items-center justify-center bg-card rounded-full shadow-md border border-border hover:bg-muted/50 transition-all"
             >
-              <ChevronRight className="w-4 h-4 text-gray-600" />
+              <ChevronRight className="w-4 h-4 text-muted-foreground" />
             </button>
           )}
 

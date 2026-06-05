@@ -1,0 +1,147 @@
+{
+  "global": {
+    "loadingLabel": "Yükleniyor…",
+    "closeLabel": "Kapat",
+    "productFallbackName": "Ürün",
+    "errorTitle": "Bir Hata Oluştu",
+    "errorMessage": "Üzgünüz, bir sorun oluştu. Lütfen daha sonra tekrar deneyin.",
+    "retryButtonLabel": "Tekrar Dene",
+    "homeButtonLabel": "Ana Sayfa",
+    "errorBoundaryTitle": "Bir Hata Oluştu",
+    "errorBoundaryMessage": "Beklenmeyen bir hata oluştu. Sayfayı yenileyerek tekrar deneyebilirsiniz.",
+    "errorBoundaryReloadButton": "Sayfayı Yenile"
+  },
+  "auth": {
+    "loginTitle": "Hesabınıza Giriş Yapın",
+    "loginSubtitle": "Alışverişe devam etmek için bilgilerinizi girin",
+    "emailLabel": "E-Posta",
+    "emailPlaceholder": "E-posta adresiniz",
+    "passwordLabel": "Şifre",
+    "passwordPlaceholder": "Şifreniz",
+    "forgotPasswordLink": "Şifrenizi mi unuttunuz?",
+    "rememberMeLabel": "Beni hatırla",
+    "loginButtonLabel": "Giriş Yap",
+    "loginSubmittingLabel": "Giriş yapılıyor…",
+    "loginErrorTitle": "Giriş başarısız",
+    "loginNoAccountText": "Hesabınız yok mu?",
+    "loginRegisterLink": "Kayıt Ol",
+    "registerTitle": "Hesap Oluştur",
+    "registerSubtitle": "E-posta ve şifre ile kaydolun",
+    "registerButtonLabel": "Kayıt Ol",
+    "registerSubmittingLabel": "Hesap oluşturuluyor…",
+    "registerKvkkConsentText": "KVKK metnini ve Mesafeli Satış Sözleşmesini okudum ve kabul ediyorum.",
+    "registerHasAccountText": "Zaten bir hesabınız var mı?",
+    "registerLoginLink": "Giriş Yap",
+    "forgotTitle": "Şifrenizi mi Unuttunuz?",
+    "forgotSubtitle": "E-posta adresinize sıfırlama bağlantısı gönderelim",
+    "forgotSubmitLabel": "Bağlantı Gönder",
+    "forgotBackToLogin": "Girişe Dön"
+  },
+  "cart": {
+    "titlePrefix": "Sepetim",
+    "emptyTitle": "Sepetiniz boş",
+    "emptyDescription": "Henüz sepetinize ürün eklemediniz.",
+    "continueShoppingButton": "Alışverişe Devam Et",
+    "subtotalLabel": "Ara Toplam",
+    "shippingNote": "Kargo ve vergiler ödeme sırasında hesaplanır.",
+    "checkoutButton": "Ödemeye Geç",
+    "loginRequiredNote": "Ödemeye geçmek için giriş yapmanız gerekiyor",
+    "loginAndContinueButton": "Giriş Yap ve Devam Et"
+  },
+  "wishlist": {
+    "sidebarTitlePrefix": "Favorilerim",
+    "sidebarEmptyTitle": "Favorileriniz boş",
+    "pageTitle": "Favorilerim",
+    "pageEmptyTitle": "Favorileriniz boş",
+    "pageStartShopping": "Alışverişe Başla"
+  },
+  "shop": {
+    "productsLoadError": "Ürünler yüklenirken hata oluştu",
+    "filtersButtonLabel": "Filtreler",
+    "clearFiltersLabel": "Filtreleri Temizle",
+    "searchPlaceholder": "Ürün ara…",
+    "sortLabel": "Sırala",
+    "emptyTitle": "Ürün bulunamadı",
+    "sortOptions": [
+      { "value": "featured", "label": "Öne Çıkanlar" },
+      { "value": "price-low", "label": "Fiyat: Düşükten Yükseğe" },
+      { "value": "price-high", "label": "Fiyat: Yüksekten Düşüğe" },
+      { "value": "newest", "label": "En Yeniler" },
+      { "value": "discounted", "label": "İndirimli" }
+    ],
+    "filterCategoryTitle": "Kategori Ara",
+    "filterPriceTitle": "Fiyat",
+    "priceRangeOptions": [
+      { "value": "0-300", "label": "₺300 Altı" },
+      { "value": "300-600", "label": "₺300 - ₺600" },
+      { "value": "1000+", "label": "₺1000 Üzeri" }
+    ],
+    "genderOptions": ["Kadın", "Erkek", "Unisex"],
+    "colorOptions": ["Siyah", "Beyaz", "Mavi", "Gri"]
+  },
+  "checkout": {
+    "defaultCountry": "Türkiye",
+    "addressTabLabel": "ADRES BİLGİLERİ",
+    "paymentTabLabel": "ÖDEME BİLGİLERİ",
+    "orderSummaryTitle": "Sipariş Özeti",
+    "cartTotalLabel": "Sepet Toplamı",
+    "grandTotalLabel": "Genel Toplam",
+    "continueToPaymentButton": "Ödemeye Geç",
+    "fullNameLabel": "Ad Soyad *",
+    "cityLabel": "Şehir *",
+    "cityPlaceholder": "Şehir seçin",
+    "cities": ["İzmir", "İstanbul", "Ankara", "Bursa", "Antalya"],
+    "districtsByCity": {
+      "İzmir": ["Karabağlar", "Konak", "Bornova", "Karşıyaka", "Buca"],
+      "İstanbul": ["Kadıköy", "Beşiktaş", "Üsküdar", "Ataşehir"],
+      "Ankara": ["Çankaya", "Keçiören", "Yenimahalle"],
+      "Bursa": ["Nilüfer", "Osmangazi"],
+      "Antalya": ["Muratpaşa", "Kepez"]
+    },
+    "orderStatusLabels": [
+      { "value": "Pending", "label": "Beklemede" },
+      { "value": "Processing", "label": "Hazırlanıyor" },
+      { "value": "Shipped", "label": "Kargolandı" },
+      { "value": "Delivered", "label": "Teslim Edildi" },
+      { "value": "Cancelled", "label": "İptal Edildi" }
+    ],
+    "paymentStatusLabels": [
+      { "value": "Pending", "label": "Ödeme Bekleniyor" },
+      { "value": "Completed", "label": "Ödeme Tamamlandı" },
+      { "value": "Failed", "label": "Ödeme Başarısız" }
+    ]
+  },
+  "orders": {
+    "pageTitle": "Siparişlerim",
+    "pageSubtitle": "Tüm siparişlerinizi buradan takip edebilirsiniz",
+    "emptyTitle": "Henüz siparişiniz yok",
+    "startShoppingButton": "Alışverişe Başla",
+    "statusOptions": [
+      { "value": "Pending", "label": "Beklemede" },
+      { "value": "Processing", "label": "Hazırlanıyor" },
+      { "value": "Shipped", "label": "Kargolandı" },
+      { "value": "Delivered", "label": "Teslim Edildi" }
+    ]
+  },
+  "product": {
+    "addToCartButton": "Sepete Ekle",
+    "cardAddToCartButton": "Sepete Ekle",
+    "saleBadge": "İndirim",
+    "newBadge": "Yeni",
+    "breadcrumbHome": "Anasayfa",
+    "breadcrumbShop": "Mağaza"
+  },
+  "category": {
+    "sectionTitle": "Kategoriler",
+    "viewAllLink": "Tümünü Gör →",
+    "allCategoriesTitle": "Kategoriler"
+  },
+  "context": {
+    "cartAddSuccessTitle": "Sepete eklendi",
+    "cartAddErrorTitle": "Sepete ekleme hatası",
+    "cartRemoveInfoTitle": "Sepetten kaldırıldı",
+    "wishlistAddSuccessTitle": "Favorilere eklendi",
+    "wishlistAlreadyInTitle": "Zaten favorilerinizde",
+    "wishlistRemoveInfoTitle": "Favorilerden kaldırıldı"
+  }
+}

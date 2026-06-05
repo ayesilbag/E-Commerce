@@ -449,20 +449,23 @@ export interface SocialLinks {
 
 export interface SiteLegalPage {
   slug: string;
-  title: string;
+  title?: string | null;
   path: string;
   content?: string | null;
 }
 
 export interface PaymentCompliance {
   legalPages: SiteLegalPage[];
+  aboutPageTitle?: string | null;
   aboutPageContent?: string | null;
+  preInformationFormPageTitle?: string | null;
   preInformationFormPageContent?: string | null;
+  deliveryReturnsPageTitle?: string | null;
   deliveryReturnsPageContent?: string | null;
+  privacyPolicyPageTitle?: string | null;
   privacyPolicyPageContent?: string | null;
+  distanceSellingAgreementPageTitle?: string | null;
   distanceSellingAgreementPageContent?: string | null;
-  visaLogoUrl?: string | null;
-  mastercardLogoUrl?: string | null;
   iyzicoPayLogoUrl?: string | null;
 }
 
@@ -477,6 +480,216 @@ export interface PaymentComplianceStatus {
   total: number;
   items: PaymentComplianceItem[];
 }
+
+export interface SiteTheme {
+  /** Light mode primary color as hex (e.g. "#8B5CF6"). null = use built-in default. */
+  primaryLight?: string | null;
+  /** Dark mode primary color as hex. null = same as primaryLight. */
+  primaryDark?: string | null;
+  fontFamily?: string | null;
+}
+
+export interface PageSeo {
+  pageKey: string;
+  label: string;
+  path: string;
+  title?: string | null;
+  description?: string | null;
+  keywords?: string | null;
+  ogImageUrl?: string | null;
+}
+
+export interface SiteSeo {
+  defaultTitle?: string | null;
+  defaultDescription?: string | null;
+  defaultKeywords?: string | null;
+  ogImageUrl?: string | null;
+  twitterHandle?: string | null;
+  pages: PageSeo[];
+}
+
+export interface HeroSlide {
+  badge: string;
+  title: string;
+  highlight: string;
+  subtitle: string;
+  ctaLabel: string;
+  ctaHref: string;
+  ctaSecondaryLabel?: string | null;
+  ctaSecondaryHref?: string | null;
+  imageUrl: string;
+  backgroundClass?: string | null;
+}
+
+export interface TrustBarItem {
+  icon: string;
+  title: string;
+  subtitle: string;
+}
+
+export interface CampaignBannerItem {
+  size: 'large' | 'small';
+  badge?: string | null;
+  title: string;
+  subtitle?: string | null;
+  linkLabel: string;
+  href: string;
+  imageUrl: string;
+  gradientClass?: string | null;
+}
+
+export interface HomeProductRow {
+  title: string;
+  subtitle?: string | null;
+  viewAllHref: string;
+  sort: string;
+  limit: number;
+}
+
+export interface NewsletterSectionContent {
+  title: string;
+  description: string;
+  placeholder: string;
+  buttonLabel: string;
+  disclaimer?: string | null;
+  submittingLabel?: string | null;
+  successTitle?: string | null;
+  successDescription?: string | null;
+  errorTitle?: string | null;
+  emptyEmailMessage?: string | null;
+}
+
+export interface FaqItem {
+  question: string;
+  answer: string;
+}
+
+export interface FaqSectionContent {
+  title: string;
+  description?: string | null;
+  items: FaqItem[];
+  footerText?: string | null;
+  footerButtonLabel?: string | null;
+  footerButtonHref?: string | null;
+}
+
+export interface ContactMapContent {
+  title: string;
+  description?: string | null;
+  embedUrl?: string | null;
+  emptyMessage?: string | null;
+}
+
+export interface FooterLink {
+  label: string;
+  href: string;
+}
+
+export interface FooterNavContent {
+  quickLinksTitle?: string | null;
+  customerServiceTitle?: string | null;
+  contactSectionTitle?: string | null;
+  copyrightSuffix?: string | null;
+  addressLabel?: string | null;
+  phoneLabel?: string | null;
+  emailLabel?: string | null;
+  workingHoursLabel?: string | null;
+  quickLinks: FooterLink[];
+  customerServiceLinks: FooterLink[];
+}
+
+export interface NotFoundPageContent {
+  title: string;
+  description?: string | null;
+  primaryButtonLabel?: string | null;
+  primaryButtonHref?: string | null;
+  secondaryButtonLabel?: string | null;
+  secondaryButtonHref?: string | null;
+  backLinkLabel?: string | null;
+}
+
+export interface SiteStorefrontContent {
+  footerDescription?: string | null;
+  heroSlides: HeroSlide[];
+  trustItems: TrustBarItem[];
+  campaignBanners: CampaignBannerItem[];
+  productRows: HomeProductRow[];
+  newsletter?: NewsletterSectionContent | null;
+  faq?: FaqSectionContent | null;
+  contactMap?: ContactMapContent | null;
+  footerNav?: FooterNavContent | null;
+  notFound?: NotFoundPageContent | null;
+  legalPageUi?: LegalPageUiContent | null;
+  contactPageUi?: ContactPageUiContent | null;
+  checkoutConsent?: CheckoutConsentContent | null;
+  navbar?: NavbarUiContent | null;
+  appPagesUi?: import('./app-pages-ui').AppPagesUiContent | null;
+}
+
+export interface LegalPageUiContent {
+  emptyStateTitle?: string | null;
+  emptyStateDescription?: string | null;
+  tocTitle?: string | null;
+  contactBlockTitle?: string | null;
+  contactBlockDescription?: string | null;
+  emailLabel?: string | null;
+  phoneLabel?: string | null;
+  contactFormButtonLabel?: string | null;
+  contactFormHref?: string | null;
+}
+
+export interface ContactPageUiContent {
+  infoSectionTitle?: string | null;
+  formSectionTitle?: string | null;
+  locationLabel?: string | null;
+  emailLabel?: string | null;
+  phoneLabel?: string | null;
+  hoursLabel?: string | null;
+  nameLabel?: string | null;
+  emailFieldLabel?: string | null;
+  subjectLabel?: string | null;
+  messageLabel?: string | null;
+  namePlaceholder?: string | null;
+  emailPlaceholder?: string | null;
+  subjectPlaceholder?: string | null;
+  messagePlaceholder?: string | null;
+  submitButtonLabel?: string | null;
+  submittingLabel?: string | null;
+  socialSectionTitle?: string | null;
+  formIntro?: string | null;
+  submitSuccessTitle?: string | null;
+  submitSuccessDescription?: string | null;
+  submitErrorTitle?: string | null;
+  submitErrorFallback?: string | null;
+}
+
+export interface CheckoutConsentLinkContent {
+  slug: string;
+  label: string;
+}
+
+export interface CheckoutConsentContent {
+  links: CheckoutConsentLinkContent[];
+  suffixText?: string | null;
+}
+
+export interface NavbarUiContent {
+  shopSectionTitle?: string | null;
+  accountSectionTitle?: string | null;
+  searchPlaceholder?: string | null;
+  categoriesLabel?: string | null;
+  loginLabel?: string | null;
+  accountLabel?: string | null;
+  wishlistLabel?: string | null;
+  cartLabel?: string | null;
+  logoutLabel?: string | null;
+  registerLabel?: string | null;
+  greetingPrefix?: string | null;
+  guestNameFallback?: string | null;
+  primaryLinks: FooterLink[];
+}
+
+export * from './app-pages-ui';
 
 export interface SiteSettings {
   id: string;
@@ -493,6 +706,9 @@ export interface SiteSettings {
   socialLinks: SocialLinks;
   paymentCompliance?: PaymentCompliance;
   paymentComplianceStatus?: PaymentComplianceStatus;
+  theme?: SiteTheme | null;
+  seo?: SiteSeo | null;
+  storefrontContent?: SiteStorefrontContent | null;
   isActive: boolean;
   isDefault: boolean;
 }

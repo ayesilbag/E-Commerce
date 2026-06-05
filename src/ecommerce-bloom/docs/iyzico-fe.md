@@ -4,7 +4,7 @@ Akış: `GET /api/payments/options` → `POST /api/orders` (`paymentMethod.type:
 
 ## Ortam
 
-- `VITE_API_BASE_URL` — production backend (ör. `https://test-bayi.digitalep.net`)
+- `VITE_API_BASE_URL` — production backend (ör. `https://e-commerce.digitalep.net`)
 - Dev: boş bırakılırsa Vite `/api` proxy kullanır
 
 ## Route'lar

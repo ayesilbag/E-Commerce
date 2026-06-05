@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using ECommerce.Domain.Constants;
 using ECommerce.Domain.Entities;
 using ECommerce.Domain.Enums;
+using ECommerce.Infrastructure.Data.Seeding.SiteSettings;
 using ECommerce.Infrastructure.Identity;
 
 namespace ECommerce.Infrastructure.Data;
@@ -21,6 +22,15 @@ public static class InitialiserExtensions
         await initialiser.InitialiseAsync();
 
         await initialiser.SeedAsync();
+    }
+
+    /// <summary>SiteSettings seed — tüm ortamlarda çalışır (tablo boşsa 2 UI kaydı oluşturur).</summary>
+    public static async Task EnsureSiteSettingsSeededAsync(this WebApplication app)
+    {
+        using var scope = app.Services.CreateScope();
+        var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        var logger = scope.ServiceProvider.GetRequiredService<ILogger<ApplicationDbContextInitialiser>>();
+        await SiteSettingsSeeder.SeedAsync(context, logger);
     }
 }
 
@@ -144,5 +154,7 @@ public class ApplicationDbContextInitialiser
 
             await _context.SaveChangesAsync();
         }
+
+        await SiteSettingsSeeder.SeedAsync(_context, _logger);
     }
 }

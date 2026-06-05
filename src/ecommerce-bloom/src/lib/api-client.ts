@@ -2,7 +2,7 @@ import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } f
 
 // API Base Configuration - Use relative URL for proxy support in development
 // Production uses the backend URL directly
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || (import.meta.env.DEV ? '' : 'https://test-bayi.digitalep.net');
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || (import.meta.env.DEV ? '' : 'https://e-commerce.digitalep.net');
 const API_TIMEOUT = 10000;
 
 // Create axios instance

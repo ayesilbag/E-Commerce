@@ -126,10 +126,10 @@ export default {
 			'fade-in': 'fade-in 0.5s ease-out'
 		},
 		backgroundImage: {
-			'purple-gradient': 'linear-gradient(90deg, #9b87f5 0%, #8B5CF6 100%)',
-			'purple-violet-gradient': 'linear-gradient(135deg, #9b87f5 0%, #7E69AB 100%)'
+			'purple-gradient': 'var(--theme-gradient, linear-gradient(90deg, #9b87f5 0%, #8B5CF6 100%))',
+			'purple-violet-gradient': 'var(--theme-gradient, linear-gradient(135deg, #9b87f5 0%, #7E69AB 100%))'
 		},
 	},
 	},
-	plugins: [require("tailwindcss-animate") as any],
+	plugins: [require("tailwindcss-animate") as any, require("@tailwindcss/typography") as any],
 } satisfies Config;

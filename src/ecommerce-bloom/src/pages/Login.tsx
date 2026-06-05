@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
-import usePageTitle from "@/hooks/usePageTitle";
+import { uiLabel, useAppPagesUi } from "@/hooks/useAppPagesUi";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -13,7 +13,7 @@ import { Mail, Eye, EyeOff } from "lucide-react";
 const REMEMBER_KEY = "bizdenalbizdensat_remember_email";
 
 const Login = () => {
-  usePageTitle("Giriş Yap");
+  const auth = useAppPagesUi()?.auth;
   const navigate = useNavigate();
   const location = useLocation();
   const { login, isAuthenticated, isLoading: authLoading } = useAuth();
@@ -26,7 +26,6 @@ const Login = () => {
     password: ""
   });
 
-  // Login olduktan sonra önceki sayfaya ya da /account'a yönlendir
   useEffect(() => {
     if (isAuthenticated) {
       const from = (location.state as any)?.from || "/account";
@@ -54,123 +53,144 @@ const Login = () => {
       } else {
         localStorage.removeItem(REMEMBER_KEY);
       }
-      // Yönlendirme isAuthenticated useEffect tarafından yapılır
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : "Giriş başarısız";
-      toast.error("Giriş başarısız", {
-        description: errorMessage,
-      });
+      const errorTitle = uiLabel(auth?.loginErrorTitle);
+      if (errorTitle) {
+        const errorMessage =
+          error instanceof Error ? error.message : uiLabel(auth?.loginErrorFallback);
+        toast.error(errorTitle, { description: errorMessage });
+      }
     } finally {
       setIsLoading(false);
     }
   };
 
+  const loginButtonLabel = isLoading
+    ? uiLabel(auth?.loginSubmittingLabel)
+    : uiLabel(auth?.loginButtonLabel);
+
   return (
-    <div className="min-h-screen flex flex-col bg-white">
+    <div className="min-h-screen flex flex-col bg-background">
       <Navbar />
       <main className="flex-1 flex items-center justify-center px-2 xs:px-4 sm:px-4 md:px-6 py-4 xs:py-6 sm:py-8 md:py-12">
         <div className="w-full max-w-md">
-          {/* Login Container */}
-          <div className="bg-gray-100 rounded-lg xs:rounded-lg sm:rounded-xl md:rounded-2xl p-4 xs:p-6 md:p-8 shadow-sm border border-gray-200">
-            {/* Header */}
-            <div className="text-center mb-4 xs:mb-6 md:mb-8">
-              <h1 className="text-base font-semibold text-gray-900 mb-1">Hesabınıza Giriş Yapın</h1>
-              <p className="text-xs text-gray-600">Alışverişe devam etmek için bilgilerinizi girin</p>
-            </div>
+          <div className="bg-muted rounded-lg xs:rounded-lg sm:rounded-xl md:rounded-2xl p-4 xs:p-6 md:p-8 shadow-sm border border-border">
+            {(uiLabel(auth?.loginTitle) || uiLabel(auth?.loginSubtitle)) && (
+              <div className="text-center mb-4 xs:mb-6 md:mb-8">
+                {uiLabel(auth?.loginTitle) && (
+                  <h1 className="text-base font-semibold text-foreground mb-1">{auth!.loginTitle}</h1>
+                )}
+                {uiLabel(auth?.loginSubtitle) && (
+                  <p className="text-xs text-muted-foreground">{auth!.loginSubtitle}</p>
+                )}
+              </div>
+            )}
 
-            {/* Form */}
             <form onSubmit={handleSubmit} className="space-y-3 xs:space-y-4 md:space-y-5">
-              {/* Email Field */}
-              <div className="space-y-1 xs:space-y-2 md:space-y-2">
-                <label className="text-xs xs:text-sm font-medium text-gray-700">E-Posta</label>
-                <div className="relative">
-                  <Input
-                    type="email"
-                    name="email"
-                    autoComplete="email"
-                    placeholder="E-posta adresiniz"
-                    value={formData.email}
-                    onChange={handleChange}
-                    required
-                    className="pr-10 text-sm h-9"
-                  />
-                  <div className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400">
-                    <Mail size={14} className="xs:size-[16px] md:size-[18px]" />
+              {(uiLabel(auth?.emailLabel) || uiLabel(auth?.emailPlaceholder)) && (
+                <div className="space-y-1 xs:space-y-2 md:space-y-2">
+                  {uiLabel(auth?.emailLabel) && (
+                    <label className="text-xs xs:text-sm font-medium text-foreground">{auth!.emailLabel}</label>
+                  )}
+                  <div className="relative">
+                    <Input
+                      type="email"
+                      name="email"
+                      autoComplete="email"
+                      placeholder={uiLabel(auth?.emailPlaceholder)}
+                      value={formData.email}
+                      onChange={handleChange}
+                      required
+                      className="pr-10 text-sm h-9"
+                    />
+                    <div className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground">
+                      <Mail size={14} className="xs:size-[16px] md:size-[18px]" />
+                    </div>
                   </div>
                 </div>
-              </div>
+              )}
 
-              {/* Password Field */}
-              <div className="space-y-1 xs:space-y-2 md:space-y-2">
-                <div className="flex items-center justify-between">
-                  <label className="text-xs xs:text-sm font-medium text-gray-700">Şifre</label>
-                  <button
-                    type="button"
-                    onClick={() => navigate("/forgot-password")}
-                    className="text-xs xs:text-sm text-purple-default hover:underline"
-                  >
-                    Şifrenizi mi unuttunuz?
-                  </button>
+              {(uiLabel(auth?.passwordLabel) || uiLabel(auth?.passwordPlaceholder) || uiLabel(auth?.forgotPasswordLink)) && (
+                <div className="space-y-1 xs:space-y-2 md:space-y-2">
+                  <div className="flex items-center justify-between">
+                    {uiLabel(auth?.passwordLabel) && (
+                      <label className="text-xs xs:text-sm font-medium text-foreground">{auth!.passwordLabel}</label>
+                    )}
+                    {uiLabel(auth?.forgotPasswordLink) && (
+                      <button
+                        type="button"
+                        onClick={() => navigate("/forgot-password")}
+                        className="text-xs xs:text-sm text-primary hover:underline"
+                      >
+                        {auth!.forgotPasswordLink}
+                      </button>
+                    )}
+                  </div>
+                  <div className="relative">
+                    <Input
+                      type={showPassword ? "text" : "password"}
+                      name="password"
+                      autoComplete="current-password"
+                      placeholder={uiLabel(auth?.passwordPlaceholder)}
+                      value={formData.password}
+                      onChange={handleChange}
+                      required
+                      className="pr-10 text-sm h-9"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-muted-foreground"
+                    >
+                      {showPassword ? <EyeOff size={14} className="xs:size-[16px] md:size-[18px]" /> : <Eye size={14} className="xs:size-[16px] md:size-[18px]" />}
+                    </button>
+                  </div>
                 </div>
-                <div className="relative">
-                  <Input
-                    type={showPassword ? "text" : "password"}
-                    name="password"
-                    autoComplete="current-password"
-                    placeholder="Şifreniz"
-                    value={formData.password}
-                    onChange={handleChange}
-                    required
-                    className="pr-10 text-sm h-9"
+              )}
+
+              {uiLabel(auth?.rememberMeLabel) && (
+                <div className="flex items-center gap-2">
+                  <Checkbox
+                    id="remember"
+                    checked={rememberMe}
+                    onCheckedChange={(v) => setRememberMe(v === true)}
+                    className="w-4 h-4"
                   />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                  <label
+                    htmlFor="remember"
+                    className="text-xs xs:text-sm text-muted-foreground cursor-pointer select-none"
                   >
-                    {showPassword ? <EyeOff size={14} className="xs:size-[16px] md:size-[18px]" /> : <Eye size={14} className="xs:size-[16px] md:size-[18px]" />}
-                  </button>
+                    {auth!.rememberMeLabel}
+                  </label>
                 </div>
-              </div>
+              )}
 
-              {/* Remember Me */}
-              <div className="flex items-center gap-2">
-                <Checkbox
-                  id="remember"
-                  checked={rememberMe}
-                  onCheckedChange={(v) => setRememberMe(v === true)}
-                  className="w-4 h-4"
-                />
-                <label
-                  htmlFor="remember"
-                  className="text-xs xs:text-sm text-gray-600 cursor-pointer select-none"
+              {loginButtonLabel && (
+                <Button
+                  type="submit"
+                  className="w-full bg-primary text-primary-foreground hover:opacity-90 font-medium h-9 text-sm"
+                  disabled={isLoading || authLoading}
                 >
-                  Beni hatırla
-                </label>
-              </div>
-
-              {/* Login Button */}
-              <Button
-                type="submit"
-                className="w-full bg-purple-gradient hover:opacity-90 text-white font-medium h-9 text-sm"
-                disabled={isLoading}
-              >
-                {isLoading ? "Giriş yapılıyor..." : "Giriş Yap"}
-              </Button>
+                  {loginButtonLabel}
+                </Button>
+              )}
             </form>
 
-            {/* Register Link */}
-            <div className="text-center mt-6">
-              <p className="text-sm text-gray-600">
-                Hesabınız yok mu?{" "}
-                <button
-                  onClick={() => navigate("/register")}
-                  className="text-purple-default font-semibold hover:underline"
-                >
-                  Kayıt Ol
-                </button>
-              </p>
-            </div>
+            {(uiLabel(auth?.loginNoAccountText) || uiLabel(auth?.loginRegisterLink)) && (
+              <div className="text-center mt-6">
+                <p className="text-sm text-muted-foreground">
+                  {uiLabel(auth?.loginNoAccountText) && <>{auth!.loginNoAccountText}{" "}</>}
+                  {uiLabel(auth?.loginRegisterLink) && (
+                    <button
+                      onClick={() => navigate("/register")}
+                      className="text-primary font-semibold hover:underline"
+                    >
+                      {auth!.loginRegisterLink}
+                    </button>
+                  )}
+                </p>
+              </div>
+            )}
           </div>
         </div>
       </main>

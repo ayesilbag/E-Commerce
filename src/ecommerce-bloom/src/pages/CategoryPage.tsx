@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { useSiteSettings } from "@/contexts/SiteSettingsContext";
+import { applyDynamicPageSeo } from "@/lib/apply-page-seo";
 import ProductCard from "@/components/ProductCard";
 import { Button } from "@/components/ui/button";
 import { Grid3X3, List } from "lucide-react";
@@ -10,9 +12,12 @@ import { getProducts } from "@/services/products.service";
 import { formatCategoryName, sortCategoriesForDisplay } from "@/lib/category-utils";
 import CategoryCard from "@/components/CategoryCard";
 import type { Category, Product } from "@/types";
+import { uiLabel, useAppPagesUi } from "@/hooks/useAppPagesUi";
 
 const CategoryPage = () => {
   const { categoryName: categorySlug } = useParams<{ categoryName?: string }>();
+  const settings = useSiteSettings();
+  const categoryUi = useAppPagesUi()?.category;
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [categories, setCategories] = useState<Category[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
@@ -26,6 +31,10 @@ const CategoryPage = () => {
           c.name.toLowerCase() === decodeURIComponent(categorySlug).toLowerCase()
       )
     : null;
+
+  const categoryLabel = categorySlug
+    ? formatCategoryName(category?.name || decodeURIComponent(categorySlug))
+    : undefined;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -56,35 +65,66 @@ const CategoryPage = () => {
           }
         }
       } catch (err) {
-        setError(err instanceof Error ? err.message : "Veriler yüklenemedi");
+        setError(err instanceof Error ? err.message : uiLabel(categoryUi?.loadError) ?? null);
       } finally {
         setIsLoading(false);
       }
     };
 
     fetchData();
-  }, [categorySlug]);
+  }, [categorySlug, categoryUi?.loadError]);
+
+  useEffect(() => {
+    if (!categorySlug) return;
+    const label = formatCategoryName(category?.name || decodeURIComponent(categorySlug));
+    applyDynamicPageSeo(settings, `/category/${categorySlug}`, {
+      title: `${label} | ${settings.siteName || settings.name}`,
+      description: category?.description || settings.seo?.defaultDescription || undefined,
+      ogImage: category?.image || undefined,
+    });
+  }, [category, categorySlug, settings]);
+
+  const allCategoriesTitle = uiLabel(categoryUi?.allCategoriesTitle);
+  const allCategoriesSubtitle = uiLabel(categoryUi?.allCategoriesSubtitle);
+  const categoryProductsSubtitle = uiLabel(categoryUi?.categoryProductsSubtitle);
+  const productsSectionTitle = uiLabel(categoryUi?.productsSectionTitle);
+  const viewModeLabel = uiLabel(categoryUi?.viewModeLabel);
+  const emptyTitle = uiLabel(categoryUi?.emptyTitle);
+  const emptyDescription = uiLabel(categoryUi?.emptyDescription);
+  const viewAllProductsButton = uiLabel(categoryUi?.viewAllProductsButton);
+
+  const subtitle = categorySlug
+    ? (categoryProductsSubtitle?.includes("{category}")
+        ? categoryProductsSubtitle.replace("{category}", categoryLabel ?? "")
+        : categoryProductsSubtitle)
+    : allCategoriesSubtitle;
+
+  const sectionTitle = categorySlug && productsSectionTitle
+    ? (productsSectionTitle.includes("{category}")
+        ? productsSectionTitle.replace("{category}", categoryLabel ?? "")
+        : `${categoryLabel ?? ""} ${productsSectionTitle}`.trim())
+    : undefined;
 
   return (
-    <div className="min-h-screen flex flex-col bg-white">
+    <div className="min-h-screen flex flex-col bg-background">
       <Navbar />
       <main className="flex-1 flex items-center justify-center px-2 xs:px-4 sm:px-4 md:px-6 py-4 xs:py-6 sm:py-8 md:py-12">
         <div className="w-full max-w-6xl">
-          <div className="bg-gray-100 rounded-lg xs:rounded-lg sm:rounded-xl md:rounded-2xl p-4 xs:p-6 md:p-8 shadow-sm border border-gray-200">
+          <div className="bg-muted rounded-lg xs:rounded-lg sm:rounded-xl md:rounded-2xl p-4 xs:p-6 md:p-8 shadow-sm border border-border">
             <div className="text-center mb-4 xs:mb-6 md:mb-8">
-              <h1 className="text-base font-semibold text-gray-900 mb-1">
-                {categorySlug ? formatCategoryName(category?.name || decodeURIComponent(categorySlug)) : "Kategoriler"}
-              </h1>
-              <p className="text-xs text-gray-600">
-                {categorySlug
-                  ? `${formatCategoryName(category?.name || decodeURIComponent(categorySlug))} kategorisindeki ürünler`
-                  : "Tüm kategorileri keşfedin"}
-              </p>
+              {(categorySlug ? categoryLabel : allCategoriesTitle) && (
+                <h1 className="text-base font-semibold text-foreground mb-1">
+                  {categorySlug ? categoryLabel : allCategoriesTitle}
+                </h1>
+              )}
+              {subtitle && (
+                <p className="text-xs text-muted-foreground">{subtitle}</p>
+              )}
             </div>
 
             {isLoading ? (
               <div className="flex justify-center py-12">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600" />
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary" />
               </div>
             ) : error ? (
               <div className="text-center py-12 text-red-500">{error}</div>
@@ -97,28 +137,32 @@ const CategoryPage = () => {
             ) : (
               <div>
                 <div className="flex flex-col xs:flex-row items-start xs:items-center justify-between gap-3 xs:gap-4 md:gap-4 mb-4 xs:mb-6 md:mb-6">
-                  <h2 className="text-sm font-semibold uppercase tracking-wide text-gray-900">
-                    {formatCategoryName(category?.name || decodeURIComponent(categorySlug))} Ürünleri
-                  </h2>
-                  <div className="flex items-center gap-1.5 xs:gap-2 md:gap-2">
-                    <span className="text-xs xs:text-sm text-gray-500">Görünüm:</span>
-                    <Button
-                      variant={viewMode === "grid" ? "default" : "outline"}
-                      size="icon"
-                      className={`h-7 w-7 xs:h-8 xs:w-8 md:h-8 md:w-8 ${viewMode === "grid" ? "bg-purple-gradient hover:opacity-90" : ""}`}
-                      onClick={() => setViewMode("grid")}
-                    >
-                      <Grid3X3 size={14} className="xs:size-[16px] md:size-[18px]" />
-                    </Button>
-                    <Button
-                      variant={viewMode === "list" ? "default" : "outline"}
-                      size="icon"
-                      className={`h-7 w-7 xs:h-8 xs:w-8 md:h-8 md:w-8 ${viewMode === "list" ? "bg-purple-gradient hover:opacity-90" : ""}`}
-                      onClick={() => setViewMode("list")}
-                    >
-                      <List size={14} className="xs:size-[16px] md:size-[18px]" />
-                    </Button>
-                  </div>
+                  {sectionTitle && (
+                    <h2 className="text-sm font-semibold uppercase tracking-wide text-foreground">
+                      {sectionTitle}
+                    </h2>
+                  )}
+                  {viewModeLabel && (
+                    <div className="flex items-center gap-1.5 xs:gap-2 md:gap-2">
+                      <span className="text-xs xs:text-sm text-muted-foreground">{viewModeLabel}</span>
+                      <Button
+                        variant={viewMode === "grid" ? "default" : "outline"}
+                        size="icon"
+                        className={`h-7 w-7 xs:h-8 xs:w-8 md:h-8 md:w-8 ${viewMode === "grid" ? "bg-primary text-primary-foreground hover:opacity-90" : ""}`}
+                        onClick={() => setViewMode("grid")}
+                      >
+                        <Grid3X3 size={14} className="xs:size-[16px] md:size-[18px]" />
+                      </Button>
+                      <Button
+                        variant={viewMode === "list" ? "default" : "outline"}
+                        size="icon"
+                        className={`h-7 w-7 xs:h-8 xs:w-8 md:h-8 md:w-8 ${viewMode === "list" ? "bg-primary text-primary-foreground hover:opacity-90" : ""}`}
+                        onClick={() => setViewMode("list")}
+                      >
+                        <List size={14} className="xs:size-[16px] md:size-[18px]" />
+                      </Button>
+                    </div>
+                  )}
                 </div>
 
                 {products.length > 0 ? (
@@ -136,12 +180,18 @@ const CategoryPage = () => {
                     ))}
                   </div>
                 ) : (
-                  <div className="text-center py-8 xs:py-10 md:py-12 bg-white rounded-lg border border-gray-200">
-                    <h3 className="text-sm font-medium mb-1 text-gray-900">Ürün bulunamadı</h3>
-                    <p className="text-gray-500 mb-4 text-xs">Bu kategoride ürün bulunamadı.</p>
-                    <Button className="bg-purple-gradient hover:opacity-90 text-white h-9 text-sm" asChild>
-                      <Link to="/shop">Tüm Ürünleri Görüntüle</Link>
-                    </Button>
+                  <div className="text-center py-8 xs:py-10 md:py-12 bg-card rounded-lg border border-border">
+                    {emptyTitle && (
+                      <h3 className="text-sm font-medium mb-1 text-foreground">{emptyTitle}</h3>
+                    )}
+                    {emptyDescription && (
+                      <p className="text-muted-foreground mb-4 text-xs">{emptyDescription}</p>
+                    )}
+                    {viewAllProductsButton && (
+                      <Button className="bg-primary text-primary-foreground hover:opacity-90 h-9 text-sm" asChild>
+                        <Link to="/shop">{viewAllProductsButton}</Link>
+                      </Button>
+                    )}
                   </div>
                 )}
               </div>

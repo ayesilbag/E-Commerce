@@ -16,8 +16,20 @@ public class SiteSettingsDto
     public SocialLinksDto SocialLinks { get; set; } = new();
     public PaymentComplianceDto PaymentCompliance { get; set; } = new();
     public PaymentComplianceStatusDto PaymentComplianceStatus { get; set; } = new();
+    public SiteThemeDto Theme { get; set; } = new();
+    public SiteSeoDto Seo { get; set; } = new();
+    public SiteStorefrontContentDto StorefrontContent { get; set; } = new();
     public bool IsActive { get; set; } = true;
     public bool IsDefault { get; set; }
+}
+
+public class SiteThemeDto
+{
+    /// <summary>Light mode primary color as hex (e.g. "#8B5CF6"). Null = use storefront default.</summary>
+    public string? PrimaryLight { get; set; }
+    /// <summary>Dark mode primary color as hex. Null = same as PrimaryLight.</summary>
+    public string? PrimaryDark { get; set; }
+    public string? FontFamily { get; set; }
 }
 
 public class SiteSettingsListItemDto

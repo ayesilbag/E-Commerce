@@ -2,7 +2,7 @@
 
 Mağaza uygulamasının (web/mobil) iyzico **Checkout Form** ile ödeme almak için kullanacağı API ve akış.
 
-**Base URL:** `https://test-bayi.digitalep.net`
+**Base URL:** `https://e-commerce.digitalep.net`
 
 **Auth:** Korumalı endpoint’lerde `Authorization: Bearer {access_token}`
 
@@ -249,7 +249,7 @@ Sadece `status: Pending` siparişler iptal edilebilir.
 ## Tam örnek (fetch)
 
 ```typescript
-const API = 'https://test-bayi.digitalep.net';
+const API = 'https://e-commerce.digitalep.net';
 
 async function payWithIyzico(
   accessToken: string,

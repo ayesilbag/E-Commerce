@@ -11,50 +11,64 @@ public static class SiteLegalPages
     public const string DistanceSellingSlug = "mesafeli-satis";
     public const string PreInformationSlug = "on-bilgilendirme-formu";
 
-    private static readonly IReadOnlyDictionary<string, (string Title, Func<SiteSettings, string?> GetContent)> Definitions =
-        new Dictionary<string, (string, Func<SiteSettings, string?>)>(StringComparer.OrdinalIgnoreCase)
+    private static readonly IReadOnlyDictionary<string, (Func<SiteSettings, string?> GetTitle, Func<SiteSettings, string?> GetContent)> Definitions =
+        new Dictionary<string, (Func<SiteSettings, string?>, Func<SiteSettings, string?>)>(StringComparer.OrdinalIgnoreCase)
         {
-            [AboutSlug] = ("Hakkımızda", s => s.AboutPageContent),
-            [DeliveryReturnsSlug] = ("Teslimat ve İade Şartları", s => s.DeliveryReturnsPageContent),
-            [PrivacyPolicySlug] = ("Gizlilik Sözleşmesi", s => s.PrivacyPolicyPageContent),
-            [DistanceSellingSlug] = ("Mesafeli Satış Sözleşmesi", s => s.DistanceSellingAgreementPageContent),
-            [PreInformationSlug] = ("Ön Bilgilendirme Formu", s => s.PreInformationFormPageContent)
+            [AboutSlug] = (s => s.AboutPageTitle, s => s.AboutPageContent),
+            [DeliveryReturnsSlug] = (s => s.DeliveryReturnsPageTitle, s => s.DeliveryReturnsPageContent),
+            [PrivacyPolicySlug] = (s => s.PrivacyPolicyPageTitle, s => s.PrivacyPolicyPageContent),
+            [DistanceSellingSlug] = (s => s.DistanceSellingAgreementPageTitle, s => s.DistanceSellingAgreementPageContent),
+            [PreInformationSlug] = (s => s.PreInformationFormPageTitle, s => s.PreInformationFormPageContent),
         };
 
-    public static bool TryGetDefinition(string slug, out string title, out Func<SiteSettings, string?> getContent)
+    public static bool TryGetDefinition(string slug, out Func<SiteSettings, string?> getTitle, out Func<SiteSettings, string?> getContent)
     {
         if (Definitions.TryGetValue(slug, out var def))
         {
-            title = def.Title;
+            getTitle = def.GetTitle;
             getContent = def.GetContent;
             return true;
         }
 
-        title = string.Empty;
+        getTitle = _ => null;
         getContent = _ => null;
         return false;
     }
 
     public static IReadOnlyList<SiteLegalPageDto> ToDtos(SiteSettings settings) =>
-        Definitions.Select(pair => new SiteLegalPageDto
-        {
-            Slug = pair.Key,
-            Title = pair.Value.Title,
-            Path = $"/{pair.Key}",
-            Content = pair.Value.GetContent(settings)
-        }).ToList();
+        Definitions.Select(pair => CreateDto(settings, pair.Key, pair.Value.GetTitle, pair.Value.GetContent))
+            .Where(d => d is not null)
+            .Cast<SiteLegalPageDto>()
+            .ToList();
 
     public static SiteLegalPageDto? ToDto(SiteSettings settings, string slug)
     {
-        if (!TryGetDefinition(slug, out var title, out var getContent))
+        if (!TryGetDefinition(slug, out var getTitle, out var getContent))
+            return null;
+
+        return CreateDto(settings, slug.ToLowerInvariant(), getTitle, getContent);
+    }
+
+    private static SiteLegalPageDto? CreateDto(
+        SiteSettings settings,
+        string slug,
+        Func<SiteSettings, string?> getTitle,
+        Func<SiteSettings, string?> getContent)
+    {
+        var title = NullIfWhiteSpace(getTitle(settings));
+        var content = NullIfWhiteSpace(getContent(settings));
+        if (title is null && content is null)
             return null;
 
         return new SiteLegalPageDto
         {
-            Slug = slug.ToLowerInvariant(),
+            Slug = slug,
             Title = title,
-            Path = $"/{slug.ToLowerInvariant()}",
-            Content = getContent(settings)
+            Path = $"/{slug}",
+            Content = content,
         };
     }
+
+    private static string? NullIfWhiteSpace(string? value) =>
+        string.IsNullOrWhiteSpace(value) ? null : value.Trim();
 }

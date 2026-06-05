@@ -15,14 +15,14 @@ const Loading = ({ size = "md", text, fullScreen = false }: LoadingProps) => {
 
   const content = (
     <div className="flex flex-col items-center justify-center gap-2 xs:gap-2.5 md:gap-3">
-      <Loader2 className={`animate-spin text-purple-default ${sizeClasses[size]}`} />
-      {text && <p className="text-xs text-gray-600 text-center">{text}</p>}
+      <Loader2 className={`animate-spin text-primary ${sizeClasses[size]}`} />
+      {text && <p className="text-xs text-muted-foreground text-center">{text}</p>}
     </div>
   );
 
   if (fullScreen) {
     return (
-      <div className="fixed inset-0 bg-white bg-opacity-80 flex items-center justify-center z-50">
+      <div className="fixed inset-0 bg-background/80 flex items-center justify-center z-50">
         {content}
       </div>
     );

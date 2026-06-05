@@ -79,6 +79,8 @@ app.MapGroup("/api").WithTags("Health").MapGet("/health", () => Results.Ok(new {
 
 app.MapFallbackToFile("/admin/{*path:nonfile}", "admin/index.html");
 
+await app.EnsureSiteSettingsSeededAsync();
+
 app.Run();
 
 public partial class Program { }

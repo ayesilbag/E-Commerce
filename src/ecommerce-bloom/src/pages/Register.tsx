@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import usePageTitle from "@/hooks/usePageTitle";
+import { useNavigate } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { uiLabel, useAppPagesUi } from "@/hooks/useAppPagesUi";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -11,8 +11,10 @@ import { Mail, Eye, EyeOff } from "lucide-react";
 import { register as apiRegister } from "@/services/auth.service";
 
 const Register = () => {
-  usePageTitle("Kayıt Ol");
+  const auth = useAppPagesUi()?.auth;
   const navigate = useNavigate();
+  const kvkkConsentText = uiLabel(auth?.registerKvkkConsentText);
+  const requiresKvkk = !!kvkkConsentText;
 
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -30,24 +32,31 @@ const Register = () => {
     }));
   };
 
+  const showValidationError = (message?: string) => {
+    const title = uiLabel(auth?.registerValidationErrorTitle);
+    if (title && message) {
+      toast.error(title, { description: message });
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
 
     if (!formData.email || !formData.password) {
-      toast.error("Hata", { description: "Email ve şifre boş bırakılamaz." });
+      showValidationError(uiLabel(auth?.registerEmptyFieldsMessage));
       setIsLoading(false);
       return;
     }
 
-    if (!kvkkAccepted) {
-      toast.error("Hata", { description: "Devam etmek için KVKK metnini ve gizlilik politikasını kabul etmelisiniz." });
+    if (requiresKvkk && !kvkkAccepted) {
+      showValidationError(uiLabel(auth?.registerKvkkRequiredMessage));
       setIsLoading(false);
       return;
     }
 
     if (formData.password.length < 6) {
-      toast.error("Hata", { description: "Şifre en az 6 karakter olmalıdır." });
+      showValidationError(uiLabel(auth?.registerPasswordMinMessage));
       setIsLoading(false);
       return;
     }
@@ -58,118 +67,138 @@ const Register = () => {
         password: formData.password,
       });
 
-      toast.success("Hesap başarıyla oluşturuldu!", {
-        description: "Hesabınız oluşturuldu. Bizdenalbizdensat'a hoş geldiniz!",
-      });
+      const successTitle = uiLabel(auth?.registerSuccessTitle);
+      if (successTitle) {
+        toast.success(successTitle, {
+          description: uiLabel(auth?.registerSuccessDescription),
+        });
+      }
 
       navigate("/login");
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : "Hesap oluşturma başarısız";
-      toast.error("Kayıt başarısız", {
-        description: errorMessage,
-      });
+      const errorTitle = uiLabel(auth?.registerErrorTitle);
+      if (errorTitle) {
+        const errorMessage =
+          error instanceof Error ? error.message : uiLabel(auth?.registerErrorFallback);
+        toast.error(errorTitle, { description: errorMessage });
+      }
     } finally {
       setIsLoading(false);
     }
   };
 
+  const registerButtonLabel = isLoading
+    ? uiLabel(auth?.registerSubmittingLabel)
+    : uiLabel(auth?.registerButtonLabel);
+
   return (
-    <div className="min-h-screen flex flex-col bg-white">
+    <div className="min-h-screen flex flex-col bg-background">
       <Navbar />
       <main className="flex-1 flex items-center justify-center px-2 xs:px-4 sm:px-4 md:px-6 py-4 xs:py-6 sm:py-8 md:py-12">
         <div className="w-full max-w-md">
-          {/* Register Container */}
-          <div className="bg-gray-100 rounded-lg xs:rounded-lg sm:rounded-xl md:rounded-2xl p-4 xs:p-6 md:p-8 shadow-sm border border-gray-200">
-            {/* Header */}
-            <div className="text-center mb-4 xs:mb-6 md:mb-8">
-              <h1 className="text-base font-semibold text-gray-900 mb-1">Hesap Oluştur</h1>
-              <p className="text-xs text-gray-600">Email ve şifre ile kaydolun</p>
-            </div>
+          <div className="bg-muted rounded-lg xs:rounded-lg sm:rounded-xl md:rounded-2xl p-4 xs:p-6 md:p-8 shadow-sm border border-border">
+            {(uiLabel(auth?.registerTitle) || uiLabel(auth?.registerSubtitle)) && (
+              <div className="text-center mb-4 xs:mb-6 md:mb-8">
+                {uiLabel(auth?.registerTitle) && (
+                  <h1 className="text-base font-semibold text-foreground mb-1">{auth!.registerTitle}</h1>
+                )}
+                {uiLabel(auth?.registerSubtitle) && (
+                  <p className="text-xs text-muted-foreground">{auth!.registerSubtitle}</p>
+                )}
+              </div>
+            )}
 
-            {/* Form */}
             <form onSubmit={handleSubmit} className="space-y-3 xs:space-y-4 md:space-y-5">
-              {/* Email Field */}
-              <div className="space-y-1 xs:space-y-2 md:space-y-2">
-                <label className="text-xs xs:text-sm font-medium text-gray-700">E-Posta</label>
-                <div className="relative">
-                  <Input
-                    type="email"
-                    name="email"
-                    autoComplete="email"
-                    placeholder="E-posta adresiniz"
-                    value={formData.email}
-                    onChange={handleChange}
-                    required
-                    className="pr-10 text-sm h-9"
-                  />
-                  <div className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400">
-                    <Mail size={14} className="xs:size-[16px] md:size-[18px]" />
+              {(uiLabel(auth?.emailLabel) || uiLabel(auth?.emailPlaceholder)) && (
+                <div className="space-y-1 xs:space-y-2 md:space-y-2">
+                  {uiLabel(auth?.emailLabel) && (
+                    <label className="text-xs xs:text-sm font-medium text-foreground">{auth!.emailLabel}</label>
+                  )}
+                  <div className="relative">
+                    <Input
+                      type="email"
+                      name="email"
+                      autoComplete="email"
+                      placeholder={uiLabel(auth?.emailPlaceholder)}
+                      value={formData.email}
+                      onChange={handleChange}
+                      required
+                      className="pr-10 text-sm h-9"
+                    />
+                    <div className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground">
+                      <Mail size={14} className="xs:size-[16px] md:size-[18px]" />
+                    </div>
                   </div>
                 </div>
-              </div>
+              )}
 
-              {/* Password Field */}
-              <div className="space-y-1 xs:space-y-2 md:space-y-2">
-                <label className="text-xs xs:text-sm font-medium text-gray-700">Şifre</label>
-                <div className="relative">
-                  <Input
-                    type={showPassword ? "text" : "password"}
-                    name="password"
-                    autoComplete="new-password"
-                    placeholder="Şifreniz"
-                    value={formData.password}
-                    onChange={handleChange}
-                    required
-                    className="pr-10 text-sm h-9"
-                  />
-                  <button
-                    type="button"
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                  >
-                    {showPassword ? <EyeOff size={14} className="xs:size-[16px] md:size-[18px]" /> : <Eye size={14} className="xs:size-[16px] md:size-[18px]" />}
-                  </button>
+              {(uiLabel(auth?.passwordLabel) || uiLabel(auth?.passwordPlaceholder)) && (
+                <div className="space-y-1 xs:space-y-2 md:space-y-2">
+                  {uiLabel(auth?.passwordLabel) && (
+                    <label className="text-xs xs:text-sm font-medium text-foreground">{auth!.passwordLabel}</label>
+                  )}
+                  <div className="relative">
+                    <Input
+                      type={showPassword ? "text" : "password"}
+                      name="password"
+                      autoComplete="new-password"
+                      placeholder={uiLabel(auth?.passwordPlaceholder)}
+                      value={formData.password}
+                      onChange={handleChange}
+                      required
+                      className="pr-10 text-sm h-9"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-muted-foreground"
+                    >
+                      {showPassword ? <EyeOff size={14} className="xs:size-[16px] md:size-[18px]" /> : <Eye size={14} className="xs:size-[16px] md:size-[18px]" />}
+                    </button>
+                  </div>
                 </div>
-              </div>
+              )}
 
-              {/* KVKK Onayı */}
-              <div className="flex items-start gap-2">
-                <Checkbox
-                  id="kvkk"
-                  checked={kvkkAccepted}
-                  onCheckedChange={(v) => setKvkkAccepted(v === true)}
-                  className="mt-0.5 w-4 h-4 shrink-0"
-                />
-                <label htmlFor="kvkk" className="text-xs text-gray-600 leading-relaxed cursor-pointer">
-                  <Link to="/privacy" className="text-purple-600 hover:underline font-medium">Kişisel Verilerin Korunması (KVKK)</Link> metnini
-                  ve{" "}
-                  <Link to="/distance-selling" className="text-purple-600 hover:underline font-medium">Mesafeli Satış Sözleşmesi</Link>'ni
-                  {" "}okudum ve kabul ediyorum.
-                </label>
-              </div>
+              {kvkkConsentText && (
+                <div className="flex items-start gap-2">
+                  <Checkbox
+                    id="kvkk"
+                    checked={kvkkAccepted}
+                    onCheckedChange={(v) => setKvkkAccepted(v === true)}
+                    className="mt-0.5 w-4 h-4 shrink-0"
+                  />
+                  <label htmlFor="kvkk" className="text-xs text-muted-foreground leading-relaxed cursor-pointer">
+                    {kvkkConsentText}
+                  </label>
+                </div>
+              )}
 
-              {/* Register Button */}
-              <Button
-                type="submit"
-                className="w-full bg-purple-gradient hover:opacity-90 text-white font-medium h-9 text-sm"
-                disabled={isLoading || !kvkkAccepted}
-              >
-                {isLoading ? "Hesap oluşturuluyor..." : "Kayıt Ol"}
-              </Button>
+              {registerButtonLabel && (
+                <Button
+                  type="submit"
+                  className="w-full bg-primary text-primary-foreground hover:opacity-90 font-medium h-9 text-sm"
+                  disabled={isLoading || (requiresKvkk && !kvkkAccepted)}
+                >
+                  {registerButtonLabel}
+                </Button>
+              )}
             </form>
 
-            {/* Login Link */}
-            <div className="text-center mt-4 xs:mt-5 md:mt-6">
-              <p className="text-xs xs:text-sm text-gray-600">
-                Zaten bir hesabınız var mı?{" "}
-                <button
-                  onClick={() => navigate("/login")}
-                  className="text-purple-default font-semibold hover:underline"
-                >
-                  Giriş Yap
-                </button>
-              </p>
-            </div>
+            {(uiLabel(auth?.registerHasAccountText) || uiLabel(auth?.registerLoginLink)) && (
+              <div className="text-center mt-4 xs:mt-5 md:mt-6">
+                <p className="text-xs xs:text-sm text-muted-foreground">
+                  {uiLabel(auth?.registerHasAccountText) && <>{auth!.registerHasAccountText}{" "}</>}
+                  {uiLabel(auth?.registerLoginLink) && (
+                    <button
+                      onClick={() => navigate("/login")}
+                      className="text-primary font-semibold hover:underline"
+                    >
+                      {auth!.registerLoginLink}
+                    </button>
+                  )}
+                </p>
+              </div>
+            )}
           </div>
         </div>
       </main>

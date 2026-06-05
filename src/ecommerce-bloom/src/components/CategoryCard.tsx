@@ -25,13 +25,13 @@ const CategoryCard = ({ category, variant = 'grid' }: CategoryCardProps) => {
   return (
     <Link
       to={`/category/${encodeURIComponent(category.slug)}`}
-      className={`group flex flex-col bg-white rounded-xl border border-gray-200/80 overflow-hidden transition-all duration-200 hover:border-gray-300 hover:shadow-[0_8px_30px_rgb(0,0,0,0.06)] ${
+      className={`group flex flex-col bg-card rounded-xl border border-border/80 overflow-hidden transition-all duration-200 hover:border-border hover:shadow-[0_8px_30px_rgb(0,0,0,0.06)] ${
         isCompact ? 'min-h-[140px]' : 'min-h-[180px] sm:min-h-[200px]'
       }`}
     >
       {/* Kategori görseli alanı — admin panelden image yüklendiğinde burada gösterilir */}
       <div
-        className={`relative w-full overflow-hidden bg-gray-100 ${
+        className={`relative w-full overflow-hidden bg-muted ${
           isCompact ? 'h-24' : 'h-28 sm:h-32'
         }`}
       >
@@ -45,7 +45,7 @@ const CategoryCard = ({ category, variant = 'grid' }: CategoryCardProps) => {
             onError={() => setImageFailed(true)}
           />
         ) : (
-          <div className="absolute inset-0 flex flex-col items-center justify-center gap-1.5 bg-gray-50 text-gray-300">
+          <div className="absolute inset-0 flex flex-col items-center justify-center gap-1.5 bg-muted/50 text-muted-foreground/50">
             <ImageIcon className="w-5 h-5" strokeWidth={1.5} />
             <Icon className="w-4 h-4 opacity-60" strokeWidth={1.75} />
           </div>
@@ -55,15 +55,15 @@ const CategoryCard = ({ category, variant = 'grid' }: CategoryCardProps) => {
       </div>
 
       <div className="flex flex-1 flex-col justify-between p-3.5 sm:p-4">
-        <h3 className="font-medium text-xs text-gray-900 leading-snug line-clamp-2 tracking-tight">
+        <h3 className="font-medium text-xs text-foreground leading-snug line-clamp-2 tracking-tight">
           {displayName}
         </h3>
-        <div className="flex items-center justify-between mt-2.5 pt-2.5 border-t border-gray-100">
-          <span className="text-xs text-gray-500">
+        <div className="flex items-center justify-between mt-2.5 pt-2.5 border-t border-border">
+          <span className="text-xs text-muted-foreground">
             {getCategoryProductLabel(category.productCount)}
           </span>
           <ChevronRight
-            className="w-4 h-4 text-gray-300 transition-all duration-200 group-hover:text-purple-600 group-hover:translate-x-0.5"
+            className="w-4 h-4 text-muted-foreground/50 transition-all duration-200 group-hover:text-primary group-hover:translate-x-0.5"
             strokeWidth={1.75}
           />
         </div>
