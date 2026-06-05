@@ -60,6 +60,8 @@ const loadCartFromStorage = (): CartItem[] => {
 
 export const CartProvider = ({ children }: { children: React.ReactNode }) => {
   const [cartItems, setCartItems] = useState<CartItem[]>(() => loadCartFromStorage());
+  // Track whether the initial authenticated cart load has been handled
+  const initialLoadDone = React.useRef(false);
 
   const setAndPersistCart = useCallback((updater: CartItem[] | ((prev: CartItem[]) => CartItem[])) => {
     setCartItems((prev) => {
@@ -82,50 +84,43 @@ export const CartProvider = ({ children }: { children: React.ReactNode }) => {
     }
   }, []);
 
-  // Load cart on mount — API for authenticated users, localStorage for guests
-  useEffect(() => {
-    const loadCart = async () => {
-      const token = getToken();
-      if (token) {
-        try {
-          const apiCart: any = await getCart();
-          const items = convertApiCart(apiCart);
-          setCartItems(items);
-          saveCartToStorage(items);
-        } catch (error) {
-          console.error("Error loading cart from API:", error);
-        }
-      }
-      // Guest users: already initialized from localStorage in useState initializer
-    };
-    loadCart();
-  }, []);
-
   const { isAuthenticated } = useAuth();
 
-  // Login: misafir sepetini API sepeti ile birleştir, ardından API sepetini göster
-  // Logout: sadece localStorage'ı temizle
+  // Unified auth+cart handler:
+  // - On mount with token: just load API cart (no guest merge, already logged in)
+  // - On login transition: merge guest items then load API cart
+  // - On logout: clear local cart
   useEffect(() => {
     const handleAuthChange = async () => {
       if (isAuthenticated) {
-        const guestItems = loadCartFromStorage();
-        try {
-          // Önce misafir ürünlerini API'ye ekle (varsa)
-          if (guestItems.length > 0) {
-            await Promise.allSettled(
-              guestItems.map((item) =>
-                apiAddToCart({ productId: item.product.id, quantity: item.quantity })
-              )
-            );
+        if (!initialLoadDone.current) {
+          // First mount while already authenticated — just load API cart, skip guest merge
+          initialLoadDone.current = true;
+          await refreshCart();
+        } else {
+          // User just logged in — merge guest items (captured before login cleared storage)
+          const guestItems = loadCartFromStorage();
+          initialLoadDone.current = true;
+          try {
+            if (guestItems.length > 0) {
+              await Promise.allSettled(
+                guestItems.map((item) =>
+                  apiAddToCart({ productId: item.product.id, quantity: item.quantity })
+                )
+              );
+            }
+          } catch {
+            // Merge errors are silent
           }
-        } catch {
-          // Birleştirme hatası sessizce geçilir, API sepeti yüklenmeye devam eder
+          await refreshCart();
         }
-        await refreshCart();
       } else {
-        // Çıkış: yerel sepeti sıfırla (misafir olarak boşla başla)
-        setCartItems([]);
-        saveCartToStorage([]);
+        if (initialLoadDone.current) {
+          // User just logged out — clear cart
+          setCartItems([]);
+          saveCartToStorage([]);
+        }
+        initialLoadDone.current = false;
       }
     };
     handleAuthChange();
